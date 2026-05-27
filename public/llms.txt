@@ -1,0 +1,36 @@
+# PUERH DIRECT — Оптовые поставки чая пуэр из Китая | Wholesale Pu-erh Tea from China
+
+PUERH DIRECT — прямой поставщик чая пуэр из Юньнани (Китай). Специализируемся на шу и шэн пуэре, чайной посуде и приватных марках. Без посредников, склад в Гуанчжоу, 20+ лет опыта.
+PUERH DIRECT — direct supplier of pu-erh tea from Yunnan, China. Specialized in ripe (shu) and raw (sheng) puerh, teaware, and private label. No middlemen, Guangzhou warehouse, 20+ years experience.
+
+## Основные страницы | Core Pages
+
+- [Главная](https://puerhdirect.ru/): Hero-блок, категории пуэра, преимущества компании, CTA.
+- [О нас](https://puerhdirect.ru/about/): История с 2003 года, производство в Юньнани, склад в Гуанчжоу, семейный бизнес.
+- [Каталог](https://puerhdirect.ru/catalog/): 42 позиции чая с фото, годом, типом и формой.
+- [Шу Пуэр](https://puerhdirect.ru/catalog/ripe-puerh/): Выдержанный шу пуэр (ripe) 1996–2025 гг.
+- [Шэн Пуэр](https://puerhdirect.ru/catalog/raw-puerh/): Шэн пуэр (sheng/raw) с чайных гор Юньнани.
+- [Чайная посуда](https://puerhdirect.ru/catalog/teaware/): Гайвани, чайники, пиалы из Исина.
+- [Другой чай](https://puerhdirect.ru/catalog/other-tea/): Белый, красный, улун, зелёный чай.
+- [Приватная марка](https://puerhdirect.ru/private-label/): Создание собственного бренда чая: от консультации до производства.
+- [Контакты](https://puerhdirect.ru/contact/): Telegram @sqvivi777, WhatsApp +86-13728005309, WeChat puerhdirect, форма запроса.
+- [FAQ](https://puerhdirect.ru/faq/): 10 вопросов и ответов о заказе, доставке, качестве, оплате, сертификации.
+
+## Товары | Products
+
+42 продукта пуэра от 1996 до 2025 года: 35 шу пуэр (ripe), 7 шэн пуэр (raw). Форматы: блин (cake), кирпич (brick), точа (tuocha). Чайные горы: Баньчжан (Banzhang), Иу (Yiwu), Булан (Bulang), Биндао (Bingdao), Линьцан (Lincang), Юн Дэ (Yongde).
+
+## Контакты | Contacts
+
+- Telegram: [@sqvivi777](https://t.me/sqvivi777) — основной канал связи
+- WhatsApp: +86-13728005309
+- WeChat: puerhdirect
+- Email: wholesale@puerhdirect.ru
+- Склад: Гуанчжоу, район Фанцунь, Китай
+
+## Дополнительно | Additional
+
+- [Карта сайта](https://puerhdirect.ru/sitemap-index.xml)
+- [Полная версия для LLM](https://puerhdirect.ru/llms-full.txt) — все тексты сайта в markdown
+- Языки: Русский (основной), English (второй)
+- Целевой рынок: Россия и СНГ
