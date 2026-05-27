@@ -26,7 +26,7 @@ const productSchema = {
   "@type": "Product",
   name: `${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`,
   description: `${p.year} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en.toLowerCase()}, origin: ${origin} tea mountain, Yunnan, China. Altitude: ${altitude}. Tree age: ${treeAge}. Stored in Guangzhou warehouse at 20-25°C, 65-75% humidity for natural aging. Direct supply from producer, no middlemen.`,
-  image: `https://puerh-astro.pages.dev${productImg}`,
+  image: `https://puerhdirect.ru${productImg}`,
   category: `${typeLabels[p.type].en} Pu-erh Tea`,
   manufacturer: "PUERH DIRECT",
   brand: { "@type": "Brand", name: "PUERH DIRECT" },
@@ -43,7 +43,7 @@ const productSchema = {
 <Layout
   title={`${p.year} ${p.nameRu} | ${p.nameEn} — PUERH DIRECT`}
   description={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}. Оптовые поставки из Китая.`}
-  ogImage={`https://puerh-astro.pages.dev${productImg}`}
+  ogImage={`https://puerhdirect.ru${productImg}`}
   canonicalURL={productUrl}
 >
   <section class="py-12 md:py-20 bg-white">

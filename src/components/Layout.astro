@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { title, description, ogImage, canonicalURL } = Astro.props;
-const baseUrl = "https://puerh-astro.pages.dev";
+const baseUrl = "https://puerhdirect.ru";
 const pageUrl = canonicalURL ? `${baseUrl}${canonicalURL}` : new URL(Astro.url.pathname, baseUrl).href;
 const imageUrl = ogImage || `${baseUrl}/images/images/logo.png`;
 
@@ -22,7 +22,7 @@ const organizationSchema = {
   url: baseUrl,
   logo: `${baseUrl}/images/images/logo.png`,
   description: "Оптовые поставки чая пуэр премиум-класса из Китая в Россию. Premium wholesale pu-erh tea from China to Russia.",
-  email: "info@puerhdirect.com",
+  email: "info@puerhdirect.ru",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Гуанчжоу",

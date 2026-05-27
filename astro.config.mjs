@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://puerh-astro.pages.dev',
+  site: 'https://puerhdirect.ru',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
