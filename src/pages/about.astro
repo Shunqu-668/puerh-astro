@@ -1,0 +1,107 @@
+---
+import Layout from "../components/Layout.astro";
+import CoverHero from "../components/CoverHero.astro";
+import CTAButton from "../components/CTAButton.astro";
+---
+
+<Layout
+  title="О нас | About Us — PUERH DIRECT"
+  description="PUERH DIRECT — прямые поставки чая пуэр из Юньнани (Китай). Direct pu-erh tea supply from Yunnan, China."
+>
+  <CoverHero
+    titleRu="О нас"
+    titleEn="About Us"
+    subtitleRu="Два поколения в чайном бизнесе. Прямые поставки из Юньнани."
+    subtitleEn="Two generations in tea business. Direct supply from Yunnan."
+    bgImage="/images/images/about-hero.jpg"
+  />
+
+  <!-- Yunnan Origin -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <img src="/images/images/about-factory.jpg" alt="Yunnan Tea Factory" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+        <div>
+          <h2 class="text-3xl font-bold mb-4">
+            <span class="text-gray-900">Производство в Юньнани</span>
+            <span class="block text-orange-500 text-xl mt-1">Yunnan Production</span>
+          </h2>
+          <p class="text-gray-600 leading-relaxed mb-3">
+            <span>Наши чайные хозяйства расположены в ключевых регионах Юньнани: Сишуанбаньна, Линьцан и Пуэр. Мы работаем напрямую с проверенными производителями, что гарантирует подлинность и высокое качество каждой партии.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>Our tea farms are located in key Yunnan regions: Xishuangbanna, Lincang, and Pu'er. We work directly with trusted producers, guaranteeing authenticity and high quality for every batch.</span>
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Сишуанбаньна | Xishuangbanna</span>
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Линьцан | Lincang</span>
+            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Пуэр | Pu'er</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guangzhou Warehouse -->
+  <section class="py-16 md:py-24 bg-[#f5f5f5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="order-2 lg:order-1">
+          <h2 class="text-3xl font-bold mb-4">
+            <span class="text-gray-900">Склад в Гуанчжоу</span>
+            <span class="block text-orange-500 text-xl mt-1">Guangzhou Warehouse</span>
+          </h2>
+          <p class="text-gray-600 leading-relaxed mb-3">
+            <span>Собственный склад в Гуанчжоу (район Фанцунь) — крупнейший центр оптовой торговли чаем в Китае. Южный климат Гуанчжоу создаёт идеальные условия для естественной выдержки пуэра.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>Our own warehouse in Guangzhou (Fangcun district) — the largest tea wholesale center in China. Guangzhou's southern climate creates ideal conditions for natural puerh aging.</span>
+          </p>
+        </div>
+        <div class="order-1 lg:order-2">
+          <img src="/images/images/fangcun-store.jpg" alt="Guangzhou Fangcun Warehouse" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two Generations -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <img src="/images/images/about-selection.jpg" alt="Tea Selection" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+        <div>
+          <h2 class="text-3xl font-bold mb-4">
+            <span class="text-gray-900">Два поколения экспертизы</span>
+            <span class="block text-orange-500 text-xl mt-1">Two Generations of Expertise</span>
+          </h2>
+          <p class="text-gray-600 leading-relaxed mb-3">
+            <span>Наша семья занимается чаем более 20 лет. Мы начинали с небольшого магазина в Куньмине и выросли до международных поставок. За эти годы мы посетили сотни чайных хозяйств, отобрали лучших производителей и накопили уникальную коллекцию выдержанного пуэра.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>Our family has been in the tea business for over 20 years. We started with a small shop in Kunming and grew to international supply. Over the years we have visited hundreds of tea farms, selected the best producers, and built a unique collection of aged puerh.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner CTA -->
+  <section class="py-16 md:py-24 bg-[#1a1a1a] text-white text-center">
+    <div class="max-w-2xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-4">
+        <span class="text-white">Стать нашим партнёром</span>
+        <span class="block text-orange-500 text-xl mt-1">Become Our Partner</span>
+      </h2>
+      <p class="text-gray-400 text-sm mb-8">
+        <span>Мы всегда открыты к сотрудничеству с чайными магазинами, ресторанами, дистрибьюторами и частными марками.</span>
+        <span class="block text-gray-500 mt-1">We are always open to cooperation with tea shops, restaurants, distributors and private labels.</span>
+      </p>
+      <CTAButton href="/contact">Связаться с нами <span class="text-orange-200 ml-1">| Contact Us</span></CTAButton>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,128 @@
+---
+import Layout from "../components/Layout.astro";
+import CoverHero from "../components/CoverHero.astro";
+import CTAButton from "../components/CTAButton.astro";
+
+const formats = [
+  { img: "/images/images/shape-8g.jpg", ru: "Мини-точа 8 г", en: "Mini Tuocha 8g", descRu: "Идеально для дегустаций и подарков", descEn: "Ideal for tastings and gifts" },
+  { img: "/images/images/shape-50g.jpg", ru: "Мини-блин 50 г", en: "Mini Cake 50g", descRu: "Популярный формат для розницы", descEn: "Popular format for retail" },
+  { img: "/images/images/shape-100g.jpg", ru: "Малый блин 100 г", en: "Small Cake 100g", descRu: "Компактный и экономичный", descEn: "Compact and economical" },
+  { img: "/images/images/shape-200g.jpg", ru: "Стандартный блин 200 г", en: "Standard Cake 200g", descRu: "Классический формат пуэра", descEn: "Classic puerh format" },
+];
+
+const workflow = [
+  { step: "01", ru: "Консультация", en: "Consultation", descRu: "Обсуждаем ваши цели, бюджет, вкусовые предпочтения и целевую аудиторию", descEn: "We discuss your goals, budget, taste preferences and target audience" },
+  { step: "02", ru: "Разработка", en: "Development", descRu: "Подбираем чайную основу, разрабатываем дизайн обёртки и упаковки", descEn: "We select the tea base, develop wrapper and packaging design" },
+  { step: "03", ru: "Утверждение образца", en: "Sample Approval", descRu: "Изготавливаем и отправляем образцы для вашего утверждения", descEn: "We produce and send samples for your approval" },
+  { step: "04", ru: "Производство", en: "Production", descRu: "Запускаем партию. Контроль качества на всех этапах. Доставка.", descEn: "We launch the batch. Quality control at all stages. Delivery." },
+];
+---
+
+<Layout
+  title="Приватная марка | Private Label — PUERH DIRECT"
+  description="Создание частной марки чая пуэр. Private label pu-erh tea creation. Индивидуальный дизайн, рецептура, упаковка."
+>
+  <CoverHero
+    titleRu="Приватная марка"
+    titleEn="Private Label"
+    subtitleRu="Создание собственного бренда чая пуэр"
+    subtitleEn="Create your own pu-erh tea brand"
+    bgImage="/images/images/hero-private-label.jpg"
+  />
+
+  <!-- White Label Options -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-4">
+            <span class="text-gray-900">Что мы предлагаем</span>
+            <span class="block text-orange-500 text-xl mt-1">What We Offer</span>
+          </h2>
+          <ul class="space-y-4">
+            <li class="flex gap-3">
+              <span class="text-orange-500 text-xl shrink-0 mt-0.5">✦</span>
+              <div>
+                <h4 class="font-semibold text-gray-900">Индивидуальная обёртка <span class="text-orange-500 font-normal text-sm">| Custom Wrapper</span></h4>
+                <p class="text-gray-500 text-sm">Дизайн обёртки блина с вашим брендом, логотипом и элементами <span class="text-gray-400">| Wrapper design with your brand, logo and elements</span></p>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-orange-500 text-xl shrink-0 mt-0.5">◈</span>
+              <div>
+                <h4 class="font-semibold text-gray-900">Уникальная рецептура <span class="text-orange-500 font-normal text-sm">| Custom Recipe</span></h4>
+                <p class="text-gray-500 text-sm">Разработка вкусового профиля под вашу аудиторию <span class="text-gray-400">| Flavor profile development for your target audience</span></p>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-orange-500 text-xl shrink-0 mt-0.5">◆</span>
+              <div>
+                <h4 class="font-semibold text-gray-900">Подарочная упаковка <span class="text-orange-500 font-normal text-sm">| Gift Packaging</span></h4>
+                <p class="text-gray-500 text-sm">Премиальная упаковка для корпоративных и розничных подарков <span class="text-gray-400">| Premium packaging for corporate and retail gifts</span></p>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-orange-500 text-xl shrink-0 mt-0.5">★</span>
+              <div>
+                <h4 class="font-semibold text-gray-900">Сертификаты качества <span class="text-orange-500 font-normal text-sm">| Quality Certificates</span></h4>
+                <p class="text-gray-500 text-sm">Предоставляем сертификаты и документы на каждую партию <span class="text-gray-400">| Certificates and documentation for every batch</span></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <img src="/images/images/service-whitelabel.jpg" alt="Private Label Service" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 Popular Formats -->
+  <section class="py-16 md:py-24 bg-[#f5f5f5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4">
+        <span class="text-gray-900">Популярные форматы</span>
+        <span class="block text-orange-500 text-xl mt-1">Popular Formats</span>
+      </h2>
+      <p class="text-gray-500 text-center max-w-xl mx-auto mb-12 text-sm">
+        <span>Наиболее востребованные форматы для приватной марки</span>
+        <span class="block text-gray-400 mt-1">The most popular formats for private label</span>
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {formats.map(f => (
+          <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+            <div class="aspect-square overflow-hidden bg-[#f5f5f5]">
+              <img src={f.img} alt={f.en} class="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div class="p-4 text-center">
+              <h4 class="font-bold text-gray-900">{f.ru}<span class="block text-orange-500 text-sm font-medium mt-0.5">{f.en}</span></h4>
+              <p class="text-gray-500 text-xs mt-2">{f.descRu}<span class="block text-gray-400 mt-0.5">{f.descEn}</span></p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Step Workflow -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4">
+        <span class="text-gray-900">Как мы работаем</span>
+        <span class="block text-orange-500 text-xl mt-1">How We Work</span>
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+        {workflow.map(w => (
+          <div class="text-center">
+            <div class="w-16 h-16 bg-orange-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">{w.step}</div>
+            <h4 class="font-bold text-gray-900 mb-2">{w.ru}<span class="block text-orange-500 text-sm font-medium mt-0.5">{w.en}</span></h4>
+            <p class="text-gray-500 text-xs leading-relaxed">{w.descRu}<span class="block text-gray-400 mt-1">{w.descEn}</span></p>
+          </div>
+        ))}
+      </div>
+      <div class="text-center mt-12">
+        <CTAButton href="/contact">Начать проект <span class="text-orange-200 ml-1">| Start Project</span></CTAButton>
+      </div>
+    </div>
+  </section>
+</Layout>

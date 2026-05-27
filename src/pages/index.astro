@@ -1,0 +1,251 @@
+---
+import Layout from "../components/Layout.astro";
+import CTAButton from "../components/CTAButton.astro";
+
+const categories = [
+  { href: "/catalog/ripe-puerh", img: "/images/images/1.jpg", ru: "Шу Пуэр", en: "Ripe Puerh" },
+  { href: "/catalog/raw-puerh", img: "/images/images/2.jpg", ru: "Шэн Пуэр", en: "Raw Puerh" },
+  { href: "/catalog/teaware", img: "/images/images/3.jpg", ru: "Чайная посуда", en: "Teaware" },
+  { href: "/catalog/other-tea", img: "/images/images/4.png", ru: "Другой чай", en: "Other Tea" },
+];
+
+const valueProps = [
+  { ru: "Прямые поставки", en: "Direct Supply", descRu: "Работаем напрямую с чайными хозяйствами Юньнани без посредников", descEn: "We work directly with Yunnan tea farms without intermediaries" },
+  { ru: "Контроль качества", en: "Quality Control", descRu: "Многоступенчатая проверка: от сбора сырья до финальной упаковки", descEn: "Multi-stage inspection: from raw material collection to final packaging" },
+  { ru: "Склад в Гуанчжоу", en: "Guangzhou Warehouse", descRu: "Собственный склад в Гуанчжоу — быстрая отправка по всему миру", descEn: "Own warehouse in Guangzhou — fast worldwide shipping" },
+  { ru: "Опыт 20+ лет", en: "20+ Years Experience", descRu: "Два поколения в чайном бизнесе. Знаем о пуэре всё", descEn: "Two generations in tea business. We know everything about puerh" },
+  { ru: "Гибкие условия", en: "Flexible Terms", descRu: "Минимальный заказ от 1 блина. Специальные цены для оптовиков", descEn: "Minimum order from 1 cake. Special prices for wholesalers" },
+  { ru: "Поддержка 24/7", en: "24/7 Support", descRu: "Оперативная связь в Telegram и WhatsApp на русском и английском", descEn: "Quick response in Telegram and WhatsApp in Russian and English" },
+];
+---
+
+<Layout
+  title="PUERH DIRECT — Чай Пуэр оптом из Китая | Puerh Tea Wholesale from China"
+  description="Прямые оптовые поставки чая пуэр из Юньнани (Китай). Direct wholesale supply of pu-erh tea from Yunnan, China. Шу и шэн пуэр, чайная посуда, приватная марка."
+>
+
+  <!-- ===== 1. HERO ===== -->
+  <section class="relative h-[75vh] max-h-[700px] flex items-center justify-center bg-cover bg-center before:absolute before:inset-0 before:bg-black/55 before:z-10" style="background-image: url('/images/images/hero-bg.JPG')">
+    <div class="relative z-20 text-center px-4 max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+        <span class="block">Чай Пуэр оптом из Китая</span>
+        <span class="block text-2xl md:text-4xl lg:text-5xl text-orange-500 mt-3">Puerh Tea Wholesale from China</span>
+      </h1>
+      <p class="text-base md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+        <span class="block">Прямые поставки премиального пуэра из Юньнани. Шу и шэн пуэр, чайная посуда, приватная марка.</span>
+        <span class="block text-gray-400 text-sm md:text-base mt-2">Direct supply of premium pu-erh from Yunnan. Ripe & raw puerh, teaware, private label.</span>
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <CTAButton href="/catalog">Каталог <span class="text-orange-200 ml-1">| Catalog</span></CTAButton>
+        <CTAButton href="/contact" variant="secondary">Контакты <span class="text-gray-400 ml-1">| Contact</span></CTAButton>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. 4-CATEGORY GRID ===== -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
+        <span class="text-gray-900">Каталог</span>
+        <span class="text-orange-500 block text-xl md:text-2xl mt-1">Catalog</span>
+      </h2>
+      <p class="text-gray-500 text-center max-w-xl mx-auto mb-12 text-sm">
+        <span>Выберите категорию для просмотра</span>
+        <span class="text-gray-400 mx-1">|</span>
+        <span class="text-gray-400">Choose a category to browse</span>
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map(cat => (
+          <a href={cat.href} class="group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+            <div class="aspect-[4/5] overflow-hidden">
+              <img src={cat.img} alt={`${cat.ru} | ${cat.en}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-center">
+              <h3 class="text-lg font-bold text-white">
+                <span class="block">{cat.ru}</span>
+                <span class="block text-orange-400 text-sm mt-0.5">{cat.en}</span>
+              </h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. RARE TEA ===== -->
+  <section class="py-16 md:py-24 bg-[#f5f5f5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            <span class="text-gray-900">Редкий и выдержанный пуэр</span>
+            <span class="block text-orange-500 text-xl md:text-2xl mt-1">Rare & Aged Puerh</span>
+          </h2>
+          <p class="text-gray-600 mb-4 leading-relaxed">
+            <span>В нашем каталоге представлены редкие выдержанные пуэры с 1996 года. Каждый блин — результат многолетней выдержки в идеальных условиях Гуанчжоу.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>Our catalog features rare aged puerh teas from 1996 onwards. Each cake is the result of years of aging under ideal Guangzhou conditions.</span>
+          </p>
+          <div class="mt-6">
+            <CTAButton href="/catalog">Смотреть каталог <span class="text-orange-200 ml-1">| Browse Catalog</span></CTAButton>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <img src="/images/images/products/1996-ripe-puerh-tuocha-yiwulaoshuqingua/1996-ripe-puerh-tuocha-yiwulaoshuqingua.jpg" alt="1996 Ripe Puerh" class="rounded-lg shadow-md w-full aspect-square object-cover" loading="lazy" />
+          <img src="/images/images/products/2004-raw-puerh-cake-banzhangshengtai/2004-raw-puerh-cake-banzhangshengtai.jpg" alt="2004 Raw Puerh" class="rounded-lg shadow-md w-full aspect-square object-cover mt-8" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. ORIGIN STATS ===== -->
+  <section class="relative py-20 md:py-28 bg-cover bg-center bg-fixed before:absolute before:inset-0 before:bg-[#1a1a1a]/80 before:z-10" style="background-image: url('/images/images/mission-banner.jpg')">
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+        <div>
+          <div class="text-5xl md:text-6xl font-bold text-orange-500">500+</div>
+          <p class="text-white mt-2 font-medium">
+            <span class="block">Позиций в каталоге</span>
+            <span class="block text-gray-400 text-sm mt-1">Products in catalog</span>
+          </p>
+        </div>
+        <div>
+          <div class="text-5xl md:text-6xl font-bold text-orange-500">20+</div>
+          <p class="text-white mt-2 font-medium">
+            <span class="block">Лет в чайном бизнесе</span>
+            <span class="block text-gray-400 text-sm mt-1">Years in tea business</span>
+          </p>
+        </div>
+        <div>
+          <div class="text-5xl md:text-6xl font-bold text-orange-500">100%</div>
+          <p class="text-white mt-2 font-medium">
+            <span class="block">Юньнаньское происхождение</span>
+            <span class="block text-gray-400 text-sm mt-1">Yunnan origin guaranteed</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. MISSION ===== -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="order-2 lg:order-1">
+          <img src="/images/images/mission-banner.jpg" alt="Mission" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+        <div class="order-1 lg:order-2">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            <span class="text-gray-900">Наша миссия</span>
+            <span class="block text-orange-500 text-xl md:text-2xl mt-1">Our Mission</span>
+          </h2>
+          <p class="text-gray-600 mb-4 leading-relaxed">
+            <span>Мы делаем настоящий китайский чай пуэр доступным для российского рынка. Работаем без посредников, напрямую с проверенными хозяйствами Юньнани, гарантируя подлинность и качество каждой партии.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>We make authentic Chinese pu-erh tea accessible to the Russian market. Working directly with trusted Yunnan farms, we guarantee the authenticity and quality of every batch.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. EXPERTISE ===== -->
+  <section class="py-16 md:py-24 bg-[#f5f5f5]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            <span class="text-gray-900">Профессиональная экспертиза</span>
+            <span class="block text-orange-500 text-xl md:text-2xl mt-1">Professional Expertise</span>
+          </h2>
+          <p class="text-gray-600 mb-4 leading-relaxed">
+            <span>Два поколения нашей семьи посвятили чайному делу. Мы лично отбираем каждый блин на складах в Куньмине и Гуанчжоу. Наш опыт позволяет находить действительно стоящие позиции среди тысяч предложений.</span>
+          </p>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            <span>Two generations of our family have dedicated themselves to the tea business. We personally select every cake at warehouses in Kunming and Guangzhou. Our experience allows us to find truly worthy teas among thousands.</span>
+          </p>
+        </div>
+        <div>
+          <img src="/images/images/expertise.jpg" alt="Expertise" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. 6 VALUE PROPOSITIONS ===== -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
+        <span class="text-gray-900">Почему выбирают нас</span>
+        <span class="block text-orange-500 text-xl md:text-2xl mt-1">Why Choose Us</span>
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        {valueProps.map(vp => (
+          <div class="bg-[#f5f5f5] rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">
+              <span class="block">{vp.ru}</span>
+              <span class="block text-orange-500 text-sm mt-0.5">{vp.en}</span>
+            </h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-1">{vp.descRu}</p>
+            <p class="text-gray-400 text-xs leading-relaxed">{vp.descEn}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. PRICE / LOGISTICS ===== -->
+  <section class="py-16 md:py-24 bg-[#1a1a1a] text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-bold mb-4">
+            <span class="text-white">Цены и минимальный заказ</span>
+            <span class="block text-orange-500 text-lg mt-1">Pricing & Minimum Order</span>
+          </h3>
+          <ul class="space-y-3 text-gray-300 text-sm leading-relaxed">
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Минимальный заказ — от 1 блина. Оптовые цены от 10 штук. <span class="text-gray-400">| Minimum order from 1 cake. Wholesale prices from 10 pcs.</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Специальные условия для постоянных клиентов и крупного опта. <span class="text-gray-400">| Special terms for regular clients and large wholesale.</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Цены зависят от года, редкости и объёма партии. Запросите прайс-лист. <span class="text-gray-400">| Prices depend on year, rarity and volume. Request a price list.</span></span></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold mb-4">
+            <span class="text-white">Доставка и логистика</span>
+            <span class="block text-orange-500 text-lg mt-1">Shipping & Logistics</span>
+          </h3>
+          <ul class="space-y-3 text-gray-300 text-sm leading-relaxed">
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Отправка из Гуанчжоу. Доставка в Россию от 7-12 дней. <span class="text-gray-400">| Shipping from Guangzhou. Delivery to Russia: 7-12 days.</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Международная доставка: СДЭК, Почта России, транспортные компании. <span class="text-gray-400">| International delivery: CDEK, Russian Post, transport companies.</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✓</span> <span>Надёжная упаковка для сохранности чая при транспортировке. <span class="text-gray-400">| Secure packaging to protect tea during transportation.</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. TELEGRAM CTA ===== -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        <span class="text-gray-900">Свяжитесь с нами в Telegram</span>
+        <span class="block text-orange-500 text-xl md:text-2xl mt-1">Contact Us on Telegram</span>
+      </h2>
+      <p class="text-gray-500 mb-8 text-sm">
+        <span>Оперативно отвечаем на все вопросы. Отправьте сообщение прямо сейчас!</span>
+        <span class="block text-gray-400 mt-1">We respond quickly to all inquiries. Send a message right now!</span>
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://t.me/puerhdirect" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#26A5E4] text-white font-semibold rounded-lg hover:bg-[#1E96D4] transition-all shadow-md hover:shadow-lg min-h-[44px]">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248c-.182 1.915-1.06 6.586-1.504 8.724-.184.986-.543 1.316-1.076 1.348-.933.086-1.64-.66-2.543-1.294-1.408-.99-2.208-1.61-3.575-2.583-.792-.56-.027-1.08.557-1.64.384-.37 2.6-2.54 2.648-2.757.006-.027.012-.13-.05-.184-.06-.054-.15-.036-.214-.02-.09.02-1.532.99-4.328 2.85-.41.28-.78.42-1.11.41-.364-.01-1.07-.21-1.595-.38-.642-.22-1.152-.34-1.107-.71.023-.2.29-.4.794-.6 3.13-1.36 5.215-2.26 6.256-2.69 2.98-1.24 3.6-1.45 4-1.46.09 0 .29.02.42.12.1.08.13.18.14.28.01.08.02.27 0 .42z"/></svg>
+          <span>Telegram</span>
+          <span class="text-blue-200 text-sm">@puerhdirect</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

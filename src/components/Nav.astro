@@ -1,0 +1,75 @@
+---
+const navItems = [
+  { href: "/", ru: "Главная", en: "Home" },
+  { href: "/catalog", ru: "Каталог", en: "Catalog" },
+  { href: "/private-label", ru: "Приватная марка", en: "Private Label" },
+  { href: "/about", ru: "О нас", en: "About" },
+  { href: "/contact", ru: "Контакты", en: "Contact" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2 shrink-0">
+        <img src="/images/images/logo.png" alt="Puerh Direct" class="h-10 w-auto" />
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              currentPath === item.href
+                ? "text-orange-500 bg-orange-50"
+                : "text-gray-700 hover:text-orange-500 hover:bg-gray-50"
+            }`}
+          >
+            <span class="text-orange-500 font-semibold">{item.ru}</span>
+            <span class="text-gray-400 mx-1">|</span>
+            <span class="text-gray-500">{item.en}</span>
+          </a>
+        ))}
+      </nav>
+
+      <button id="menu-btn" class="lg:hidden p-2 text-gray-600 hover:text-orange-500" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden lg:hidden pb-4">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class={`block px-3 py-2.5 rounded-md text-sm ${
+            currentPath === item.href
+              ? "text-orange-500 bg-orange-50 font-medium"
+              : "text-gray-700 hover:text-orange-500"
+          }`}
+        >
+          <span class="text-orange-500 font-semibold">{item.ru}</span>
+          <span class="text-gray-400 mx-1">|</span>
+          <span class="text-gray-500">{item.en}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const openIcon = document.getElementById('menu-icon-open');
+  const closeIcon = document.getElementById('menu-icon-close');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    openIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  });
+</script>

@@ -1,0 +1,59 @@
+---
+import Layout from "../components/Layout.astro";
+import CoverHero from "../components/CoverHero.astro";
+import { products, typeLabels, shapeLabels, getProductImg } from "../data/products";
+---
+
+<Layout
+  title="Каталог Пуэра | Puerh Catalog — PUERH DIRECT"
+  description="Полный каталог чая пуэр из Китая. Full catalog of pu-erh tea from China."
+>
+  <CoverHero
+    titleRu="Каталог Пуэра"
+    titleEn="Puerh Catalog"
+    subtitleRu="Более 40 редких и выдержанных позиций из Юньнани"
+    subtitleEn="Over 40 rare and aged selections from Yunnan"
+    bgImage="/images/images/catalog-header.jpg"
+  />
+
+  <section class="py-12 md:py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Category quick links -->
+      <div class="flex flex-wrap gap-3 justify-center mb-10">
+        <a href="/catalog/raw-puerh" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Шэн Пуэр <span class="text-gray-400">| Raw</span></a>
+        <a href="/catalog/ripe-puerh" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Шу Пуэр <span class="text-gray-400">| Ripe</span></a>
+        <a href="/catalog/teaware" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Посуда <span class="text-gray-400">| Teaware</span></a>
+        <a href="/catalog/other-tea" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Другой чай <span class="text-gray-400">| Other</span></a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {products.map(p => (
+          <div class="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300">
+            <a href={`/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}`} class="block">
+              <div class="aspect-square overflow-hidden bg-[#f5f5f5]">
+                <img
+                  src={getProductImg(p)}
+                  alt={`${p.year} ${p.nameEn}`}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+              </div>
+            </a>
+            <div class="p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-bold text-white bg-orange-500 px-2 py-0.5 rounded">{p.year}</span>
+                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{typeLabels[p.type]?.ru} <span class="text-gray-400">| {typeLabels[p.type]?.en}</span></span>
+              </div>
+              <h3 class="text-sm font-bold text-gray-900 mb-1">
+                <span class="block">{p.nameRu}</span>
+                <span class="block text-orange-500 text-xs font-medium mt-0.5">{p.nameEn}</span>
+              </h3>
+              <p class="text-xs text-gray-400">{shapeLabels[p.shape]?.ru} <span class="text-gray-300">|</span> <span class="text-gray-400">{shapeLabels[p.shape]?.en}</span></p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

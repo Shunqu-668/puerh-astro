@@ -1,0 +1,30 @@
+---
+import Nav from "./Nav.astro";
+import Footer from "./Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — PUERH DIRECT</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/png" href="/images/images/logo.png" />
+  </head>
+  <body class="bg-white text-gray-900 antialiased">
+    <Nav />
+    <main class="pt-16">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

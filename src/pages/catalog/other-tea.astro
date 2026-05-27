@@ -1,0 +1,33 @@
+---
+import Layout from "../../components/Layout.astro";
+import CoverHero from "../../components/CoverHero.astro";
+import CTAButton from "../../components/CTAButton.astro";
+---
+
+<Layout
+  title="Другой чай | Other Tea — PUERH DIRECT"
+  description="Красный чай, белый чай, улун и другие сорта китайского чая оптом."
+>
+  <CoverHero
+    titleRu="Другой чай"
+    titleEn="Other Tea"
+    subtitleRu="Красный чай, белый чай, улун и другие сорта"
+    subtitleEn="Black tea, white tea, oolong and other varieties"
+    bgImage="/images/images/4.png"
+  />
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4">
+          <span class="text-gray-900">Скоро в каталоге</span>
+          <span class="block text-orange-500 text-lg mt-1">Coming Soon</span>
+        </h2>
+        <p class="text-gray-500 text-sm mb-8">
+          <span>Мы обновляем раздел других сортов чая. Свяжитесь с нами для получения актуальной информации.</span>
+          <span class="block text-gray-400 mt-2">We are updating our other tea section. Contact us for current availability.</span>
+        </p>
+        <CTAButton href="/contact">Свяжитесь с нами <span class="text-orange-200 ml-1">| Contact Us</span></CTAButton>
+      </div>
+    </div>
+  </section>
+</Layout>
