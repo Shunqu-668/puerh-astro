@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9">
+  xpath-default-namespace="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <xsl:template match="/">
 <html lang="ru">
@@ -34,16 +34,16 @@
   <p class="sub">Sitemap — puerhdirect.ru</p>
 
   <xsl:choose>
-    <xsl:when test="/sitemapindex:sitemapindex">
-      <p class="count">Sitemap index: <xsl:value-of select="count(/sitemapindex:sitemapindex/sitemapindex:sitemap)"/> file(s)</p>
+    <xsl:when test="/sitemapindex">
+      <p class="count">Sitemap index: <xsl:value-of select="count(/sitemapindex/sitemap)"/> file(s)</p>
       <table>
         <thead><tr><th>#</th><th>Sitemap URL</th><th>Last Modified</th></tr></thead>
         <tbody>
-          <xsl:for-each select="/sitemapindex:sitemapindex/sitemapindex:sitemap">
+          <xsl:for-each select="/sitemapindex/sitemap">
             <tr>
               <td><xsl:value-of select="position()"/></td>
-              <td><a href="{sitemapindex:loc}"><xsl:value-of select="sitemapindex:loc"/></a></td>
-              <td class="date"><xsl:value-of select="sitemapindex:lastmod"/></td>
+              <td><a href="{loc}"><xsl:value-of select="loc"/></a></td>
+              <td class="date"><xsl:value-of select="lastmod"/></td>
             </tr>
           </xsl:for-each>
         </tbody>
@@ -51,15 +51,15 @@
     </xsl:when>
 
     <xsl:otherwise>
-      <p class="count"><xsl:value-of select="count(/urlset:urlset/urlset:url)"/> URLs indexed</p>
+      <p class="count"><xsl:value-of select="count(/urlset/url)"/> URLs indexed</p>
       <table>
         <thead><tr><th>#</th><th>URL</th><th>Last Modified</th></tr></thead>
         <tbody>
-          <xsl:for-each select="/urlset:urlset/urlset:url">
+          <xsl:for-each select="/urlset/url">
             <tr>
               <td><xsl:value-of select="position()"/></td>
-              <td><a href="{urlset:loc}"><span class="loc"><xsl:value-of select="urlset:loc"/></span></a></td>
-              <td class="date"><xsl:value-of select="urlset:lastmod"/></td>
+              <td><a href="{loc}"><span class="loc"><xsl:value-of select="loc"/></span></a></td>
+              <td class="date"><xsl:value-of select="lastmod"/></td>
             </tr>
           </xsl:for-each>
         </tbody>
