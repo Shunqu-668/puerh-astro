@@ -14,18 +14,18 @@ if (!p) return Astro.redirect("/404");
 
 const productUrl = `/catalog/product/${p.slug}/`;
 const productImg = getProductImg(p);
-const teaMountains = ["Banzhang", "Yiwu", "Bulang", "Bingdao", "Lincang", "Yongde"];
-const foundMountain = teaMountains.find(m => p.nameEn.includes(m) || p.nameRu.includes(m));
-const origin = foundMountain || "Yunnan";
-const isGushu = p.nameEn.includes("Gushu") || p.nameRu.includes("Гушу");
-const treeAge = isGushu ? "100-500 years (gushu ancient trees)" : "50-100 years (plantation & semi-wild)";
+const origin = p.origin || "Yunnan";
+const isGushu = p.treeAge === "gushu";
+const treeAgeLabel = isGushu ? "100-500 years (gushu ancient trees)" : "40-100 years (arbor & plantation)";
+const treeAgeLabelRu = isGushu ? "Гушу (100–500 лет)" : "Арбор (40–100 лет)";
+const treeAgeLabelShort = isGushu ? "Gushu (100–500 yr)" : "Arbor (40–100 yr)";
 const altitude = "1200–1800 m";
 
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
   name: `${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`,
-  description: `${p.year} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en.toLowerCase()}, origin: ${origin} tea mountain, Yunnan, China. Altitude: ${altitude}. Tree age: ${treeAge}. Stored in Guangzhou warehouse at 20-25°C, 65-75% humidity for natural aging. Direct supply from producer, no middlemen.`,
+  description: `${p.year} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en.toLowerCase()}, origin: ${origin} tea mountain, Yunnan, China. Altitude: ${altitude}. Tree age: ${treeAgeLabel}. Stored in Guangzhou warehouse at 20-25°C, 65-75% humidity for natural aging. Direct supply from producer, no middlemen.`,
   image: `https://puerhdirect.ru${productImg}`,
   category: `${typeLabels[p.type].en} Pu-erh Tea`,
   manufacturer: "PUERH DIRECT",
@@ -62,6 +62,7 @@ const productSchema = {
             src={getProductImg(p)}
             alt={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`}
             class="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
 
@@ -79,10 +80,10 @@ const productSchema = {
 
           <div class="space-y-4 text-gray-600 text-sm leading-relaxed mb-8">
             <p>
-              {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра. Происхождение: чайная гора {origin}, провинция Юньнань, Китай. Высота произрастания: {altitude}. Возраст деревьев: {treeAge}. Хранение на складе в Гуанчжоу при температуре 20–25°C и влажности 65–75%. Прямые поставки от производителя.
+              {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра. Происхождение: чайная гора {origin}, провинция Юньнань, Китай. Высота произрастания: {altitude}. Возраст деревьев: {treeAgeLabel}. Хранение на складе в Гуанчжоу при температуре 20–25°C и влажности 65–75%. Прямые поставки от производителя.
             </p>
             <p class="text-gray-400">
-              {p.year} {typeLabels[p.type].en} {shapeLabels[p.shape].en.toLowerCase()}. Origin: {origin} tea mountain, Yunnan, China. Altitude: {altitude}. Tree age: {treeAge}. Stored in Guangzhou warehouse at 20–25°C, 65–75% humidity. Direct supply from producer.
+              {p.year} {typeLabels[p.type].en} {shapeLabels[p.shape].en.toLowerCase()}. Origin: {origin} tea mountain, Yunnan, China. Altitude: {altitude}. Tree age: {treeAgeLabel}. Stored in Guangzhou warehouse at 20–25°C, 65–75% humidity. Direct supply from producer.
             </p>
           </div>
 
@@ -97,7 +98,7 @@ const productSchema = {
             </div>
             <div class="flex flex-col gap-0.5">
               <dt class="text-xs text-gray-400 uppercase tracking-wide">Деревья | Trees</dt>
-              <dd class="text-gray-800 font-medium">{isGushu ? "Гушу (100–500 лет)" : "Плантационные (50–100 лет)"}<span class="text-gray-400 ml-1">| {isGushu ? "Gushu (100–500 yr)" : "Plantation (50–100 yr)"}</span></dd>
+              <dd class="text-gray-800 font-medium">{treeAgeLabelRu}<span class="text-gray-400 ml-1">| {treeAgeLabelShort}</span></dd>
             </div>
             <div class="flex flex-col gap-0.5">
               <dt class="text-xs text-gray-400 uppercase tracking-wide">Хранение | Storage</dt>
@@ -114,6 +115,12 @@ const productSchema = {
           </dl>
 
           <div class="border-t border-gray-100 pt-8">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-medium">MOQ: от 1 блина | from 1 cake</span>
+              <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Опт от 10 шт | Wholesale from 10 pcs</span>
+              {p.origin && <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">{p.origin}, Yunnan</span>}
+              {p.treeAge === "gushu" && <span class="text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-full font-medium">Гушу | Gushu</span>}
+            </div>
             <p class="text-gray-500 text-sm mb-4">
               Заинтересованы в оптовых закупках? Свяжитесь с нами для получения прайс-листа.
               <span class="block text-gray-400 mt-1">Interested in wholesale? Contact us for a price list.</span>

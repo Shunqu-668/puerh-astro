@@ -1,0 +1,186 @@
+---
+import Layout from "../components/Layout.astro";
+import CoverHero from "../components/CoverHero.astro";
+import { products, typeLabels, shapeLabels, getProductImg } from "../data/products";
+---
+
+<Layout
+  title="Заказ образцов | Sample Request — PUERH DIRECT"
+  description="Закажите образцы чая пуэр перед оптовой закупкой. Request pu-erh tea samples before wholesale purchase. Бесплатная доставка образцов."
+  ogImage="https://puerhdirect.ru/images/images/catalog-header.jpg"
+  canonicalURL="/sample/"
+>
+  <CoverHero
+    titleRu="Заказ образцов"
+    titleEn="Sample Request"
+    subtitleRu="Попробуйте перед покупкой — выберите до 5 образцов"
+    subtitleEn="Try before you buy — select up to 5 samples"
+    bgImage="/images/images/catalog-header.jpg"
+  />
+
+  <section class="py-12 md:py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <form id="sample-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-10">
+        <input type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
+        <input type="hidden" name="subject" value="Новый запрос образцов с puerhdirect.ru" />
+        <input type="hidden" name="redirect" value="false" />
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+        <input type="hidden" name="selected_samples" id="selected-samples-input" value="" />
+
+        <!-- Step 1: Product Selection -->
+        <div>
+          <h2 class="text-2xl font-bold mb-2">
+            <span class="text-gray-900">1. Выберите образцы</span>
+            <span class="block text-orange-500 text-lg mt-1">1. Select Samples</span>
+          </h2>
+          <p class="text-gray-500 text-sm mb-6">
+            <span>Выберите до 5 позиций для дегустации. Стоимость образцов и доставки обсуждается индивидуально.</span>
+            <span class="block text-gray-400 mt-1">Select up to 5 teas to taste. Sample and shipping costs are discussed individually.</span>
+          </p>
+
+          <div id="sample-counter" class="text-sm text-orange-500 font-medium mb-4">
+            Выбрано | Selected: <span id="count">0</span>/5
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {products.map((p, i) => (
+              <label class={`sample-card relative flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-orange-300 transition-all has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50`}>
+                <input type="checkbox" name={`sample_${i}`} value={p.slug} class="absolute top-2 right-2 w-4 h-4 text-orange-500 rounded focus:ring-orange-500 peer" data-product={p.nameEn} />
+                <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f5f5f5] mb-2">
+                  <img src={getProductImg(p)} alt={p.nameEn} class="w-full h-full object-cover" loading="lazy" />
+                </div>
+                <span class="text-xs font-bold text-gray-800 text-center leading-tight">{p.nameRu}</span>
+                <span class="text-[10px] text-orange-500 mt-0.5">{p.nameEn}</span>
+                <span class="text-[10px] text-gray-400 mt-0.5">{p.year} · {typeLabels[p.type]?.en} · {shapeLabels[p.shape]?.en}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <!-- Step 2: Contact Info -->
+        <div class="border-t border-gray-200 pt-10">
+          <h2 class="text-2xl font-bold mb-2">
+            <span class="text-gray-900">2. Контактные данные</span>
+            <span class="block text-orange-500 text-lg mt-1">2. Contact Information</span>
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                Имя <span class="text-orange-500">*</span>
+                <span class="text-gray-400 font-normal ml-1">| Name</span>
+              </label>
+              <input type="text" name="name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm" placeholder="Александр">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                Telegram / WhatsApp / Телефон <span class="text-orange-500">*</span>
+                <span class="text-gray-400 font-normal ml-1">| Contact</span>
+              </label>
+              <input type="text" name="contact" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm" placeholder="@username / +7...">
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              Адрес доставки <span class="text-orange-500">*</span>
+              <span class="text-gray-400 font-normal ml-1">| Shipping Address</span>
+            </label>
+            <textarea name="address" required rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm resize-y" placeholder="Страна, город, индекс, адрес...&#10;Country, city, postal code, address..."></textarea>
+          </div>
+
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              Комментарий
+              <span class="text-gray-400 font-normal ml-1">| Comment</span>
+              <span class="text-gray-400 text-xs ml-1">(необязательно | optional)</span>
+            </label>
+            <textarea name="message" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm resize-y" placeholder="Дополнительные пожелания...&#10;Additional preferences..."></textarea>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="text-center pt-4 border-t border-gray-200">
+          <button type="submit" id="submit-btn" class="inline-flex items-center justify-center px-10 py-4 text-base font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[48px] bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-500/25">
+            Заказать образцы <span class="text-orange-200 ml-1">| Request Samples</span>
+          </button>
+        </div>
+
+        <div id="form-success" class="hidden text-center p-6 bg-green-50 rounded-xl border border-green-200">
+          <p class="text-green-700 font-semibold text-lg">Запрос отправлен! | Request Sent!</p>
+          <p class="text-green-600 text-sm mt-1">Мы свяжемся с вами для уточнения деталей доставки. | We'll contact you to confirm shipping details.</p>
+        </div>
+
+        <div id="form-error" class="hidden text-center p-6 bg-red-50 rounded-xl border border-red-200">
+          <p class="text-red-700 font-semibold">Ошибка отправки | Submission Error</p>
+          <p class="text-red-600 text-sm mt-1">Пожалуйста, попробуйте ещё раз или напишите нам в Telegram @sqvivi777. | Please try again or contact us on Telegram @sqvivi777.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const MAX_SAMPLES = 5;
+  const checkboxes = document.querySelectorAll('.sample-card input[type="checkbox"]');
+  const countEl = document.getElementById('count');
+  const hiddenInput = document.getElementById('selected-samples-input');
+
+  function updateCount() {
+    const checked = document.querySelectorAll('.sample-card input[type="checkbox"]:checked');
+    const count = checked.length;
+    countEl.textContent = count;
+
+    const names = Array.from(checked).map(cb => cb.dataset.product);
+    hiddenInput.value = names.join(', ');
+
+    if (count >= MAX_SAMPLES) {
+      checkboxes.forEach(cb => {
+        if (!cb.checked) cb.disabled = true;
+      });
+    } else {
+      checkboxes.forEach(cb => { cb.disabled = false; });
+    }
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateCount));
+
+  const form = document.getElementById('sample-form');
+  const btn = document.getElementById('submit-btn');
+  const success = document.getElementById('form-success');
+  const error = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const checked = document.querySelectorAll('.sample-card input[type="checkbox"]:checked');
+    if (checked.length === 0) {
+      alert('Выберите хотя бы один образец | Please select at least one sample');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = 'Отправка... | Sending...';
+    success.classList.add('hidden');
+    error.classList.add('hidden');
+
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+      const data = await res.json();
+      if (data.success) {
+        form.querySelectorAll('textarea').forEach(el => el.value = '');
+        checkboxes.forEach(cb => { cb.checked = false; cb.disabled = false; });
+        updateCount();
+        success.classList.remove('hidden');
+        success.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        error.classList.remove('hidden');
+      }
+    } catch {
+      error.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Заказать образцы <span class="text-orange-200 ml-1">| Request Samples</span>';
+    }
+  });
+</script>

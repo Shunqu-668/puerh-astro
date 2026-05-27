@@ -65,6 +65,19 @@ const faqs = [
     aEn: "We respond within 1 hour during business hours (9:00 to 21:00 Moscow time) via Telegram and WhatsApp. In Russian, English, or Chinese. For urgent inquiries, use Telegram @sqvivi777 — this is the fastest way to reach us. Outside business hours, we aim to respond within 2-3 hours.",
   },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(f => ({
+    "@type": "Question",
+    name: f.qRu,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: `${f.aRu}\n\n${f.aEn}`,
+    },
+  })),
+};
 ---
 
 <Layout
@@ -115,4 +128,6 @@ const faqs = [
       </div>
     </div>
   </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
 </Layout>
