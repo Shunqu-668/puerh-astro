@@ -14,14 +14,14 @@ interface Props {
 const { title, description, ogImage, canonicalURL } = Astro.props;
 const baseUrl = "https://puerhdirect.ru";
 const pageUrl = canonicalURL ? `${baseUrl}${canonicalURL}` : new URL(Astro.url.pathname, baseUrl).href;
-const imageUrl = ogImage || `${baseUrl}/images/images/logo.png`;
+const imageUrl = ogImage || `${baseUrl}/images/images/logo.webp`;
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "PUERH DIRECT",
   url: baseUrl,
-  logo: `${baseUrl}/images/images/logo.png`,
+  logo: `${baseUrl}/images/images/logo.webp`,
   description: "Оптовые поставки чая пуэр премиум-класса из Китая в Россию. Premium wholesale pu-erh tea from China to Russia.",
   email: "info@puerhdirect.ru",
   address: {
@@ -81,7 +81,7 @@ const organizationSchema = {
     <!-- Yandex verification (replace with your code at https://webmaster.yandex.com) -->
     <meta name="yandex-verification" content="93e5aae716cf117c" />
 
-    <link rel="icon" type="image/png" href="/images/images/logo.png" />
+    <link rel="icon" type="image/png" href="/images/images/logo.webp" />
 
     <!-- Yandex.Metrica — замените YOUR_METRICA_ID на реальный идентификатор из https://metrika.yandex.ru -->
     <script>

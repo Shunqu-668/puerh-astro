@@ -15,7 +15,24 @@ import CTAButton from "../components/CTAButton.astro";
         <span>Запрошенная страница не существует или была перемещена.</span>
         <span class="block text-gray-400 mt-1">The requested page does not exist or has been moved.</span>
       </p>
-      <CTAButton href="/">На главную <span class="text-orange-200 ml-1">| Home</span></CTAButton>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-12">
+        <CTAButton href="/">На главную <span class="text-orange-200 ml-1">| Home</span></CTAButton>
+        <CTAButton href="/catalog">Каталог <span class="text-orange-200 ml-1">| Catalog</span></CTAButton>
+      </div>
+      <div class="border-t border-gray-100 pt-8">
+        <p class="text-xs text-gray-400 mb-4">
+          <span>Популярные страницы</span>
+          <span class="text-gray-300 mx-1">|</span>
+          <span class="text-gray-400">Popular Pages</span>
+        </p>
+        <div class="flex flex-wrap gap-3 justify-center text-sm">
+          <a href="/catalog/ripe-puerh" class="text-gray-500 hover:text-orange-500 transition-colors">Шу Пуэр <span class="text-gray-400">| Ripe</span></a>
+          <a href="/catalog/raw-puerh" class="text-gray-500 hover:text-orange-500 transition-colors">Шэн Пуэр <span class="text-gray-400">| Raw</span></a>
+          <a href="/sample" class="text-gray-500 hover:text-orange-500 transition-colors">Образцы <span class="text-gray-400">| Samples</span></a>
+          <a href="/faq" class="text-gray-500 hover:text-orange-500 transition-colors">FAQ</a>
+          <a href="/contact" class="text-gray-500 hover:text-orange-500 transition-colors">Контакты <span class="text-gray-400">| Contact</span></a>
+        </div>
+      </div>
     </div>
   </section>
 </Layout>

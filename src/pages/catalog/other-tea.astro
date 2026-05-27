@@ -7,7 +7,7 @@ import CTAButton from "../../components/CTAButton.astro";
 <Layout
   title="Другой чай | Other Tea — PUERH DIRECT"
   description="Красный чай, белый чай, улун и другие сорта китайского чая оптом."
-  ogImage="https://puerhdirect.ru/images/images/4.png"
+  ogImage="https://puerhdirect.ru/images/images/4.webp"
   canonicalURL="/catalog/other-tea/"
 >
   <CoverHero
@@ -15,20 +15,40 @@ import CTAButton from "../../components/CTAButton.astro";
     titleEn="Other Tea"
     subtitleRu="Красный чай, белый чай, улун и другие сорта"
     subtitleEn="Black tea, white tea, oolong and other varieties"
-    bgImage="/images/images/4.png"
+    bgImage="/images/images/4.webp"
   />
   <section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="max-w-xl mx-auto">
-        <h2 class="text-2xl font-bold mb-4">
-          <span class="text-gray-900">Скоро в каталоге</span>
-          <span class="block text-orange-500 text-lg mt-1">Coming Soon</span>
-        </h2>
-        <p class="text-gray-500 text-sm mb-8">
-          <span>Мы обновляем раздел других сортов чая. Свяжитесь с нами для получения актуальной информации.</span>
-          <span class="block text-gray-400 mt-2">We are updating our other tea section. Contact us for current availability.</span>
-        </p>
-        <CTAButton href="/contact">Свяжитесь с нами <span class="text-orange-200 ml-1">| Contact Us</span></CTAButton>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-sm text-gray-400 mb-8">
+        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+        <span class="mx-2">/</span>
+        <a href="/catalog" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">Другой чай | Other Tea</span>
+      </nav>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="order-2 lg:order-1">
+          <img src="/images/images/4.webp" alt="Другие сорта китайского чая | Other Chinese tea varieties" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
+        <div class="order-1 lg:order-2">
+          <h2 class="text-2xl font-bold mb-4">
+            <span class="text-gray-900">Другие сорта китайского чая</span>
+            <span class="block text-orange-500 text-lg mt-1">Other Chinese Tea Varieties</span>
+          </h2>
+          <ul class="space-y-3 text-gray-600 text-sm">
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✦</span> <span>Красный чай (Дянь Хун, Цзинь Цзюнь Мэй) <span class="text-gray-400">| Black tea (Dian Hong, Jin Jun Mei)</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✦</span> <span>Белый чай (Бай Хао Инь Чжэнь, Шоу Мэй, Гун Мэй) <span class="text-gray-400">| White tea (Bai Hao Yin Zhen, Shou Mei, Gong Mei)</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✦</span> <span>Улун (Те Гуаньинь, Да Хун Пао) <span class="text-gray-400">| Oolong (Tie Guan Yin, Da Hong Pao)</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">✦</span> <span>Выдержанный белый чай (7+ лет) <span class="text-gray-400">| Aged white tea (7+ years)</span></span></li>
+          </ul>
+          <p class="text-gray-400 text-xs mt-6 leading-relaxed">
+            <span>Помимо пуэра, мы поставляем широкий спектр китайского чая. Ассортимент обновляется — запросите актуальный список.</span>
+            <span class="block mt-1">Beyond puerh, we supply a wide range of Chinese teas. Selection rotates — request the current list.</span>
+          </p>
+          <div class="mt-6">
+            <CTAButton href="/contact">Запросить каталог <span class="text-orange-200 ml-1">| Request Catalog</span></CTAButton>
+          </div>
+        </div>
       </div>
     </div>
   </section>

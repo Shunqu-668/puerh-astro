@@ -7,7 +7,7 @@ import { products, typeLabels, shapeLabels, getProductImg } from "../data/produc
 <Layout
   title="Каталог Пуэра | Puerh Catalog — PUERH DIRECT"
   description="Полный каталог чая пуэр из Китая. Full catalog of pu-erh tea from China."
-  ogImage="https://puerhdirect.ru/images/images/catalog-header.jpg"
+  ogImage="https://puerhdirect.ru/images/images/catalog-header.webp"
   canonicalURL="/catalog/"
 >
   <CoverHero
@@ -15,11 +15,18 @@ import { products, typeLabels, shapeLabels, getProductImg } from "../data/produc
     titleEn="Puerh Catalog"
     subtitleRu="Более 40 редких и выдержанных позиций из Юньнани"
     subtitleEn="Over 40 rare and aged selections from Yunnan"
-    bgImage="/images/images/catalog-header.jpg"
+    bgImage="/images/images/catalog-header.webp"
   />
 
   <section class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Breadcrumb -->
+      <nav class="text-sm text-gray-400 mb-8">
+        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">Каталог | Catalog</span>
+      </nav>
 
       <!-- Category quick links -->
       <div class="flex flex-wrap gap-3 justify-center mb-10">

@@ -67,6 +67,7 @@ export const shapeLabels: Record<string, { ru: string; en: string }> = {
 };
 
 export function getProductImg(p: Product): string {
-  const file = p.imgFile || `${p.slug}.jpg`;
+  let file = p.imgFile || `${p.slug}.jpg`;
+  file = file.replace(/\.(jpg|jpeg|png)$/i, ".webp");
   return `/images/images/products/${p.slug}/${file}`;
 }

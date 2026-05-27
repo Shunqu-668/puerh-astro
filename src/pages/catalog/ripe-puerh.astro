@@ -9,7 +9,7 @@ const ripeProducts = products.filter(p => p.type === "ripe");
 <Layout
   title="Шу Пуэр | Ripe Puerh — PUERH DIRECT"
   description="Шу пуэр (ripe puerh) оптом из Китая. Выдержанный шу пуэр с 1996 года."
-  ogImage="https://puerhdirect.ru/images/images/1.jpg"
+  ogImage="https://puerhdirect.ru/images/images/1.webp"
   canonicalURL="/catalog/ripe-puerh/"
 >
   <CoverHero
@@ -17,15 +17,23 @@ const ripeProducts = products.filter(p => p.type === "ripe");
     titleEn="Ripe Puerh"
     subtitleRu="Глубокая ферментация, насыщенный вкус, тёплое воздействие"
     subtitleEn="Deep fermentation, rich flavor, warming effect"
-    bgImage="/images/images/1.jpg"
+    bgImage="/images/images/1.webp"
   />
   <section class="py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-sm text-gray-400 mb-8">
+        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+        <span class="mx-2">/</span>
+        <a href="/catalog" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">Шу Пуэр | Ripe Puerh</span>
+      </nav>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {ripeProducts.map(p => (
           <a href={`/catalog/product/${p.slug}/`} class="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300 block">
-            <div class="aspect-square overflow-hidden bg-[#f5f5f5]">
+            <div class="aspect-square overflow-hidden bg-[#f5f5f5] relative">
               <img src={getProductImg(p)} alt={`${p.year} ${p.nameEn}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              <span class="absolute top-3 right-3 text-[10px] font-bold text-white bg-orange-500/90 backdrop-blur-sm px-2 py-1 rounded">ОПТ | WHOLESALE</span>
             </div>
             <div class="p-4">
               <div class="flex items-center gap-2 mb-2">
@@ -36,7 +44,10 @@ const ripeProducts = products.filter(p => p.type === "ripe");
                 <span class="block">{p.nameRu}</span>
                 <span class="block text-orange-500 text-xs font-medium mt-0.5">{p.nameEn}</span>
               </h3>
-              <p class="text-xs text-gray-400">{shapeLabels[p.shape]?.ru} <span class="text-gray-300">|</span> <span class="text-gray-400">{shapeLabels[p.shape]?.en}</span></p>
+              <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                <p class="text-xs text-gray-400">{shapeLabels[p.shape]?.ru} <span class="text-gray-300">|</span> <span class="text-gray-400">{shapeLabels[p.shape]?.en}</span></p>
+                <span class="text-[10px] text-orange-500 font-medium">от 1 блина | from 1 cake</span>
+              </div>
             </div>
           </a>
         ))}

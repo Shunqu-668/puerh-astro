@@ -7,7 +7,7 @@ import CTAButton from "../../components/CTAButton.astro";
 <Layout
   title="Чайная посуда | Teaware — PUERH DIRECT"
   description="Чайная посуда для заваривания пуэра: чайники, гайвани, чахай, пиалы."
-  ogImage="https://puerhdirect.ru/images/images/3.jpg"
+  ogImage="https://puerhdirect.ru/images/images/3.webp"
   canonicalURL="/catalog/teaware/"
 >
   <CoverHero
@@ -15,20 +15,41 @@ import CTAButton from "../../components/CTAButton.astro";
     titleEn="Teaware"
     subtitleRu="Традиционная посуда для заваривания пуэра"
     subtitleEn="Traditional teaware for brewing puerh"
-    bgImage="/images/images/3.jpg"
+    bgImage="/images/images/3.webp"
   />
   <section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="max-w-xl mx-auto">
-        <h2 class="text-2xl font-bold mb-4">
-          <span class="text-gray-900">Скоро в каталоге</span>
-          <span class="block text-orange-500 text-lg mt-1">Coming Soon</span>
-        </h2>
-        <p class="text-gray-500 text-sm mb-8">
-          <span>Мы обновляем раздел чайной посуды. Свяжитесь с нами для получения актуальной информации о наличии.</span>
-          <span class="block text-gray-400 mt-2">We are updating the teaware section. Contact us for current availability.</span>
-        </p>
-        <CTAButton href="/contact">Свяжитесь с нами <span class="text-orange-200 ml-1">| Contact Us</span></CTAButton>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-sm text-gray-400 mb-8">
+        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+        <span class="mx-2">/</span>
+        <a href="/catalog" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">Посуда | Teaware</span>
+      </nav>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-2xl font-bold mb-4">
+            <span class="text-gray-900">Традиционная чайная посуда</span>
+            <span class="block text-orange-500 text-lg mt-1">Traditional Teaware</span>
+          </h2>
+          <ul class="space-y-3 text-gray-600 text-sm">
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">◆</span> <span>Гайвани (традиционные чайники с крышкой) — 80–180 мл <span class="text-gray-400">| Gaiwans 80–180ml</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">◆</span> <span>Чайники из исинской глины — ручная работа <span class="text-gray-400">| Yixing clay teapots — handmade</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">◆</span> <span>Чахай (сливники справедливости) — стекло и фарфор <span class="text-gray-400">| Chahai (fairness pitchers) — glass & porcelain</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">◆</span> <span>Пиалы и дегустационные наборы <span class="text-gray-400">| Tasting cups & sets</span></span></li>
+            <li class="flex gap-2"><span class="text-orange-500 shrink-0">◆</span> <span>Чайные доски (чабань) и аксессуары <span class="text-gray-400">| Tea trays (chaban) & accessories</span></span></li>
+          </ul>
+          <p class="text-gray-400 text-xs mt-6 leading-relaxed">
+            <span>Ассортимент обновляется. Свяжитесь с нами для актуального каталога посуды и оптовых цен.</span>
+            <span class="block mt-1">Selection is updated regularly. Contact us for current teaware catalog and wholesale pricing.</span>
+          </p>
+          <div class="mt-6">
+            <CTAButton href="/contact">Запросить каталог <span class="text-orange-200 ml-1">| Request Catalog</span></CTAButton>
+          </div>
+        </div>
+        <div>
+          <img src="/images/images/3.webp" alt="Традиционная чайная посуда | Traditional teaware" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        </div>
       </div>
     </div>
   </section>
