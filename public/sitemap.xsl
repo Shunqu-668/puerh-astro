@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xpath-default-namespace="http://www.sitemaps.org/schemas/sitemap/0.9">
+  xmlns:sm="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <xsl:template match="/">
 <html lang="ru">
@@ -34,16 +34,32 @@
   <p class="sub">Sitemap — puerhdirect.ru</p>
 
   <xsl:choose>
-    <xsl:when test="/sitemapindex">
-      <p class="count">Sitemap index: <xsl:value-of select="count(/sitemapindex/sitemap)"/> file(s)</p>
+    <xsl:when test="/sm:sitemapindex">
+      <p class="count">Sitemap index: <xsl:value-of select="count(/sm:sitemapindex/sm:sitemap)"/> file(s)</p>
       <table>
         <thead><tr><th>#</th><th>Sitemap URL</th><th>Last Modified</th></tr></thead>
         <tbody>
-          <xsl:for-each select="/sitemapindex/sitemap">
+          <xsl:for-each select="/sm:sitemapindex/sm:sitemap">
             <tr>
               <td><xsl:value-of select="position()"/></td>
-              <td><a href="{loc}"><xsl:value-of select="loc"/></a></td>
-              <td class="date"><xsl:value-of select="lastmod"/></td>
+              <td><a href="{sm:loc}"><xsl:value-of select="sm:loc"/></a></td>
+              <td class="date"><xsl:value-of select="sm:lastmod"/></td>
+            </tr>
+          </xsl:for-each>
+        </tbody>
+      </table>
+    </xsl:when>
+
+    <xsl:when test="/sm:urlset">
+      <p class="count"><xsl:value-of select="count(/sm:urlset/sm:url)"/> URLs indexed</p>
+      <table>
+        <thead><tr><th>#</th><th>URL</th><th>Last Modified</th></tr></thead>
+        <tbody>
+          <xsl:for-each select="/sm:urlset/sm:url">
+            <tr>
+              <td><xsl:value-of select="position()"/></td>
+              <td><a href="{sm:loc}"><span class="loc"><xsl:value-of select="sm:loc"/></span></a></td>
+              <td class="date"><xsl:value-of select="sm:lastmod"/></td>
             </tr>
           </xsl:for-each>
         </tbody>
@@ -51,19 +67,7 @@
     </xsl:when>
 
     <xsl:otherwise>
-      <p class="count"><xsl:value-of select="count(/urlset/url)"/> URLs indexed</p>
-      <table>
-        <thead><tr><th>#</th><th>URL</th><th>Last Modified</th></tr></thead>
-        <tbody>
-          <xsl:for-each select="/urlset/url">
-            <tr>
-              <td><xsl:value-of select="position()"/></td>
-              <td><a href="{loc}"><span class="loc"><xsl:value-of select="loc"/></span></a></td>
-              <td class="date"><xsl:value-of select="lastmod"/></td>
-            </tr>
-          </xsl:for-each>
-        </tbody>
-      </table>
+      <p class="count">Unknown sitemap format</p>
     </xsl:otherwise>
   </xsl:choose>
 </div>
