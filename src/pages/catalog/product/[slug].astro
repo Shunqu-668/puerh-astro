@@ -1,0 +1,71 @@
+---
+import Layout from "../../../components/Layout.astro";
+import CTAButton from "../../../components/CTAButton.astro";
+import { products, typeLabels, shapeLabels, getProductImg } from "../../../data/products";
+
+export function getStaticPaths() {
+  return products.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const p = products.find(x => x.slug === slug);
+
+if (!p) return Astro.redirect("/404");
+---
+
+<Layout
+  title={`${p.year} ${p.nameRu} | ${p.nameEn} — PUERH DIRECT`}
+  description={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}. Оптовые поставки из Китая.`}
+>
+  <section class="py-12 md:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-sm text-gray-400 mb-8">
+        <a href="/catalog/" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
+        <span class="mx-2">/</span>
+        <a href={`/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/`} class="hover:text-orange-500 transition-colors">{typeLabels[p.type].ru} | {typeLabels[p.type].en}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">{p.nameEn}</span>
+      </nav>
+
+      <div class="grid md:grid-cols-2 gap-10 lg:gap-16">
+        <div class="aspect-square rounded-2xl overflow-hidden bg-[#f5f5f5]">
+          <img
+            src={getProductImg(p)}
+            alt={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`}
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-sm font-bold text-white bg-orange-500 px-3 py-1 rounded-full">{p.year}</span>
+            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{typeLabels[p.type].ru} | {typeLabels[p.type].en}</span>
+            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{shapeLabels[p.shape].ru} | {shapeLabels[p.shape].en}</span>
+          </div>
+
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {p.nameRu}
+          </h1>
+          <p class="text-xl text-orange-500 font-medium mb-8">{p.nameEn}</p>
+
+          <div class="space-y-4 text-gray-600 text-sm leading-relaxed mb-8">
+            <p>
+              {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра из провинции Юньнань, Китай. Этот {p.type === "raw" ? "шэн" : "шу"} пуэр отличается насыщенным вкусом и ароматом, характерным для чая из региона произрастания.
+            </p>
+            <p class="text-gray-400">
+              {p.year} {typeLabels[p.type].en} puerh, {shapeLabels[p.shape].en.toLowerCase()} from Yunnan, China. This {p.type === "raw" ? "sheng" : "shu"} puerh offers a complex flavor profile and rich aroma characteristic of its growing region.
+            </p>
+          </div>
+
+          <div class="border-t border-gray-100 pt-8">
+            <p class="text-gray-500 text-sm mb-4">
+              Заинтересованы в оптовых закупках? Свяжитесь с нами для получения прайс-листа.
+              <span class="block text-gray-400 mt-1">Interested in wholesale? Contact us for a price list.</span>
+            </p>
+            <CTAButton href="/contact">Получить прайс | Get Quote</CTAButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
