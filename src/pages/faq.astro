@@ -1,0 +1,118 @@
+---
+import Layout from "../components/Layout.astro";
+import CoverHero from "../components/CoverHero.astro";
+import CTAButton from "../components/CTAButton.astro";
+
+const faqs = [
+  {
+    qRu: "Какой минимальный объём заказа?",
+    qEn: "What is the minimum order quantity?",
+    aRu: "Минимальный заказ — от 1 блина (200 г) любого чая из каталога. Однако для оптовых цен рекомендуем заказывать от 10 штук одной позиции — это даёт существенную скидку. Для крупного опта (от 50 шт.) предоставляем индивидуальные условия. Свяжитесь с нами для расчёта точной стоимости вашей партии.",
+    aEn: "Minimum order is from 1 cake (200g) of any tea in our catalog. However, for wholesale pricing we recommend ordering 10+ pieces of one item — this provides a significant discount. For large wholesale (50+ pcs), we offer individual terms. Contact us for an exact quote on your batch.",
+  },
+  {
+    qRu: "Как происходит доставка в Россию?",
+    qEn: "How does shipping to Russia work?",
+    aRu: "Доставка осуществляется из Гуанчжоу (Китай) напрямую в Россию. Срок доставки: 7-12 дней в зависимости от региона. Работаем с СДЭК, Почтой России и транспортными компаниями. Каждый заказ упаковывается в многослойную защитную упаковку для сохранности чая при международной перевозке. Стоимость доставки рассчитывается индивидуально в зависимости от веса и объёма заказа.",
+    aEn: "Shipping is carried out from Guangzhou (China) directly to Russia. Delivery time: 7-12 days depending on the region. We work with CDEK, Russian Post, and transport companies. Each order is packed in multi-layer protective packaging to preserve tea quality during international transit. Shipping cost is calculated individually based on weight and volume.",
+  },
+  {
+    qRu: "Где хранится чай и как обеспечивается качество?",
+    qEn: "Where is the tea stored and how is quality ensured?",
+    aRu: "Весь чай хранится на собственном складе в Гуанчжоу при контролируемой температуре и влажности — идеальных условиях для выдержки пуэра. Каждая партия проходит многоступенчатый контроль: отбор сырья на плантациях Юньнани → проверка при поступлении на склад → финальная инспекция перед отправкой. Наша семья занимается чаем более 20 лет, и мы лично отвечаем за качество каждого блина.",
+    aEn: "All tea is stored in our own warehouse in Guangzhou under controlled temperature and humidity — ideal conditions for puerh aging. Each batch undergoes multi-stage quality control: raw material selection at Yunnan plantations → inspection upon warehouse arrival → final check before shipping. Our family has been in tea business for over 20 years, and we personally vouch for the quality of every cake.",
+  },
+  {
+    qRu: "Какие виды пуэра вы предлагаете?",
+    qEn: "What types of puerh do you offer?",
+    aRu: "Мы предлагаем шу пуэр (ripe/cooked) и шэн пуэр (raw/sheng) в трёх основных форматах: блин (200 г), кирпич (250 г) и точа (100-250 г). В каталоге представлены как молодые чаи (2020-2025 гг.), так и редкие выдержанные позиции начиная с 1996 года. Также доступны чайная посуда (гайвани, чайники, пиалы) и другие сорта китайского чая (красный, белый, улун).",
+    aEn: "We offer ripe (shu) and raw (sheng) puerh in three main formats: cake (200g), brick (250g), and tuocha (100-250g). Our catalog includes both young teas (2020-2025) and rare aged selections dating back to 1996. We also offer teaware (gaiwans, teapots, cups) and other Chinese tea varieties (black, white, oolong).",
+  },
+  {
+    qRu: "Можно ли создать свой собственный бренд чая?",
+    qEn: "Can I create my own tea brand?",
+    aRu: "Да, мы предлагаем услугу «приватная марка» (private label). Вы можете заказать чай с собственной обёрткой и упаковкой. Процесс включает 4 этапа: консультация по целям и бюджету → подбор чайной основы и разработка дизайна → изготовление и отправка образцов для утверждения → запуск партии в производство. Популярные форматы: мини-точа 8 г, мини-блин 50 г, малый блин 100 г, стандартный блин 200 г.",
+    aEn: "Yes, we offer private label services. You can order tea with your own wrapper and packaging. The process includes 4 stages: consultation on goals and budget → tea base selection and design development → sample production and approval → batch production launch. Popular formats: mini tuocha 8g, mini cake 50g, small cake 100g, standard cake 200g.",
+  },
+  {
+    qRu: "Откуда родом ваш чай и как вы его отбираете?",
+    qEn: "Where does your tea come from and how do you select it?",
+    aRu: "Весь пуэр происходит из провинции Юньнань (Китай) — единственного региона, где производится настоящий пуэр. Чай собирается с древних чайных деревьев (гушу) и плантационных садов в знаменитых чайных горах: Баньчжан, Иу, Булан, Биндао, Линьцан и других. Мы лично посещаем хозяйства, дегустируем каждую партию и отбираем только те позиции, которые соответствуют нашим стандартам вкуса, аромата и потенциала выдержки.",
+    aEn: "All puerh comes from Yunnan Province, China — the only region where authentic puerh is produced. Tea is harvested from ancient tea trees (gushu) and plantation gardens in famous tea mountains: Banzhang, Yiwu, Bulang, Bingdao, Lincang, and others. We personally visit farms, taste every batch, and select only those teas that meet our standards for flavor, aroma, and aging potential.",
+  },
+  {
+    qRu: "Какие способы оплаты вы принимаете?",
+    qEn: "What payment methods do you accept?",
+    aRu: "Мы принимаем банковские переводы (USD/RMB), USDT (TRC-20), а также платежи через платёжные системы по договорённости. Для постоянных клиентов возможна отсрочка платежа. Все детали обсуждаются индивидуально — свяжитесь с нами для уточнения условий по конкретному заказу.",
+    aEn: "We accept bank transfers (USD/RMB), USDT (TRC-20), and payments through payment systems by arrangement. Deferred payment is available for regular clients. All details are discussed individually — contact us to clarify terms for your specific order.",
+  },
+  {
+    qRu: "Есть ли у вас сертификаты качества?",
+    qEn: "Do you have quality certificates?",
+    aRu: "Да, вся наша продукция проходит необходимую сертификацию. Мы предоставляем сертификаты происхождения, фитосанитарные сертификаты и протоколы лабораторных испытаний по запросу. Каждая позиция имеет документальное подтверждение года производства и региона сбора. Для оптовых партнёров готовы предоставить полный пакет документов для таможенного оформления.",
+    aEn: "Yes, all our products undergo necessary certification. We provide certificates of origin, phytosanitary certificates, and laboratory test reports upon request. Each item has documented proof of production year and harvest region. For wholesale partners, we can provide a complete documentation package for customs clearance.",
+  },
+  {
+    qRu: "Чем ваш пуэр отличается от того, что продаётся на маркетплейсах?",
+    qEn: "How is your puerh different from what's sold on marketplaces?",
+    aRu: "Ключевые отличия: 1) Прямые поставки с плантаций без посредников — вы получаете чай по реальной цене, а не с наценкой перекупщиков. 2) Контролируемое хранение в Гуанчжоу — правильная влажность и температура, что критически важно для пуэра. 3) Наш 20-летний опыт позволяет отбирать действительно достойные позиции. 4) Каждый блин проверяется лично перед отправкой. 5) Мы специализируемся именно на пуэре, а не продаём «всё подряд».",
+    aEn: "Key differences: 1) Direct supply from plantations without middlemen — you get tea at real prices, not with reseller markups. 2) Controlled storage in Guangzhou — proper humidity and temperature, which is critical for puerh. 3) Our 20-year experience allows us to select truly worthy teas. 4) Every cake is personally inspected before shipping. 5) We specialize specifically in puerh, not selling 'everything and anything.'",
+  },
+  {
+    qRu: "Как быстро вы отвечаете на запросы?",
+    qEn: "How quickly do you respond to inquiries?",
+    aRu: "Мы отвечаем в течение 1 часа в рабочее время (с 9:00 до 21:00 по московскому времени) через Telegram и WhatsApp. На русском, английском или китайском языке. Для срочных вопросов используйте Telegram @sqvivi777 — это самый быстрый способ связи. В нерабочее время стараемся отвечать в течение 2-3 часов.",
+    aEn: "We respond within 1 hour during business hours (9:00 to 21:00 Moscow time) via Telegram and WhatsApp. In Russian, English, or Chinese. For urgent inquiries, use Telegram @sqvivi777 — this is the fastest way to reach us. Outside business hours, we aim to respond within 2-3 hours.",
+  },
+];
+---
+
+<Layout
+  title="Часто задаваемые вопросы | FAQ — PUERH DIRECT"
+  description="FAQ по оптовым заказам чая пуэр: минимальный заказ, доставка в Россию, качество, оплата, сертификаты. Вопросы и ответы. FAQ on wholesale puerh tea orders."
+  ogImage="https://puerh-astro.pages.dev/images/images/catalog-header.jpg"
+  canonicalURL="/faq/"
+>
+  <CoverHero
+    titleRu="Часто задаваемые вопросы"
+    titleEn="Frequently Asked Questions"
+    subtitleRu="Всё, что нужно знать о заказе пуэра оптом"
+    subtitleEn="Everything you need to know about wholesale puerh orders"
+    bgImage="/images/images/catalog-header.jpg"
+  />
+
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <dl class="divide-y divide-gray-200">
+        {faqs.map((faq, i) => (
+          <details class="group py-6 cursor-pointer">
+            <summary class="flex justify-between items-start gap-4 text-left list-none [&::-webkit-details-marker]:hidden">
+              <h2 class="text-lg font-bold text-gray-900 group-open:text-orange-600 transition-colors">
+                <span class="block">{faq.qRu}</span>
+                <span class="block text-orange-500 text-base font-medium mt-1">{faq.qEn}</span>
+              </h2>
+              <span class="text-orange-500 text-2xl shrink-0 mt-1 group-open:hidden">+</span>
+              <span class="text-orange-500 text-2xl shrink-0 mt-1 hidden group-open:inline">−</span>
+            </summary>
+            <div class="mt-4 space-y-2">
+              <p class="text-gray-600 text-sm leading-relaxed">{faq.aRu}</p>
+              <p class="text-gray-400 text-sm leading-relaxed">{faq.aEn}</p>
+            </div>
+          </details>
+        ))}
+      </dl>
+
+      <div class="mt-16 text-center bg-[#f5f5f5] rounded-2xl p-10">
+        <h2 class="text-2xl font-bold mb-4">
+          <span class="text-gray-900">Не нашли ответ?</span>
+          <span class="block text-orange-500 text-lg mt-1">Didn't find an answer?</span>
+        </h2>
+        <p class="text-gray-500 text-sm mb-6">
+          <span>Напишите нам напрямую — проконсультируем по любым вопросам.</span>
+          <span class="block text-gray-400 mt-1">Write to us directly — we'll advise on any questions.</span>
+        </p>
+        <CTAButton href="/contact">Связаться с нами | Contact Us</CTAButton>
+      </div>
+    </div>
+  </section>
+</Layout>
