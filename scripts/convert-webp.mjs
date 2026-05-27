@@ -14,7 +14,7 @@ function walk(dir) {
     } else {
       const ext = extname(entry).toLowerCase();
       if (!EXTS.includes(ext)) continue;
-      const webpPath = full.replace(ext, ".webp");
+            const webpPath = full.slice(0, -ext.length) + ".webp";
       if (existsSync(webpPath)) continue;
       tasks.push(
         sharp(full)
