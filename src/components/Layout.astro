@@ -6,9 +6,36 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage, canonicalURL } = Astro.props;
+const baseUrl = "https://puerh-astro.pages.dev";
+const pageUrl = canonicalURL ? `${baseUrl}${canonicalURL}` : new URL(Astro.url.pathname, baseUrl).href;
+const imageUrl = ogImage || `${baseUrl}/images/images/logo.png`;
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "PUERH DIRECT",
+  url: baseUrl,
+  logo: `${baseUrl}/images/images/logo.png`,
+  description: "Оптовые поставки чая пуэр премиум-класса из Китая в Россию. Premium wholesale pu-erh tea from China to Russia.",
+  email: "info@puerhdirect.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Гуанчжоу",
+    addressCountry: "CN",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+86-13728005309",
+    contactType: "sales",
+    availableLanguage: ["Russian", "English", "Chinese"],
+  },
+  sameAs: ["https://t.me/sqvivi777"],
+};
 ---
 
 <!doctype html>
@@ -18,7 +45,44 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} — PUERH DIRECT</title>
     {description && <meta name="description" content={description} />}
+
+    <!-- Canonical -->
+    <link rel="canonical" href={pageUrl} />
+
+    <!-- hreflang: Russian (default) + English -->
+    <link rel="alternate" hreflang="ru" href={pageUrl} />
+    <link rel="alternate" hreflang="en" href={pageUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PUERH DIRECT" />
+    <meta property="og:title" content={`${title} — PUERH DIRECT`} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} — PUERH DIRECT`} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={imageUrl} />
+
+    <!-- GEO tags for Russia/CIS -->
+    <meta name="geo.region" content="RU" />
+    <meta name="geo.placename" content="Гуанчжоу, Китай | Guangzhou, China" />
+    <meta name="geo.position" content="23.1291;113.2644" />
+
+    <!-- Yandex verification (replace with your code at https://webmaster.yandex.com) -->
+    <!-- <meta name="yandex-verification" content="YOUR_CODE" /> -->
+
     <link rel="icon" type="image/png" href="/images/images/logo.png" />
+
+    <!-- JSON-LD Organization -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
   </head>
   <body class="bg-white text-gray-900 antialiased">
     <Nav />
