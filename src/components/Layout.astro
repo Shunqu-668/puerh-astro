@@ -83,6 +83,10 @@ const organizationSchema = {
 
     <link rel="icon" type="image/png" href="/images/images/logo.webp" />
 
+    <link rel="preload" as="image" href="/images/images/logo.webp" />
+
+    <slot name="head" />
+
     <!-- Yandex.Metrica — замените YOUR_METRICA_ID на реальный идентификатор из https://metrika.yandex.ru -->
     <script>
       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

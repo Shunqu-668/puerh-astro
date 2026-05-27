@@ -21,6 +21,17 @@ const treeAgeLabelRu = isGushu ? "Гушу (100–500 лет)" : "Арбор (40
 const treeAgeLabelShort = isGushu ? "Gushu (100–500 yr)" : "Arbor (40–100 yr)";
 const altitude = "1200–1800 m";
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "PUERH DIRECT", item: "https://puerhdirect.ru/" },
+    { "@type": "ListItem", position: 2, name: "Каталог | Catalog", item: "https://puerhdirect.ru/catalog/" },
+    { "@type": "ListItem", position: 3, name: `${typeLabels[p.type].ru} | ${typeLabels[p.type].en}`, item: `https://puerhdirect.ru/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/` },
+    { "@type": "ListItem", position: 4, name: p.nameEn },
+  ],
+};
+
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
@@ -132,5 +143,6 @@ const productSchema = {
     </div>
   </section>
 
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)}></script>
   <script type="application/ld+json" set:html={JSON.stringify(productSchema)}></script>
 </Layout>
