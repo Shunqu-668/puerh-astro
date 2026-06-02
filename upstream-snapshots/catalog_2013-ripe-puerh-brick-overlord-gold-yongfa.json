@@ -1,0 +1,56 @@
+{
+  "sections": 1,
+  "headings": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 2,
+    "h4": 2
+  },
+  "imageCount": 8,
+  "imageUrls": [
+    "https://mc.yandex.ru/watch/109302235",
+    "/images/logo.png",
+    "/images/products/2013-ripe-puerh-brick-overlord-gold-yongfa/2013-ripe-puerh-brick-overlord-gold-yongfa.jpg",
+    "/images/products/2013-ripe-puerh-brick-overlord-gold-yongfa/2013-ripe-puerh-brick-overlord-gold-yongfa.jpg",
+    "/images/products/2013-ripe-puerh-brick-overlord-gold-yongfa/2222.jpg",
+    "/images/products/2013-ripe-puerh-brick-overlord-gold-yongfa/3333.jpg",
+    "/images/products/2013-ripe-puerh-brick-overlord-gold-yongfa/4444.jpg",
+    "/images/wechat-qr.png"
+  ],
+  "imageAlts": [
+    "",
+    "puerhdirect",
+    "Шу Пуэр Кирпич Золотой Барион Банчжан 2013 года, 250г/штука",
+    "thumbnail",
+    "thumbnail",
+    "thumbnail",
+    "thumbnail",
+    "WeChat QR"
+  ],
+  "cssClassCount": 22,
+  "cssClasses": [
+    "absolute top-0 left-0 right-0 z-50",
+    "flex flex-col items-center py-8 px-4",
+    "text-center mb-8 w-full flex justify-between items-center",
+    "w-10 sm:hidden",
+    "text-white text-2xl focus:outline-none",
+    "h-16 md:h-24 mx-auto",
+    "absolute inset-0 bg-black/80",
+    "text-gray-400 text-sm tracking-wide",
+    "hover:text-white transition",
+    "hover:text-white transition uppercase",
+    "text-[#F58220] uppercase",
+    "bg-[#0a0a0a] min-h-screen pt-12 pb-24 text-gray-300",
+    "max-w-7xl mx-auto px-4 md:px-8",
+    "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20",
+    "lg:col-span-7",
+    "lg:col-span-5 flex flex-col justify-start pt-2",
+    "text-3xl md:text-4xl font-bold text-white mb-3 leading-tight",
+    "text-lg text-gray-500 mb-10 font-serif tracking-wide",
+    "flex flex-col gap-y-4 py-6 border-y border-gray-800/50 mb-10",
+    "flex justify-between border-b border-gray-800/30 pb-3",
+    "text-gray-400 text-sm md:text-base tracking-wider",
+    "text-white text-sm md:text-base font-medium"
+  ],
+  "htmlSize": 21452
+}

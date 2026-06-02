@@ -1,0 +1,58 @@
+{
+  "sections": 4,
+  "headings": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 9,
+    "h4": 2
+  },
+  "imageCount": 9,
+  "imageUrls": [
+    "https://mc.yandex.ru/watch/109302235",
+    "/images/logo.png",
+    "/images/service-whitelabel.jpg",
+    "/images/service-pressing.jpg",
+    "/images/shape-8g.jpg",
+    "/images/shape-50g.jpg",
+    "/images/shape-100g.jpg",
+    "/images/shape-200g.jpg",
+    "/images/wechat-qr.png"
+  ],
+  "imageAlts": [
+    "",
+    "puerhdirect",
+    "White Label Solutions",
+    "Custom Pressing",
+    "Mini Tuo 8g",
+    "Chocolate Brick 50g",
+    "Small Cake 100g",
+    "Tea Brick 200g",
+    "WeChat QR"
+  ],
+  "cssClassCount": 22,
+  "cssClasses": [
+    "absolute top-0 left-0 right-0 z-50",
+    "flex flex-col items-center py-8 px-4",
+    "text-center mb-8 w-full flex justify-between items-center",
+    "w-10 sm:hidden",
+    "text-white text-2xl focus:outline-none",
+    "h-16 md:h-24 mx-auto",
+    "absolute inset-0 bg-black/80 backdrop-blur-[2px]",
+    "relative z-10 text-center text-white px-4 max-w-4xl mt-32",
+    "text-4xl md:text-5xl font-serif font-bold mb-4",
+    "text-xl text-gray-200 mb-8",
+    "bg-white py-24",
+    "max-w-7xl mx-auto px-4",
+    "grid md:grid-cols-2 gap-16",
+    "aspect-[4/3] object-cover w-full rounded-xl mb-8 shadow-md",
+    "text-2xl font-bold mb-6",
+    "text-gray-600 text-base leading-relaxed",
+    "bg-gray-50 py-24",
+    "text-3xl md:text-4xl font-bold text-center mb-16",
+    "grid grid-cols-2 md:grid-cols-4 gap-8",
+    "aspect-square object-cover w-full mb-6 rounded-sm",
+    "font-bold mb-2",
+    "text-sm text-gray-500"
+  ],
+  "htmlSize": 17722
+}
