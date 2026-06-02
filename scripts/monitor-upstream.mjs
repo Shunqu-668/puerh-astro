@@ -36,11 +36,24 @@ function extractText(html) {
 async function fetchPage(page) {
   const url = BASE_URL + page.url;
   console.log(`Fetching: ${url}`);
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'PUERH-DIRECT-Monitor/1.0' },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-  return await res.text();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+    return await res.text();
+  } catch (err) {
+    clearTimeout(timeout);
+    throw err;
+  }
 }
 
 function getSnapshotPath(name) {
@@ -76,6 +89,8 @@ async function main() {
 
   const changes = [];
 
+  let errorCount = 0;
+
   for (const page of PAGES) {
     try {
       const html = await fetchPage(page);
@@ -105,8 +120,15 @@ async function main() {
         console.log(`  → unchanged: ${page.name}`);
       }
     } catch (err) {
+      errorCount++;
       console.error(`  → ERROR ${page.name}: ${err.message}`);
+        if (err.cause) console.error(`    cause: ${err.cause}`);
     }
+  }
+
+  if (errorCount === PAGES.length) {
+    console.error(`\nAll ${PAGES.length} pages failed to fetch. Exiting with error.`);
+    process.exit(1);
   }
 
   if (changes.length === 0) {
@@ -155,10 +177,15 @@ async function main() {
   fs.writeFileSync(tmpFile, issueBody);
 
   if (process.env.GITHUB_ACTIONS) {
-    execSync(`gh issue create --title "上游变化 — ${date}" --body-file ${tmpFile} --label "upstream-change"`, {
-      stdio: 'inherit',
-    });
-    console.log('\nIssue created.');
+    try {
+      execSync(`gh issue create --title "上游变化 — ${date}" --body-file ${tmpFile} --label "upstream-change"`, {
+        stdio: 'inherit',
+      });
+      console.log('\nIssue created.');
+    } catch (err) {
+      console.error('Failed to create issue:', err.message);
+      console.log('Issue body saved to:', tmpFile);
+    }
   } else {
     console.log('\n[local run] Issue body written to:', tmpFile);
   }
