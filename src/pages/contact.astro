@@ -176,8 +176,8 @@ import CTAButton from "../components/CTAButton.astro";
           </div>
 
           <div class="text-center pt-2">
-            <button type="submit" id="submit-btn" class="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[44px] bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-500/25">
-              Отправить запрос <span class="text-orange-200 ml-1">| Send Inquiry</span>
+            <button type="submit" id="submit-btn" class="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[44px] bg-[#F58220] text-gray-900 hover:bg-[#E07518] hover:shadow-orange-500/25">
+              Отправить запрос <span class="text-gray-700 ml-1">| Send Inquiry</span>
             </button>
           </div>
 
@@ -226,7 +226,7 @@ import CTAButton from "../components/CTAButton.astro";
       error.classList.remove('hidden');
     } finally {
       btn.disabled = false;
-      btn.innerHTML = 'Отправить запрос <span class="text-orange-200 ml-1">| Send Inquiry</span>';
+      btn.innerHTML = 'Отправить запрос <span class="text-gray-700 ml-1">| Send Inquiry</span>';
     }
   });
 </script>

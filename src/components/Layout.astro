@@ -94,9 +94,14 @@ const organizationSchema = {
       for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}
       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-      ym(109468811, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+      try { ym(109468811, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true}); } catch(e) {}
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109468811" style="position:absolute;left:-9999px" alt="" /></div></noscript>
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.target && (e.target.src || '').indexOf('mc.yandex') > -1) { e.preventDefault(); }
+      }, true);
+    </script>
 
     <!-- JSON-LD Organization -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
