@@ -20,6 +20,10 @@ function stripDynamicContent(html) {
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<link[^>]*rel="stylesheet"[^>]*>/gi, '')
+    .replace(/\b[a-f0-9]{8,}\b/gi, 'HASH')
+    .replace(/"[a-f0-9]{8,}"/gi, '"HASH"')
+    .replace(/\/[a-f0-9]{8,}\./g, '/HASH.')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -103,7 +107,10 @@ async function main() {
       const oldCleaned = fs.existsSync(htmlPath) ? stripDynamicContent(fs.readFileSync(htmlPath, 'utf8')) : '';
       const oldText = fs.existsSync(textPath) ? fs.readFileSync(textPath, 'utf8') : '';
 
-      if (oldCleaned !== cleaned) {
+      const textChanged = oldText !== text;
+      const htmlChanged = oldCleaned !== cleaned;
+
+      if (textChanged) {
         const diff = generateDiff(oldText, text);
         changes.push({
           name: page.name,
@@ -115,7 +122,11 @@ async function main() {
 
         fs.writeFileSync(htmlPath, html);
         fs.writeFileSync(textPath, text);
-        console.log(`  → CHANGED: ${page.name}`);
+        console.log(`  → TEXT CHANGED: ${page.name}`);
+      } else if (htmlChanged) {
+        fs.writeFileSync(htmlPath, html);
+        fs.writeFileSync(textPath, text);
+        console.log(`  → html-only change (ignored): ${page.name}`);
       } else {
         console.log(`  → unchanged: ${page.name}`);
       }
