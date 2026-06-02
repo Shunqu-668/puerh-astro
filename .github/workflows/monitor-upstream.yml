@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 jobs:
@@ -19,13 +19,19 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 抓取上游页面并对比变化
-        run: node scripts/monitor-upstream.mjs
-
-      - name: 提交快照更新
-        if: success()
+      - name: 构建本站（用于对比）
         run: |
-          git config user.name "puerh-web"
-          git config user.email "puerh-web@users.noreply.github.com"
-          git add upstream-snapshots/
-          git diff --staged --quiet || (git commit -m "chore: 更新上游快照 $(date +%Y-%m-%d)" && git push)
+          npm ci
+          npm run build
+
+      - name: 抓取上游并对比本站
+        run: node scripts/monitor-upstream.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: 上传对比报告
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upstream-monitor-report
+          path: upstream-snapshots/LATEST-REPORT.md

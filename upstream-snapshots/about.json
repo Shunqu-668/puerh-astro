@@ -24,29 +24,5 @@
     "WeChat QR"
   ],
   "cssClassCount": 22,
-  "cssClasses": [
-    "absolute top-0 left-0 right-0 z-50",
-    "flex flex-col items-center py-8 px-4",
-    "text-center mb-8 w-full flex justify-between items-center",
-    "w-10 sm:hidden",
-    "text-white text-2xl focus:outline-none",
-    "h-16 md:h-24 mx-auto",
-    "absolute inset-0 bg-black/40",
-    "relative z-10 text-center text-white px-4 max-w-4xl mt-32",
-    "text-4xl md:text-5xl font-serif font-bold mb-4",
-    "text-xl text-gray-200 mb-8",
-    "py-24 bg-white",
-    "text-2xl font-bold mb-6",
-    "text-gray-600 text-base leading-relaxed",
-    "rounded-xl shadow-lg aspect-[4/3] object-cover w-full",
-    "py-24 bg-gray-50",
-    "bg-[#111111] py-20 text-center text-white",
-    "max-w-4xl mx-auto px-4",
-    "text-3xl font-bold mb-4",
-    "text-gray-300 mb-10 text-lg",
-    "bg-[#111111] border-t-4 border-[#F58220] text-white py-12",
-    "max-w-7xl mx-auto px-4",
-    "grid grid-cols-1 md:grid-cols-[3fr_3fr_4fr] gap-6 mb-10"
-  ],
   "htmlSize": 13546
 }

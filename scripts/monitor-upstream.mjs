@@ -6,20 +6,20 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SNAPSHOTS_DIR = path.join(__dirname, '..', 'upstream-snapshots');
-const BASE_URL = 'https://puerhdirect.com';
+const DIST_DIR = path.join(__dirname, '..', 'dist');
+const UPSTREAM_URL = 'https://puerhdirect.com';
+const OUR_URL = 'https://puerhdirect.ru';
 const CONCURRENCY = 5;
 const FETCH_TIMEOUT = 30000;
 
-// 基础页面（固定监控）
 const BASE_PAGES = [
-  { url: '/', name: 'homepage' },
-  { url: '/catalog', name: 'catalog' },
-  { url: '/about', name: 'about' },
-  { url: '/contact', name: 'contact' },
-  { url: '/private-label', name: 'private-label' },
+  { url: '/', name: 'homepage', ourPath: 'index.html' },
+  { url: '/catalog', name: 'catalog', ourPath: 'catalog/index.html' },
+  { url: '/about', name: 'about', ourPath: 'about/index.html' },
+  { url: '/contact', name: 'contact', ourPath: 'contact/index.html' },
+  { url: '/private-label', name: 'private-label', ourPath: 'private-label/index.html' },
 ];
 
-// 分类/子分类页面
 const CATEGORY_PAGES = [
   { url: '/catalog/ripe-puerh', name: 'catalog/ripe-puerh' },
   { url: '/catalog/raw-puerh', name: 'catalog/raw-puerh' },
@@ -68,22 +68,25 @@ function extractText(html) {
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
     .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
-// 提取页面结构指纹：区块数、标题层级、图片列表、关键CSS类
 function extractStructure(html) {
   const sections = (html.match(/<section\b[^>]*>/gi) || []).length;
   const headings = {};
   for (const h of ['h1', 'h2', 'h3', 'h4']) {
-    const matches = html.match(new RegExp(`<${h}\\b[^>]*>`, 'gi'));
-    headings[h] = matches ? matches.length : 0;
+    const m = html.match(new RegExp(`<${h}[ >]`, 'gi'));
+    headings[h] = m ? m.length : 0;
   }
   const images = [...html.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/gi)].map(m => {
     const src = m[1];
-    const alt = (m[0].match(/alt="([^"]*)"/) || [,''])[1];
-    return { src, alt };
+    const alt = (m[0].match(/alt="([^"]*)"/) || [, ''])[1];
+    return { src: src.replace(/\?.*/, ''), alt };
   });
   const mainCssClasses = [...new Set([...html.matchAll(/class="([^"]{5,60})"/gi)].map(m => m[1]).slice(0, 30))];
 
@@ -91,10 +94,9 @@ function extractStructure(html) {
     sections,
     headings,
     imageCount: images.length,
-    imageUrls: images.map(i => i.src.replace(BASE_URL, '').replace(/\?.*/, '')),
+    imageUrls: images.map(i => i.src),
     imageAlts: images.map(i => i.alt),
     cssClassCount: mainCssClasses.length,
-    cssClasses: mainCssClasses,
     htmlSize: html.length,
   };
 }
@@ -110,65 +112,52 @@ function getStorePath(name) {
 
 function compareStructure(oldS, newS) {
   const diffs = [];
-  if (oldS.sections !== newS.sections) diffs.push(`区块数: ${oldS.sections} → ${newS.sections}`);
+  if (oldS.sections !== newS.sections) diffs.push(`区块: ${oldS.sections}→${newS.sections}`);
   for (const h of ['h1', 'h2', 'h3', 'h4']) {
-    if (oldS.headings[h] !== newS.headings[h]) diffs.push(`<${h}>: ${oldS.headings[h]} → ${newS.headings[h]}`);
+    if (oldS.headings[h] !== newS.headings[h]) diffs.push(`<${h}>: ${oldS.headings[h]}→${newS.headings[h]}`);
   }
-  if (oldS.imageCount !== newS.imageCount) diffs.push(`图片数: ${oldS.imageCount} → ${newS.imageCount}`);
+  if (oldS.imageCount !== newS.imageCount) diffs.push(`图片: ${oldS.imageCount}→${newS.imageCount}`);
 
-  const oldImgSet = new Set(oldS.imageUrls);
-  const newImgSet = new Set(newS.imageUrls);
+  const oldImgSet = new Set(oldS.imageUrls.map(u => u.split('/').pop()));
+  const newImgSet = new Set(newS.imageUrls.map(u => u.split('/').pop()));
   const addedImgs = [...newImgSet].filter(u => !oldImgSet.has(u));
   const removedImgs = [...oldImgSet].filter(u => !newImgSet.has(u));
-  if (addedImgs.length > 0) diffs.push(`新增图片: +${addedImgs.length} 张`);
-  if (removedImgs.length > 0) diffs.push(`移除图片: -${removedImgs.length} 张`);
-
-  if (oldS.cssClassCount !== newS.cssClassCount) diffs.push(`CSS类数: ${oldS.cssClassCount} → ${newS.cssClassCount}`);
-  if (oldS.htmlSize !== newS.htmlSize) diffs.push(`HTML大小: ${oldS.htmlSize} → ${newS.htmlSize} 字节`);
+  if (addedImgs.length > 0) diffs.push(`+${addedImgs.length}图`);
+  if (removedImgs.length > 0) diffs.push(`-${removedImgs.length}图`);
 
   return diffs;
 }
 
-function generateTextDiff(oldText, newText) {
-  const oldLines = oldText.split('\n');
-  const newLines = newText.split('\n');
-  const oldSet = new Set(oldLines.map(l => l.trim()).filter(Boolean));
-  const newSet = new Set(newLines.map(l => l.trim()).filter(Boolean));
-  const added = [];
-  const removed = [];
-  for (const line of newSet) { if (!oldSet.has(line)) added.push(line); }
-  for (const line of oldSet) { if (!newSet.has(line)) removed.push(line); }
-  return {
-    added: added.slice(0, 30),
-    removed: removed.slice(0, 30),
-  };
+function getKeywords(text) {
+  const words = text.split(/[\s,.\-!?()|«»"'\\/]+/).filter(w => w.length > 3).map(w => w.toLowerCase());
+  const freq = {};
+  words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+  return Object.entries(freq).filter(([, c]) => c >= 2).map(([w]) => w);
 }
 
-// 从 catalog 页面发现所有产品链接
 async function discoverProductPages() {
-  console.log('Discovering product links from catalog...');
+  console.log('发现产品链接...');
   try {
-    const html = await fetchWithRetry(BASE_URL + '/catalog');
+    const html = await fetchWithRetry(UPSTREAM_URL + '/catalog');
     const links = [...new Set([...html.matchAll(/href="(\/catalog\/[^"]+)"/g)].map(m => m[1]))];
-    const products = links
-      .filter(l => !['/catalog/ripe-puerh', '/catalog/raw-puerh', '/catalog/teaware', '/catalog/other-tea'].includes(l))
-      .filter(l => !l.includes('/brick/') && !l.includes('/cake/') && !l.includes('/tuocha/') && !l.includes('/loose/'))
-      .filter(l => !l.includes('/tea-pets/') && !l.includes('/teapots-trays/') && !l.includes('/teaware-other/'))
-      .filter(l => !l.includes('/dancong/') && !l.includes('/green-tea/') && !l.includes('/heicha/') && !l.includes('/red-tea/') && !l.includes('/tieguanyin/'))
-      .filter(l => l !== '/catalog')
+
+    const isSubcat = (l) => l.includes('/brick/') || l.includes('/cake/') || l.includes('/tuocha/')
+      || l.includes('/loose/') || l.includes('/tea-pets/') || l.includes('/teapots-trays/')
+      || l.includes('/teaware-other/') || l.includes('/dancong/') || l.includes('/green-tea/')
+      || l.includes('/heicha/') || l.includes('/red-tea/') || l.includes('/tieguanyin/');
+
+    const isCategory = (l) => ['/catalog/ripe-puerh', '/catalog/raw-puerh', '/catalog/teaware', '/catalog/other-tea'].includes(l);
+
+    const products = links.filter(l => !isCategory(l) && !isSubcat(l) && l !== '/catalog')
       .map(l => ({ url: l, name: l.replace('/catalog/', 'catalog/') }));
 
-    // 子分类页面
-    const subcats = links
-      .filter(l => l.includes('/brick/') || l.includes('/cake/') || l.includes('/tuocha/') || l.includes('/loose/')
-        || l.includes('/tea-pets/') || l.includes('/teapots-trays/') || l.includes('/teaware-other/')
-        || l.includes('/dancong/') || l.includes('/green-tea/') || l.includes('/heicha/') || l.includes('/red-tea/') || l.includes('/tieguanyin/'))
+    const subcats = links.filter(l => isSubcat(l))
       .map(l => ({ url: l, name: l.replace('/catalog/', 'catalog/') }));
 
-    console.log(`  Found: ${BASE_PAGES.length} base + ${CATEGORY_PAGES.length} cats + ${subcats.length} subcats + ${products.length} products`);
+    console.log(`  发现: ${BASE_PAGES.length}基础 + ${CATEGORY_PAGES.length}分类 + ${subcats.length}子分类 + ${products.length}产品`);
     return { products, subcats };
   } catch (err) {
-    console.error('  Discovery failed:', err.message);
+    console.error('  发现失败:', err.message);
     return { products: [], subcats: [] };
   }
 }
@@ -179,11 +168,9 @@ async function processPages(pages, label) {
     const batch = pages.slice(i, i + CONCURRENCY);
     const batchResults = await Promise.all(batch.map(async page => {
       try {
-        console.log(`  [${label}] ${page.url}`);
-        const html = await fetchWithRetry(BASE_URL + page.url);
+        const html = await fetchWithRetry(UPSTREAM_URL + page.url);
         return { page, html, ok: true };
       } catch (err) {
-        console.error(`  [${label}] ERROR ${page.url}: ${err.message}`);
         return { page, html: null, ok: false, error: err.message };
       }
     }));
@@ -192,174 +179,249 @@ async function processPages(pages, label) {
   return results;
 }
 
-function analyzePage(page, html) {
-  const cleaned = stripDynamicContent(html);
-  const text = extractText(html);
-  const structure = extractStructure(html);
-  const paths = getStorePath(page.name);
-
-  const oldText = fs.existsSync(paths.txt) ? fs.readFileSync(paths.txt, 'utf8') : '';
-  const oldStructure = fs.existsSync(paths.json) ? JSON.parse(fs.readFileSync(paths.json, 'utf8')) : null;
-
-  const textChanged = oldText !== text;
-  const structureDiffs = oldStructure ? compareStructure(oldStructure, structure) : [];
-  const structureChanged = structureDiffs.length > 0;
-
-  // 始终更新快照
-  fs.mkdirSync(path.dirname(paths.html), { recursive: true });
-  fs.writeFileSync(paths.html, html);
-  fs.writeFileSync(paths.txt, text);
-  fs.writeFileSync(paths.json, JSON.stringify(structure, null, 2));
-
-  if (!textChanged && !structureChanged) return null;
-
-  const textDiff = textChanged ? generateTextDiff(oldText, text) : { added: [], removed: [] };
-
-  return {
-    name: page.name,
-    url: BASE_URL + page.url,
-    textChanged,
-    structureChanged,
-    structureDiffs,
-    addedLines: textDiff.added,
-    removedLines: textDiff.removed,
-    structure: { old: oldStructure, new: structure },
-  };
+// 获取我们网站的页面内容（优先 live，fallback dist）
+function getOurPage(page) {
+  const paths = [
+    path.join(DIST_DIR, page.ourPath),
+    path.join(DIST_DIR, page.name.replace(/\//g, '_') + '.html'),
+  ];
+  for (const p of paths) {
+    if (fs.existsSync(p)) return { html: fs.readFileSync(p, 'utf8'), source: 'dist' };
+  }
+  return null;
 }
 
 async function main() {
   fs.mkdirSync(SNAPSHOTS_DIR, { recursive: true });
 
   const { products, subcats } = await discoverProductPages();
+  const allUpstreamPages = [...BASE_PAGES, ...CATEGORY_PAGES, ...subcats, ...products];
 
-  const allPages = [...BASE_PAGES, ...CATEGORY_PAGES, ...subcats, ...products];
-  console.log(`\nMonitoring ${allPages.length} pages...\n`);
-
-  const results = await processPages(allPages, 'fetch');
-
+  console.log(`\n抓取上游 ${allUpstreamPages.length} 页...\n`);
+  const results = await processPages(allUpstreamPages, 'upstream');
   const errors = results.filter(r => !r.ok);
   const okResults = results.filter(r => r.ok);
 
-  console.log(`\nAnalyzing ${okResults.length} pages (${errors.length} errors)...\n`);
-
-  const changes = [];
-  for (const { page, html } of okResults) {
-    const change = analyzePage(page, html);
-    if (change) {
-      changes.push(change);
-      const kind = [change.textChanged && '文本', change.structureChanged && '结构'].filter(Boolean).join('+');
-      console.log(`  → ${kind}变化: ${page.name}`);
-      change.structureDiffs.forEach(d => console.log(`      ${d}`));
-    } else {
-      console.log(`  → 无变化: ${page.name}`);
-    }
-  }
-
-  if (errors.length === allPages.length && allPages.length > 0) {
-    console.error(`\nAll ${allPages.length} pages failed. Exiting with error.`);
+  if (errors.length === allUpstreamPages.length && allUpstreamPages.length > 0) {
+    console.error(`全部 ${allUpstreamPages.length} 页抓取失败`);
     process.exit(1);
   }
 
-  // 提交快照
-  if (process.env.GITHUB_ACTIONS) {
-    try {
-      execSync('git config user.name "puerh-web"');
-      execSync('git config user.email "puerh-web@users.noreply.github.com"');
-      execSync('git add upstream-snapshots/');
-      const diffCheck = execSync('git diff --staged --quiet', { stdio: 'pipe' });
-      // no diff → nothing to commit
-    } catch {
-      // diff exists → commit
-      execSync(`git commit -m "chore: 更新上游快照 $(date +%Y-%m-%d)"`);
-      execSync('git push');
-      console.log('Snapshots committed.');
+  // ====== 1. 上游自身变化检测（对比上次快照）======
+  console.log(`\n--- 上游变化检测 (${okResults.length}页) ---\n`);
+  const upstreamChanges = [];
+  for (const { page, html } of okResults) {
+    const text = extractText(html);
+    const structure = extractStructure(html);
+    const paths = getStorePath(page.name);
+
+    const oldText = fs.existsSync(paths.txt) ? fs.readFileSync(paths.txt, 'utf8') : '';
+    const oldStructure = fs.existsSync(paths.json) ? JSON.parse(fs.readFileSync(paths.json, 'utf8')) : null;
+
+    // 更新快照
+    fs.mkdirSync(path.dirname(paths.html), { recursive: true });
+    fs.writeFileSync(paths.html, html);
+    fs.writeFileSync(paths.txt, text);
+    fs.writeFileSync(paths.json, JSON.stringify(structure, null, 2));
+
+    const textChanged = oldText && oldText !== text;
+    const structureDiffs = oldStructure ? compareStructure(oldStructure, structure) : [];
+    const structureChanged = structureDiffs.length > 0;
+
+    if (textChanged || structureChanged) {
+      upstreamChanges.push({ name: page.name, url: UPSTREAM_URL + page.url, textChanged, structureChanged, structureDiffs });
+      console.log(`  ⚡ 上游变化: ${page.name} ${textChanged?'[文本]':''}${structureChanged?'[结构]':''}`);
     }
   }
 
-  if (changes.length === 0) {
-    console.log('\n✓ 无变化。');
-    return;
+  // ====== 2. 上游 vs 本站对比 ======
+  console.log(`\n--- 上游 vs 本站对比 (${BASE_PAGES.length} 核心页) ---\n`);
+
+  const comparisonReport = [];
+  for (const bp of BASE_PAGES) {
+    const ourPage = getOurPage(bp);
+    if (!ourPage) {
+      comparisonReport.push({ name: bp.name, label: bp.url === '/' ? '首页' : bp.url.replace(/\//g, ''), error: '本站页面未找到' });
+      console.log(`  ⚠ ${bp.name}: 本站页面未找到`);
+      continue;
+    }
+
+    const utext = fs.readFileSync(getStorePath(bp.name).txt, 'utf8');
+    const ustruct = JSON.parse(fs.readFileSync(getStorePath(bp.name).json, 'utf8'));
+    const otext = extractText(ourPage.html);
+    const ostruct = extractStructure(ourPage.html);
+
+    const reportItem = { name: bp.name, label: bp.name, diffs: [] };
+
+    // 结构对比
+    if (ustruct.sections !== ostruct.sections)
+      reportItem.diffs.push({ type: 'structure', detail: `区块数: 上游${ustruct.sections} vs 本站${ostruct.sections}` });
+    for (const h of ['h1', 'h2', 'h3', 'h4']) {
+      if (ustruct.headings[h] !== ostruct.headings[h])
+        reportItem.diffs.push({ type: 'structure', detail: `<${h}>: 上游${ustruct.headings[h]} vs 本站${ostruct.headings[h]}` });
+    }
+    if (ustruct.imageCount !== ostruct.imageCount)
+      reportItem.diffs.push({ type: 'structure', detail: `图片数: 上游${ustruct.imageCount} vs 本站${ostruct.imageCount}` });
+
+    // 关键词对比
+    const ignoreWords = new Set(['puerh', 'direct', 'direct—', 'directpuerh', 'whatsapp', 'telegram', 'wechat',
+      'того', 'этого', 'есть', 'быть', 'phone', 'email', 'china', 'китай', 'китая', 'пуэр', 'пуэра',
+      'contact', 'контакты', 'свяжитесь', 'главная', 'каталог', 'catalog', 'about', 'home', 'page',
+      'privac', 'политика', 'конфиденциальности', 'все', 'для', 'под', 'что', 'как', 'это', 'nach',
+      'alla', 'время', 'index', 'ещё', 'data', 'only', 'more', 'всех', 'ваши', 'ваше', 'наша', 'наши',
+      'помощью', 'связи', 'более', 'менее', 'очень', 'также', 'кроме', 'после', 'before', 'after',
+      'здесь', 'там', 'ещё', 'уже', 'если', 'чтоб', 'будет', 'могут', 'может', 'можно', 'нужно',
+      'очень', 'самый', 'самом', 'самых', 'который', 'которые', 'которых', 'которого',
+      '@puerhdirect', '@sqvivi777', '13728005309', '18042891507', '4289', '1507',
+    ]);
+    const uKeywords = getKeywords(utext).filter(w => !ignoreWords.has(w));
+    const oKeywords = getKeywords(otext).filter(w => !ignoreWords.has(w));
+    const uSet = new Set(uKeywords);
+    const oSet = new Set(oKeywords);
+
+    const onlyUpstream = uKeywords.filter(w => !oSet.has(w));
+    const onlyOurs = oKeywords.filter(w => !uSet.has(w));
+
+    if (onlyUpstream.length > 0)
+      reportItem.diffs.push({ type: 'content', detail: `上游独有: ${onlyUpstream.slice(0, 12).join(', ')}${onlyUpstream.length > 12 ? ' ...+' + (onlyUpstream.length - 12) : ''}` });
+    if (onlyOurs.length > 0)
+      reportItem.diffs.push({ type: 'content', detail: `本站独有: ${onlyOurs.slice(0, 12).join(', ')}${onlyOurs.length > 12 ? ' ...+' + (onlyOurs.length - 12) : ''}` });
+
+    if (reportItem.diffs.length === 0) {
+      console.log(`  ✓ ${bp.name}: 基本一致`);
+      reportItem.ok = true;
+    } else {
+      console.log(`  ⚡ ${bp.name}: ${reportItem.diffs.length} 项差异`);
+      reportItem.diffs.forEach(d => console.log(`      [${d.type}] ${d.detail}`));
+    }
+    comparisonReport.push(reportItem);
   }
 
-  console.log(`\n${changes.length} 个页面发生变化，生成报告...\n`);
+  // ====== 3. 产品覆盖对比 ======
+  console.log(`\n--- 产品覆盖对比 ---`);
+  const catHtml = fs.readFileSync(getStorePath('catalog').html, 'utf8');
+  const upstreamProductSlugs = [...new Set([...catHtml.matchAll(/href="\/catalog\/([0-9]{4}-[a-z-]+)"/g)].map(m => m[1]))]
+    .filter(s => !/^(ripe-puerh|raw-puerh|teaware|other-tea)/.test(s)).sort();
 
+  let productReport = null;
+  try {
+    const prodTs = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'products.ts'), 'utf8');
+    const ourSlugs = [...prodTs.matchAll(/slug:\s*"([^"]+)"/g)].map(m => m[1]).sort();
+    const upstreamSet = new Set(upstreamProductSlugs);
+    const ourSet = new Set(ourSlugs);
+    const onlyUpstream = upstreamProductSlugs.filter(s => !ourSet.has(s));
+    const onlyOurs = ourSlugs.filter(s => !upstreamSet.has(s));
+
+    productReport = {
+      upstreamCount: upstreamProductSlugs.length,
+      ourCount: ourSlugs.length,
+      matchCount: upstreamProductSlugs.filter(s => ourSet.has(s)).length,
+      onlyUpstream,
+      onlyOurs,
+    };
+    console.log(`  上游${upstreamProductSlugs.length}产品 vs 本站${ourSlugs.length}产品`);
+    if (onlyUpstream.length > 0) console.log(`  上游独有(${onlyUpstream.length}): ${onlyUpstream.join(', ')}`);
+    if (onlyOurs.length > 0) console.log(`  本站独有(${onlyOurs.length}): ${onlyOurs.join(', ')}`);
+    if (onlyUpstream.length === 0 && onlyOurs.length === 0) console.log('  ✓ 产品完全同步');
+  } catch (err) {
+    console.log('  无法读取 products.ts:', err.message);
+  }
+
+  // ====== 4. 生成报告 ======
   const date = new Date().toISOString().slice(0, 10);
-  const textChanges = changes.filter(c => c.textChanged);
-  const structureChanges = changes.filter(c => c.structureChanged && !c.textChanged);
+  const lines = [];
 
-  const sections = [
-    `## 上游变化报告 — ${date}`,
-    '',
-    `> 监控 **${allPages.length}** 个页面，检测到 **${changes.length}** 个变化`,
-    `> ${textChanges.length} 个文本变化 · ${structureChanges.length} 个结构变化 · ${errors.length} 个抓取失败`,
-    '',
-  ];
+  lines.push(`# 上游监控报告 — ${date}`);
+  lines.push('');
+  lines.push(`> 监控 ${allUpstreamPages.length} 页 | ${errors.length} 抓取失败 | ${upstreamChanges.length} 上游变化 | ${comparisonReport.filter(r => !r.ok).length} 本站差异`);
+  lines.push('');
 
-  if (textChanges.length > 0) {
-    sections.push('## 📝 文本内容变化');
-    sections.push('');
-    for (const c of textChanges) {
-      sections.push(`### [${c.name}](${c.url})`);
-      sections.push('');
-      if (c.structureDiffs.length > 0) {
-        sections.push('**结构变化:**');
-        c.structureDiffs.forEach(d => sections.push(`- ${d}`));
-        sections.push('');
-      }
-      if (c.addedLines.length > 0) {
-        sections.push('**新增内容:**');
-        sections.push('');
-        c.addedLines.slice(0, 15).forEach(l => sections.push(`- ${l}`));
-        if (c.addedLines.length > 15) sections.push(`- ... 共 ${c.addedLines.length} 条`);
-        sections.push('');
-      }
-      if (c.removedLines.length > 0) {
-        sections.push('**移除内容:**');
-        sections.push('');
-        c.removedLines.slice(0, 15).forEach(l => sections.push(`- ${l}`));
-        if (c.removedLines.length > 15) sections.push(`- ... 共 ${c.removedLines.length} 条`);
-        sections.push('');
-      }
+  // 上游自身变化
+  if (upstreamChanges.length > 0) {
+    lines.push('## 📡 上游网站变化（与上次快照对比）');
+    lines.push('');
+    for (const c of upstreamChanges) {
+      lines.push(`- **${c.name}** [${c.textChanged?'文本':''}${c.textChanged&&c.structureChanged?'+':''}${c.structureChanged?'结构':''}](${c.url})`);
+      c.structureDiffs.forEach(d => lines.push(`  - ${d}`));
     }
+    lines.push('');
+  } else {
+    lines.push('## 📡 上游网站：无变化');
+    lines.push('');
   }
 
-  if (structureChanges.length > 0) {
-    sections.push('## 🏗️ 仅结构变化（文本未变）');
-    sections.push('');
-    for (const c of structureChanges) {
-      sections.push(`### [${c.name}](${c.url})`);
-      c.structureDiffs.forEach(d => sections.push(`- ${d}`));
-      sections.push('');
+  // 本站差异
+  const siteDiffs = comparisonReport.filter(r => !r.ok);
+  if (siteDiffs.length > 0) {
+    lines.push('## 🔴 本站与上游差异（需审核）');
+    lines.push('');
+    lines.push('| 页面 | 差异项 |');
+    lines.push('|------|--------|');
+    for (const r of siteDiffs) {
+      if (r.error) {
+        lines.push(`| ${r.label} | ⚠ ${r.error} |`);
+      } else {
+        const diffSummary = r.diffs.map(d => `[${d.type}] ${d.detail}`).join('<br>');
+        lines.push(`| [${r.label}](${OUR_URL}/${r.name === 'homepage' ? '' : r.name}) | ${diffSummary} |`);
+      }
     }
+    lines.push('');
+  } else {
+    lines.push('## 🟢 本站与上游：基本一致');
+    lines.push('');
+  }
+
+  // 产品覆盖
+  if (productReport) {
+    lines.push('## 📦 产品覆盖');
+    lines.push('');
+    lines.push(`上游 ${productReport.upstreamCount} 个 | 本站 ${productReport.ourCount} 个 | 匹配 ${productReport.matchCount} 个`);
+    if (productReport.onlyUpstream.length > 0) {
+      lines.push('');
+      lines.push(`**上游独有 (${productReport.onlyUpstream.length}):** 需新增`);
+      lines.push('');
+      productReport.onlyUpstream.forEach(s => lines.push(`- \`${s}\``));
+    }
+    if (productReport.onlyOurs.length > 0) {
+      lines.push('');
+      lines.push(`**本站独有 (${productReport.onlyOurs.length}):** 可保留或移除`);
+      lines.push('');
+      productReport.onlyOurs.forEach(s => lines.push(`- \`${s}\``));
+    }
+    lines.push('');
   }
 
   if (errors.length > 0) {
-    sections.push('## ⚠️ 抓取失败');
-    sections.push('');
-    errors.forEach(e => sections.push(`- **${e.page.name}**: ${e.error}`));
-    sections.push('');
+    lines.push('## ⚠️ 抓取失败');
+    lines.push('');
+    errors.forEach(e => lines.push(`- **${e.page.name}**: ${e.error}`));
+    lines.push('');
   }
 
-  sections.push('---');
-  sections.push(`> 由 [upstream monitor workflow](https://github.com/Shunqu-668/puerh-astro/actions/workflows/monitor-upstream.yml) 自动生成`);
-  sections.push(`> 监控范围: ${BASE_PAGES.length} 基础页 + ${CATEGORY_PAGES.length} 分类 + ${subcats.length} 子分类 + ${products.length} 产品 = ${allPages.length} 页`);
-  sections.push('');
-  sections.push('🤖 请 @Shunqu-668 审核变化后手动同步对应页面。');
+  lines.push('---');
+  lines.push(`> 自动生成于 ${new Date().toISOString()} | [监控脚本](https://github.com/Shunqu-668/puerh-astro/blob/main/scripts/monitor-upstream.mjs)`);
+  lines.push('>');
+  lines.push('> ⚠️ **不会自动同步任何内容。** 请审核上述差异后手动决定哪些需要更新。');
 
-  const issueBody = sections.join('\n');
-  const tmpFile = path.join(os.tmpdir(), 'puerh-upstream-issue.md');
-  fs.writeFileSync(tmpFile, issueBody);
+  const report = lines.join('\n');
+  const reportFile = path.join(SNAPSHOTS_DIR, 'LATEST-REPORT.md');
+  fs.writeFileSync(reportFile, report);
 
+  console.log(`\n✓ 报告已保存: ${reportFile}`);
+
+  // GitHub Actions 中创建 Issue
   if (process.env.GITHUB_ACTIONS) {
     try {
-      execSync(`gh issue create --title "上游变化 — ${date}" --body-file "${tmpFile}" --label "upstream-change"`, { stdio: 'inherit' });
+      execSync(`gh issue create --title "上游监控报告 — ${date}" --body-file "${reportFile}" --label "upstream-monitor"`, { stdio: 'inherit' });
       console.log('Issue created.');
     } catch (err) {
-      console.error('Failed to create issue:', err.message);
-      console.log('Issue body saved to:', tmpFile);
+      console.error('创建 Issue 失败:', err.message);
     }
   } else {
-    console.log('[local run] Report saved to:', tmpFile);
+    // 本地运行：直接打印报告路径
+    console.log('\n' + '='.repeat(60));
+    console.log(report);
+    console.log('='.repeat(60));
   }
 }
 
