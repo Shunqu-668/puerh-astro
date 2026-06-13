@@ -20,13 +20,15 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "PUERH DIRECT",
+  alternateName: ["Puerh Direct Wholesale", "Пуэр Директ"],
   url: baseUrl,
   logo: `${baseUrl}/images/images/logo.webp`,
-  description: "Оптовые поставки чая пуэр премиум-класса из Китая в Россию. Premium wholesale pu-erh tea from China to Russia.",
-  email: "info@puerhdirect.ru",
+  description: "Прямые оптовые поставки пуэра из Гуанчжоу (Фанцунь). Direct wholesale puerh from Guangzhou, China. MOQ 20kg.",
+  email: "wholesale@puerhdirect.ru",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Гуанчжоу",
+    addressLocality: "Guangzhou",
+    addressRegion: "Guangdong",
     addressCountry: "CN",
   },
   contactPoint: {
@@ -51,9 +53,10 @@ const organizationSchema = {
     <!-- Canonical -->
     <link rel="canonical" href={pageUrl} />
 
-    <!-- hreflang: Russian (default) + English -->
+    <!-- hreflang: Russian (default) + English + x-default -->
     <link rel="alternate" hreflang="ru" href={pageUrl} />
     <link rel="alternate" hreflang="en" href={pageUrl} />
+    <link rel="alternate" hreflang="x-default" href={pageUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -73,6 +76,9 @@ const organizationSchema = {
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={imageUrl} />
 
+    <!-- VK -->
+    <meta property="vk:image" content={imageUrl} />
+
     <!-- GEO tags for Russia/CIS -->
     <meta name="geo.region" content="RU" />
     <meta name="geo.placename" content="Гуанчжоу, Китай | Guangzhou, China" />
@@ -87,14 +93,15 @@ const organizationSchema = {
 
     <slot name="head" />
 
-    <!-- Yandex.Metrica — замените 109468811 на реальный идентификатор из https://metrika.yandex.ru -->
+    <!-- Yandex.Metrika counter -->
     <script>
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
       m[i].l=1*new Date();
       for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-      try { ym(109468811, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true}); } catch(e) {}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+      ym(109468811, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109468811" style="position:absolute;left:-9999px" alt="" /></div></noscript>
     <script>

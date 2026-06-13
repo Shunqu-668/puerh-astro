@@ -4,95 +4,95 @@ import CoverHero from "../components/CoverHero.astro";
 import CTAButton from "../components/CTAButton.astro";
 
 const formats = [
-  { img: "/images/images/shape-8g.webp", ru: "Мини-точа 8 г", en: "Mini Tuocha 8g", descRu: "Идеально для дегустаций и подарков", descEn: "Ideal for tastings and gifts" },
-  { img: "/images/images/shape-50g.webp", ru: "Мини-блин 50 г", en: "Mini Cake 50g", descRu: "Популярный формат для розницы", descEn: "Popular format for retail" },
-  { img: "/images/images/shape-100g.webp", ru: "Малый блин 100 г", en: "Small Cake 100g", descRu: "Компактный и экономичный", descEn: "Compact and economical" },
-  { img: "/images/images/shape-200g.webp", ru: "Стандартный блин 200 г", en: "Standard Cake 200g", descRu: "Классический формат пуэра", descEn: "Classic puerh format" },
+  { img: "/images/images/shape-200g.webp", ru: "Стандартный блин 200 г", en: "Standard Cake 200g", descRu: "Классический формат пуэра, ходовой объём", descEn: "Classic puerh format, best-selling volume" },
+  { img: "/images/images/shape-357g.webp", ru: "Блин 357 г", en: "Cake 357g", descRu: "Традиционный формат для выдержанного пуэра", descEn: "Traditional format for aged puerh" },
+  { img: "/images/images/shape-500g.webp", ru: "Кирпич 500 г", en: "Brick 500g", descRu: "Популярный оптовый формат", descEn: "Popular wholesale format" },
+  { img: "/images/images/shape-1000g.webp", ru: "Кирпич 1000 г", en: "Brick 1000g", descRu: "Крупный формат для оптовых партий", descEn: "Large format for wholesale batches" },
 ];
 
 const workflow = [
-  { step: "01", ru: "Консультация", en: "Consultation", descRu: "Обсуждаем ваши цели, бюджет, вкусовые предпочтения и целевую аудиторию", descEn: "We discuss your goals, budget, taste preferences and target audience" },
-  { step: "02", ru: "Разработка", en: "Development", descRu: "Подбираем чайную основу, разрабатываем дизайн обёртки и упаковки", descEn: "We select the tea base, develop wrapper and packaging design" },
-  { step: "03", ru: "Утверждение образца", en: "Sample Approval", descRu: "Изготавливаем и отправляем образцы для вашего утверждения", descEn: "We produce and send samples for your approval" },
-  { step: "04", ru: "Производство", en: "Production", descRu: "Запускаем партию. Контроль качества на всех этапах. Доставка.", descEn: "We launch the batch. Quality control at all stages. Delivery." },
+  { step: "01", ru: "Консультация", en: "Consultation", descRu: "Обсуждаем ваши бизнес-цели, бюджет, вкусовой профиль и целевую аудиторию", descEn: "We discuss your business goals, budget, flavor profile and target audience" },
+  { step: "02", ru: "Разработка и образцы", en: "Development & Samples", descRu: "Подбираем чайную основу, разрабатываем дизайн обёртки. Изготавливаем и отправляем образцы на утверждение", descEn: "We select tea base, develop wrapper design. Produce and send samples for approval" },
+  { step: "03", ru: "Производство партии", en: "Batch Production", descRu: "Запускаем производство от 20 кг. Прессование, упаковка, контроль качества", descEn: "We launch production from 20 kg. Pressing, packaging, quality control" },
+  { step: "04", ru: "Отгрузка", en: "Shipping", descRu: "Отправка целыми коробками. Карго-доставка в РФ и СНГ.", descEn: "Shipping by full boxes. Cargo delivery to Russia and CIS." },
 ];
 ---
 
 <Layout
-  title="Свой Бренд Пуэра | Private Label — Контрактное производство чая, MOQ 20 кг"
-  description="Создайте свой чайный бренд с нашими мощностями в Юньнани и Гуанчжоу. Create your tea brand with our facilities in Yunnan and Guangzhou. Контрактное производство пуэра."
+  title="Контрактное Производство Пуэра | Private Label — MOQ 20 кг"
+  description="Контрактное производство пуэра под вашим брендом. Изготовление блинов и кирпичей от 20 кг на собственных мощностях в Юньнани. Contract puerh manufacturing from 20 kg. Private label wholesale MOQ 20kg."
   ogImage="https://puerhdirect.ru/images/images/hero-private-label.webp"
   canonicalURL="/private-label/"
 >
   <CoverHero
-    titleRu="Свой Бренд Пуэра"
-    titleEn="Private Label"
-    subtitleRu="Создайте свой чайный бренд с нашими мощностями в Юньнани и Гуанчжоу"
-    subtitleEn="Create your tea brand with our facilities in Yunnan and Guangzhou"
+    titleRu="Контрактное Производство Пуэра"
+    titleEn="Private Label Puerh Manufacturing"
+    subtitleRu="Изготовление блинов и кирпичей под вашим брендом от 20 кг на собственных мощностях"
+    subtitleEn="Custom cake and brick manufacturing under your brand from 20 kg at our own facilities"
     bgImage="/images/images/hero-private-label.webp"
   />
 
-  <!-- White Label Options -->
+  <!-- Contract Manufacturing Solutions -->
   <section class="py-16 md:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Готовые Решения</span>
-            <span class="block text-orange-500 text-xl mt-1">White Label Solutions</span>
+            <span class="text-gray-900">Контрактное Производство</span>
+            <span class="block text-orange-500 text-xl mt-1">Contract Manufacturing</span>
           </h2>
           <p class="text-gray-500 text-sm mb-6">
-            <span>Выбирайте наши хиты продаж (особенно Шу Пуэр), а мы упакуем их в коробки с вашим логотипом. Быстро и эффективно.</span>
-            <span class="block text-gray-400 mt-1">Select our best-sellers (especially Ripe Puerh), we pack them with your custom design in Guangzhou. Fast and efficient.</span>
+            <span>Выбирайте наши хиты продаж (особенно Шу Пуэр), а мы упакуем их под вашим брендом на складе в Гуанчжоу. Быстро, профессионально, с контролем качества на каждом этапе. Минимальный заказ — 20 кг.</span>
+            <span class="block text-gray-400 mt-1">Select our best-sellers (especially Ripe Puerh), we pack them with your custom design in Guangzhou. Fast, professional, with QC at every stage. MOQ: 20 kg.</span>
           </p>
           <ul class="space-y-4">
             <li class="flex gap-3">
               <span class="text-orange-500 text-xl shrink-0 mt-0.5">✦</span>
               <div>
                 <h4 class="font-semibold text-gray-900">Индивидуальная обёртка <span class="text-orange-500 font-normal text-sm">| Custom Wrapper</span></h4>
-                <p class="text-gray-500 text-sm">Дизайн обёртки блина с вашим брендом, логотипом и элементами <span class="text-gray-400">| Wrapper design with your brand, logo and elements</span></p>
+                <p class="text-gray-500 text-sm">Дизайн обёртки блина с вашим брендом и логотипом <span class="text-gray-400">| Wrapper design with your brand and logo</span></p>
               </div>
             </li>
             <li class="flex gap-3">
               <span class="text-orange-500 text-xl shrink-0 mt-0.5">◈</span>
               <div>
-                <h4 class="font-semibold text-gray-900">Уникальная рецептура <span class="text-orange-500 font-normal text-sm">| Custom Recipe</span></h4>
-                <p class="text-gray-500 text-sm">Разработка вкусового профиля под вашу аудиторию <span class="text-gray-400">| Flavor profile development for your target audience</span></p>
+                <h4 class="font-semibold text-gray-900">Уникальный Купаж <span class="text-orange-500 font-normal text-sm">| Custom Blend Recipe</span></h4>
+                <p class="text-gray-500 text-sm">Разработка вкусового профиля под вашу аудиторию. Мелкосерийный купаж от 20 кг. <span class="text-gray-400">| Flavor profile development for your audience. Small-batch blending from 20 kg.</span></p>
               </div>
             </li>
             <li class="flex gap-3">
               <span class="text-orange-500 text-xl shrink-0 mt-0.5">◆</span>
               <div>
-                <h4 class="font-semibold text-gray-900">Подарочная упаковка <span class="text-orange-500 font-normal text-sm">| Gift Packaging</span></h4>
-                <p class="text-gray-500 text-sm">Премиальная упаковка для корпоративных и розничных подарков <span class="text-gray-400">| Premium packaging for corporate and retail gifts</span></p>
+                <h4 class="font-semibold text-gray-900">Фирменная Упаковка <span class="text-orange-500 font-normal text-sm">| Branded Packaging</span></h4>
+                <p class="text-gray-500 text-sm">Коробки, крафт-пакеты, подарочные форматы — под ваш бренд <span class="text-gray-400">| Boxes, kraft bags, gift formats — all under your brand</span></p>
               </div>
             </li>
             <li class="flex gap-3">
               <span class="text-orange-500 text-xl shrink-0 mt-0.5">★</span>
               <div>
-                <h4 class="font-semibold text-gray-900">Сертификаты качества <span class="text-orange-500 font-normal text-sm">| Quality Certificates</span></h4>
-                <p class="text-gray-500 text-sm">Предоставляем сертификаты и документы на каждую партию <span class="text-gray-400">| Certificates and documentation for every batch</span></p>
+                <h4 class="font-semibold text-gray-900">Сертификаты и Документы <span class="text-orange-500 font-normal text-sm">| Certificates & Documentation</span></h4>
+                <p class="text-gray-500 text-sm">Полный пакет документов на каждую партию для карго и таможни <span class="text-gray-400">| Full documentation for every batch — cargo and customs ready</span></p>
               </div>
             </li>
           </ul>
         </div>
         <div>
-          <img src="/images/images/service-whitelabel.webp" alt="Private Label Service" class="rounded-xl shadow-lg w-full aspect-[4/3] object-cover" loading="lazy" />
+          <img src="/images/images/service-whitelabel.webp" alt="Contract Manufacturing Service" class="rounded-xl shadow-lg w-full aspect-[4/3] object-cover" loading="lazy" />
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4 Popular Formats -->
+  <!-- 4 B2B Formats -->
   <section class="py-16 md:py-24 bg-[#f5f5f5]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold text-center mb-4">
-        <span class="text-gray-900">Популярные форматы</span>
-        <span class="block text-orange-500 text-xl mt-1">Popular Formats</span>
+        <span class="text-gray-900">Форматы для Оптового Производства</span>
+        <span class="block text-orange-500 text-xl mt-1">Wholesale Production Formats</span>
       </h2>
       <p class="text-gray-500 text-center max-w-xl mx-auto mb-12 text-sm">
-        <span>Наиболее востребованные форматы для приватной марки</span>
-        <span class="block text-gray-400 mt-1">The most popular formats for private label</span>
+        <span>Стандартные форматы для контрактного производства. MOQ: 20 кг.</span>
+        <span class="block text-gray-400 mt-1">Standard formats for contract manufacturing. MOQ: 20 kg.</span>
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {formats.map(f => (
@@ -119,14 +119,14 @@ const workflow = [
         </div>
         <div>
           <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Индивидуальный Купаж</span>
-            <span class="block text-orange-500 text-xl mt-1">Custom Blend</span>
+            <span class="text-gray-900">Индивидуальный Купаж от 20 кг</span>
+            <span class="block text-orange-500 text-xl mt-1">Custom Blend from 20 kg</span>
           </h2>
           <p class="text-gray-600 leading-relaxed mb-3">
-            <span>Разработаем уникальную рецептуру под вашу аудиторию. Контролируем прессование и упаковку каждой партии на собственных мощностях в Юньнани и Гуанчжоу. Вы получаете эксклюзивный продукт, которого нет ни у кого на рынке.</span>
+            <span>Разработаем уникальную рецептуру под вашу аудиторию. Контролируем прессование и упаковку каждой партии на собственных мощностях в Юньнани и Гуанчжоу. Вы получаете эксклюзивный продукт, которого нет ни у кого на рынке. Минимальный заказ — 20 кг.</span>
           </p>
           <p class="text-gray-400 text-sm leading-relaxed">
-            <span>We develop a unique recipe for your target audience. We control pressing and packaging of every batch at our own facilities in Yunnan and Guangzhou. You get an exclusive product that no one else has on the market.</span>
+            <span>We develop a unique recipe for your target audience. We control pressing and packaging of every batch at our own facilities in Yunnan and Guangzhou. You get an exclusive product that no one else has on the market. MOQ: 20 kg.</span>
           </p>
         </div>
       </div>

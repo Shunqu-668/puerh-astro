@@ -1,7 +1,11 @@
 User-agent: *
 Allow: /
-Disallow: /404.html
 
+# Sitemap
 Sitemap: https://puerhdirect.ru/sitemap-index.xml
 
+# Yandex specific
+User-agent: Yandex
+Allow: /
 Host: puerhdirect.ru
+Clean-param: sub

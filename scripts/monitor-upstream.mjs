@@ -287,6 +287,33 @@ async function main() {
     if (onlyOurs.length > 0)
       reportItem.diffs.push({ type: 'content', detail: `本站独有: ${onlyOurs.slice(0, 12).join(', ')}${onlyOurs.length > 12 ? ' ...+' + (onlyOurs.length - 12) : ''}` });
 
+    // B2B 定位关键词检查
+    const b2bKeywords = ['опт', 'оптовый', 'оптовые', 'wholesale', 'moq', '20kg', '20кг', 'карго', 'фанцунь', 'fangcun', 'коробками', 'партнер', 'партнёр'];
+    const retailFlags = ['блин', 'блина', 'розница', 'подарок', 'подарков', 'розничный', 'розничные', '8г', '8g', '50г', '50g', 'retail', 'gift'];
+
+    const uB2B = b2bKeywords.filter(kw => utext.toLowerCase().includes(kw));
+    const oB2B = b2bKeywords.filter(kw => otext.toLowerCase().includes(kw));
+    const uRetail = retailFlags.filter(kw => utext.toLowerCase().includes(kw));
+    const oRetail = retailFlags.filter(kw => otext.toLowerCase().includes(kw));
+
+    const missingB2B = uB2B.filter(kw => !oB2B.includes(kw));
+    const extraRetail = oRetail.filter(kw => !uRetail.includes(kw));
+
+    if (missingB2B.length > 0)
+      reportItem.diffs.push({ type: 'b2b-gap', detail: `本站缺少B2B关键词: ${missingB2B.join(', ')}` });
+    if (extraRetail.length > 0)
+      reportItem.diffs.push({ type: 'retail-leak', detail: `本站有零售词(上游无): ${extraRetail.join(', ')}` });
+
+    // SEO 元素检查（仅首页）
+    if (bp.name === 'homepage') {
+      const seoChecks = [];
+      if (!ourPage.html.includes('hreflang="x-default"')) seoChecks.push('缺少 hreflang x-default');
+      if (!ourPage.html.includes('vk:image')) seoChecks.push('缺少 VK meta 标签');
+      if (!ourPage.html.includes('alternateName')) seoChecks.push('JSON-LD 缺 alternateName');
+      if (seoChecks.length > 0)
+        reportItem.diffs.push({ type: 'seo', detail: seoChecks.join('; ') });
+    }
+
     if (reportItem.diffs.length === 0) {
       console.log(`  ✓ ${bp.name}: 基本一致`);
       reportItem.ok = true;
