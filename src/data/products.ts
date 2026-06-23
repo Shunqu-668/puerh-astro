@@ -8,6 +8,9 @@ export interface Product {
   imgFile?: string;
   origin?: string;
   treeAge?: "gushu" | "arbor";
+  descRu?: string;
+  descEn?: string;
+  descCn?: string;
 }
 
 export const products: Product[] = [

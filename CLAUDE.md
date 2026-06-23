@@ -26,6 +26,8 @@ puerh-astro/
       Footer.astro     # 3列页脚, 橙色顶边, bg #111111
       CoverHero.astro  # 通用Cover Hero（标题+副标题+背景图）
       CTAButton.astro  # 橙色按钮组件
+    integrations/
+      sitemap-xsl.mjs  # sitemap XSL 样式注入（独立集成，node:fs 动态导入）
     data/
       products.ts      # 44个产品数据 + 工具函数
     pages/

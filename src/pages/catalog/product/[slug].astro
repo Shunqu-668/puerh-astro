@@ -2,6 +2,7 @@
 import Layout from "../../../components/Layout.astro";
 import CTAButton from "../../../components/CTAButton.astro";
 import { products, typeLabels, shapeLabels, getProductImg } from "../../../data/products";
+import productDescriptions from "../../../data/product-descriptions.json";
 
 export function getStaticPaths() {
   return products.map(p => ({ params: { slug: p.slug } }));
@@ -11,6 +12,9 @@ const { slug } = Astro.params;
 const p = products.find(x => x.slug === slug);
 
 if (!p) return Astro.redirect("/404");
+
+const descData = productDescriptions[p.slug] || {};
+const hasDesc = descData.descRu || descData.descEn;
 
 const productUrl = `/catalog/product/${p.slug}/`;
 const productImg = getProductImg(p);
@@ -90,13 +94,28 @@ const productSchema = {
           <p class="text-xl text-orange-500 font-medium mb-8">{p.nameEn}</p>
 
           <div class="space-y-4 text-gray-600 text-sm leading-relaxed mb-8">
-            <p>
-              {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра. Происхождение: чайная гора {origin}, провинция Юньнань, Китай. Высота произрастания: {altitude}. Возраст деревьев: {treeAgeLabel}. Хранение на складе в Гуанчжоу при температуре 20–25°C и влажности 65–75%. Прямые поставки от производителя.
-            </p>
-            <p class="text-gray-400">
-              {p.year} {typeLabels[p.type].en} {shapeLabels[p.shape].en.toLowerCase()}. Origin: {origin} tea mountain, Yunnan, China. Altitude: {altitude}. Tree age: {treeAgeLabel}. Stored in Guangzhou warehouse at 20–25°C, 65–75% humidity. Direct supply from producer.
-            </p>
-          </div>
+            {hasDesc ? (
+              <>
+                <p class="text-gray-800 leading-relaxed">{descData.descRu || descData.descEn}</p>
+                {descData.descEn && descData.descRu && (
+                  <p class="text-gray-400 leading-relaxed">{descData.descEn}</p>
+                )}
+                {descData.descCn && (
+                  <p class="text-gray-300 text-xs leading-relaxed border-t border-gray-100 pt-3 mt-3">
+                    <span class="text-gray-400 font-medium">中文溯源 | Chinese Origin:</span> {descData.descCn}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p>
+                  {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра. Происхождение: чайная гора {origin}, провинция Юньнань, Китай. Высота произрастания: {altitude}. Возраст деревьев: {treeAgeLabel}. Хранение на складе в Гуанчжоу (Фанцунь | Fangcun) при температуре 20–25°C и влажности 65–75%. Прямые поставки от производителя.
+                </p>
+                <p class="text-gray-400">
+                  {p.year} {typeLabels[p.type].en} {shapeLabels[p.shape].en.toLowerCase()}. Origin: {origin} tea mountain, Yunnan, China. Altitude: {altitude}. Tree age: {treeAgeLabel}. Stored in Guangzhou warehouse (Fangcun tea market) at 20–25°C, 65–75% humidity. Direct supply from producer.
+                </p>
+              </>
+            )}
 
           <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm border-t border-gray-100 pt-6 mb-8">
             <div class="flex flex-col gap-0.5">
@@ -127,10 +146,11 @@ const productSchema = {
 
           <div class="border-t border-gray-100 pt-8">
             <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-medium">MOQ: от 1 блина | from 1 cake</span>
+              <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-medium">MOQ: 20 кг | 20 kg</span>
               <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Опт от 10 шт | Wholesale from 10 pcs</span>
               {p.origin && <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">{p.origin}, Yunnan</span>}
               {p.treeAge === "gushu" && <span class="text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-full font-medium">Гушу | Gushu</span>}
+              <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Фанцунь | Fangcun</span>
             </div>
             <p class="text-gray-500 text-sm mb-4">
               Заинтересованы в оптовых закупках? Свяжитесь с нами для получения прайс-листа.
