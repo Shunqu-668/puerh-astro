@@ -57,7 +57,9 @@ const productSchema = {
 
 <Layout
   title={`${p.year} ${p.nameRu} | ${p.nameEn} — PUERH DIRECT`}
-  description={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}. Оптовые поставки из Китая.`}
+  description={hasDesc
+    ? (descData.descRu || descData.descEn).slice(0, 160).replace(/\.[^.]*$/, '.')
+    : `${p.year} ${typeLabels[p.type].ru} ${shapeLabels[p.shape].ru} «${p.nameRu}» — оптом из Гуанчжоу (Фанцунь). ${origin}, Юньнань. ${isGushu ? 'Гушу' : 'Арбор'}. MOQ 20 кг. ${p.year} ${p.nameEn} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en} wholesale from Guangzhou Fangcun.`}
   ogImage={`https://puerhdirect.ru${productImg}`}
   canonicalURL={productUrl}
 >
