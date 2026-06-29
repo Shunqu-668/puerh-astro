@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../components/Layout.astro";
+import CoverHero from "../../components/CoverHero.astro";
+import CTAButton from "../../components/CTAButton.astro";
+
+const posts = await getCollection("blog");
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const description = "Блог о пуэре: производство, хранение, поставки из Китая. Полезные статьи для оптовых покупателей. Pu-erh blog: production, storage, wholesale from China.";
+---
+
+<Layout
+  title="Блог | Blog"
+  description={description}
+  canonicalURL="/blog"
+>
+  <CoverHero
+    titleRu="Блог"
+    titleEn="Blog"
+    subtitleRu="Статьи о пуэре для оптовых покупателей. Производство, хранение, закупки."
+    subtitleEn="Articles about pu-erh for wholesale buyers. Production, storage, sourcing."
+    bgImage="/images/images/hero-bg.JPG"
+  />
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid gap-8">
+      {posts.map((post) => (
+        <article class="group border border-gray-200 rounded-lg p-6 hover:border-orange-300 hover:shadow-md transition-all">
+          <a href={`/blog/${post.id.replace(/\.md$/, "")}`} class="no-underline">
+            <div class="flex items-start gap-4">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2">
+                  <time class="text-sm text-gray-400 flex-shrink-0" datetime={post.data.date.toISOString()}>
+                    {post.data.date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}
+                  </time>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 group-hover:text-orange-500 transition-colors mb-2 leading-tight">
+                  {post.data.title}
+                </h2>
+                <p class="text-gray-500 text-sm leading-relaxed line-clamp-2">
+                  {post.data.description}
+                </p>
+                <div class="flex items-center gap-2 mt-4">
+                  <span class="text-[#F58220] font-semibold text-sm">Читать</span>
+                  <span class="text-gray-400 text-sm">|</span>
+                  <span class="text-gray-400 text-sm">Read</span>
+                  <svg class="w-4 h-4 text-orange-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <div class="text-center mt-16 bg-[#1a1a1a] rounded-xl p-10">
+      <h2 class="text-2xl font-bold text-white mb-3">Нужна консультация по закупкам?</h2>
+      <p class="text-gray-400 mb-6">Ответим на вопросы о поставках пуэра из Китая.</p>
+      <CTAButton href="https://t.me/sqvivi777" variant="primary" textRu="Написать в Telegram" textEn="Write on Telegram" />
+    </div>
+  </div>
+</Layout>
