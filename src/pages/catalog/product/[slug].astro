@@ -1,6 +1,7 @@
 ---
 import Layout from "../../../components/Layout.astro";
 import CTAButton from "../../../components/CTAButton.astro";
+import Picture from "../../../components/Picture.astro";
 import { products, typeLabels, shapeLabels, getProductImg } from "../../../data/products";
 import productDescriptions from "../../../data/product-descriptions.json";
 
@@ -75,8 +76,9 @@ const productSchema = {
 
       <div class="grid md:grid-cols-2 gap-10 lg:gap-16">
         <div class="aspect-square rounded-2xl overflow-hidden bg-[#f5f5f5]">
-          <img
+          <Picture
             src={getProductImg(p)}
+            fallback={getProductImg(p).replace(/\.webp$/, ".jpg")}
             alt={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`}
             class="w-full h-full object-cover"
             loading="lazy"

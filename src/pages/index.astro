@@ -1,6 +1,7 @@
 ---
 import Layout from "../components/Layout.astro";
 import CTAButton from "../components/CTAButton.astro";
+import Picture from "../components/Picture.astro";
 
 const categories = [
   { href: "/catalog/ripe-puerh", img: "/images/images/1.webp", ru: "Шу Пуэр", en: "Ripe Puerh" },
@@ -42,7 +43,7 @@ const categories = [
         {categories.map(cat => (
           <a href={cat.href} class="text-center group">
             <div class="w-32 h-32 md:w-48 md:h-48 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300">
-              <img src={cat.img} alt={cat.ru} class="w-full h-full object-cover" loading="lazy" />
+              <Picture src={cat.img} alt={cat.ru} class="w-full h-full object-cover" loading="lazy" />
             </div>
             <h3 class="font-bold text-lg mb-1">{cat.ru}</h3>
             <p class="text-sm text-gray-600">{cat.en}</p>
@@ -76,7 +77,7 @@ const categories = [
         </div>
       </div>
       <div class="order-1 md:order-2">
-        <img src="/images/images/fangcun-store.webp" alt="Склад Фанцунь" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        <Picture src="/images/images/fangcun-store.webp" alt="Склад Фанцунь" class="rounded-xl shadow-lg w-full" loading="lazy" />
       </div>
     </div>
   </section>
@@ -95,7 +96,7 @@ const categories = [
   <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
       <div>
-        <img src="/images/images/expertise.webp" alt="Expertise" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        <Picture src="/images/images/expertise.webp" alt="Expertise" class="rounded-xl shadow-lg w-full" loading="lazy" />
       </div>
       <div>
         <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Более 20 Лет Экспертизы В Отборе И Хранении Чая</h2>
@@ -138,7 +139,7 @@ const categories = [
         </div>
       </div>
       <div>
-        <img src="/images/images/value-prop.webp" alt="Value Proposition" class="rounded-xl shadow-lg w-full" loading="lazy" />
+        <Picture src="/images/images/value-prop.webp" alt="Value Proposition" class="rounded-xl shadow-lg w-full" loading="lazy" />
       </div>
     </div>
   </section>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../components/Layout.astro";
 import CoverHero from "../../components/CoverHero.astro";
+import Picture from "../../components/Picture.astro";
 import { products, typeLabels, shapeLabels, getProductImg } from "../../data/products";
 
 const rawProducts = products.filter(p => p.type === "raw");
@@ -32,7 +33,7 @@ const rawProducts = products.filter(p => p.type === "raw");
         {rawProducts.map(p => (
           <a href={`/catalog/product/${p.slug}/`} class="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300 block">
             <div class="aspect-square overflow-hidden bg-[#f5f5f5] relative">
-              <img src={getProductImg(p)} alt={`${p.year} ${p.nameEn}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={`${p.year} ${p.nameEn}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
               <span class="absolute top-3 right-3 text-[10px] font-bold text-white bg-orange-500/90 backdrop-blur-sm px-2 py-1 rounded">ОПТ | WHOLESALE</span>
             </div>
             <div class="p-4">

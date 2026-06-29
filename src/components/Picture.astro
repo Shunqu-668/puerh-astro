@@ -1,0 +1,32 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  fallback?: string;
+  class?: string;
+  loading?: "lazy" | "eager";
+  width?: number;
+  height?: number;
+}
+
+const { src, alt, fallback, class: className = "", loading = "lazy", width, height } = Astro.props;
+
+const srcLower = src.toLowerCase();
+const srcIsWebP = srcLower.endsWith(".webp");
+
+const webpSrc = srcIsWebP ? src : src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+const imgSrc = srcIsWebP ? (fallback || src.replace(/\.webp$/i, ".jpg")) : src;
+---
+
+<picture>
+  <source srcset={webpSrc} type="image/webp" />
+  <img
+    src={imgSrc}
+    alt={alt}
+    class={className}
+    loading={loading}
+    decoding="async"
+    width={width}
+    height={height}
+  />
+</picture>
