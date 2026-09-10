@@ -26,7 +26,7 @@ const articleSchema = {
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.date.toISOString(),
-  dateModified: (post.data.updatedDate || post.data.date).toISOString(),
+  dateModified: post.data.date.toISOString(),
   author: {
     "@type": "Organization",
     name: "PUERH DIRECT",
@@ -46,10 +46,10 @@ const articleSchema = {
 <Layout
   title={post.data.title}
   description={post.data.description}
-  canonicalURL={`/blog/${slug}/`}
+  canonicalURL={`/blog/${slug}`}
   ogImage={post.data.ogImage}
 >
-  <article class="article-page max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <header class="mb-10">
       <a href="/blog" class="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-orange-500 transition-colors mb-6">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,19 +60,18 @@ const articleSchema = {
         <span class="text-gray-400">Blog</span>
       </a>
 
-      <h1 class="display-title mb-6">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
         {post.data.title}
       </h1>
 
-      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+      <div class="flex items-center gap-4 text-sm text-gray-400">
         <time datetime={post.data.date.toISOString()}>
           {post.data.date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}
         </time>
-        {post.data.updatedDate && <span>Обновлено: <time datetime={post.data.updatedDate.toISOString()}>{post.data.updatedDate.toLocaleDateString("ru-RU")}</time></span>}
       </div>
     </header>
 
-    <div class="article-content prose prose-gray prose-lg max-w-none
+    <div class="prose prose-gray prose-lg max-w-none
       prose-headings:text-gray-900 prose-headings:font-bold
       prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-200
       prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3

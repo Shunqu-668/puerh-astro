@@ -1,4 +1,3 @@
-import { products } from "../data/products";
 const initialized = new WeakSet<HTMLFormElement>();
 const isLocalPreview = () => !['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
 
@@ -29,37 +28,8 @@ function setupInquiries() {
     const product = params.get('product') || '';
     const requested = form.querySelector<HTMLInputElement>('[name="product_requested"]');
     const sku = form.querySelector<HTMLInputElement>('[name="product_sku"]');
-    const knownProduct = products.find(item => item.slug === product);
-    const weightField = form.querySelector<HTMLInputElement>('[name="product_unit_weight_g"]');
-    const productContext = form.querySelector<HTMLElement>('[data-product-context]');
-    const volume = form.querySelector<HTMLInputElement>('[name="order_volume"]');
-    let derivedVolume = '';
-    function restoreProductContext() {
-      if (requested) requested.value = knownProduct ? knownProduct.nameRu : (params.get('tea') || product).slice(0, 200);
-      if (sku) sku.value = knownProduct?.slug || '';
-      if (weightField) weightField.value = knownProduct ? String(knownProduct.unitWeightGrams) : '';
-      if (productContext && knownProduct) {
-        productContext.hidden = false;
-        productContext.textContent = `${knownProduct.unitWeightGrams} г/шт. · ${knownProduct.unitsPerCarton} шт./коробка по каталогу. Партию и упаковку уточним; полная коробка не обязательна.`;
-      }
-      const q = Number(params.get('quantity'));
-      const unit = params.get('unit');
-      const valid = Number.isFinite(q) && q > 0 && q <= 1000000 && (unit === 'pieces' ? Number.isInteger(q) : unit === 'kg' && Math.abs(q * 1000 - Math.round(q * 1000)) < 0.00001);
-      if (volume && knownProduct && valid) {
-        const format = (value: number) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 3 }).format(value);
-        volume.value = unit === 'pieces' ? `${format(q)} шт. (≈ ${format(q * knownProduct.unitWeightGrams / 1000)} кг нетто)` : `${format(q)} кг нетто (≈ ${format(q * 1000 / knownProduct.unitWeightGrams)} шт., ориентир)`;
-        derivedVolume = volume.value;
-      }
-    }
-    restoreProductContext();
-    requested?.addEventListener('input', () => {
-      // Manual tea changes must not leave the previous SKU or weight in the inquiry.
-      const matches = knownProduct && requested.value === knownProduct.nameRu;
-      if (sku) sku.value = matches ? knownProduct.slug : '';
-      if (weightField) weightField.value = matches ? String(knownProduct.unitWeightGrams) : '';
-      if (productContext) productContext.hidden = !matches;
-      if (!matches && volume && volume.value === derivedVolume) volume.value = '';
-    });
+    if (requested) requested.value = (params.get('tea') || product).slice(0, 200);
+    if (sku && /^[a-z0-9-]{1,160}$/.test(product)) sku.value = product;
     const chosenBox = boxes.find(box => box.value === product);
     if (chosenBox) chosenBox.checked = true;
     updateSamples();
@@ -100,7 +70,8 @@ function setupInquiries() {
         form.reset();
         updateSamples();
         // Retain the product context for a possible follow-up request.
-        restoreProductContext();
+        if (requested) requested.value = (params.get('tea') || product).slice(0, 200);
+        if (sku && /^[a-z0-9-]{1,160}$/.test(product)) sku.value = product;
         success.classList.remove('hidden');
         success.focus();
       } catch {
