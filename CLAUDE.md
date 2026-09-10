@@ -2,6 +2,13 @@
 
 1:1 复刻 puerhdirect.com 的 Astro 静态站点，面向俄罗斯 B2B 普洱茶批发。暗色主题 + 橙色 #F58220 点缀，RU/EN 双语（同页面内联显示，非 i18n 路由分离）。无购物车、无在线支付，纯展示 + 线下询价。
 
+## 交接文档
+
+接手本项目前，按顺序读：
+1. `CLAUDE.md`（本文件）— 项目地图、技术栈、目录结构
+2. `docs/handoff.md` — 交接记录（当前状态、待办、诊断结论）
+3. `docs/russian-writing-guide.md` — 俄语撰写规范（写任何俄语前必读）
+
 ## 线上地址
 - 生产: https://puerhdirect.ru
 - 部署: Cloudflare Pages（wrangler CLI）
