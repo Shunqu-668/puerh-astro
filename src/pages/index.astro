@@ -1,179 +1,92 @@
 ---
 import Layout from "../components/Layout.astro";
-import CTAButton from "../components/CTAButton.astro";
 import Picture from "../components/Picture.astro";
-
+import { products } from "../data/products";
 const categories = [
-  { href: "/catalog/ripe-puerh", img: "/images/images/1.webp", ru: "Шу Пуэр", en: "Ripe Puerh" },
-  { href: "/catalog/raw-puerh", img: "/images/images/2.webp", ru: "Шэн Пуэр", en: "Raw Puerh" },
-  { href: "/catalog/teaware", img: "/images/images/3.webp", ru: "Чайники и Чабани", en: "Teapots & Tea Pets" },
-  { href: "/catalog/other-tea", img: "/images/images/4.webp", ru: "Другой Чай", en: "Other Tea" },
+  { href: "/catalog/ripe-puerh/", img: "/images/images/1.webp", ru: "Шу пуэр", en: "Ripe puerh", note: "Ферментированный пуэр" },
+  { href: "/catalog/raw-puerh/", img: "/images/images/2.webp", ru: "Шэн пуэр", en: "Raw puerh", note: "Пуэр естественной выдержки" },
+  { href: "/catalog/teaware/", img: "/images/images/3.webp", ru: "Чайная посуда", en: "Teaware", note: "Для подачи и дегустации" },
+  { href: "/catalog/other-tea/", img: "/images/images/4.webp", ru: "Другой чай", en: "Other tea", note: "Расширьте ассортимент" },
 ];
 ---
-
-<Layout
-  title="Пуэр оптом из Гуанчжоу | Шу Пуэр / Шэн Пуэр"
-  description="Прямые оптовые поставки пуэра с чайного рынка Фанцунь (Гуанчжоу). Шу Пуэр и Шэн Пуэр от 2006 года. Карго-доставка в РФ. Минимальный заказ 20 кг. Direct wholesale puerh from Guangzhou Fangcun. MOQ 20kg."
-  ogImage="https://puerhdirect.ru/images/images/hero-bg.webp"
-  canonicalURL="/"
->
+<Layout title="Пуэр оптом для вашего бизнеса — шу и шэн из Китая"
+  description="Пуэр оптом для чайных магазинов и других закупщиков. Выберите чай, запросите платные образцы и предложение по вашему объёму. Доставка согласовывается отдельно."
+  ogImage="https://puerhdirect.ru/images/images/hero-bg.webp" canonicalURL="/">
   <link slot="head" rel="preload" as="image" href="/images/images/hero-bg.webp" fetchpriority="high" />
-
-  <!-- ===== 1. HERO ===== -->
-  <section class="relative h-[75vh] max-h-[700px] flex items-center justify-center" style="background-color: #1a1a1a; background-image: url('/images/images/hero-bg.webp'); background-size: cover; background-position: center;">
-    <div class="absolute inset-0 bg-black/65 backdrop-blur-[3px]"></div>
-    <div class="relative z-10 text-center text-white px-4 max-w-5xl mt-24">
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
-        Шу Пуэр | Puerh Direct Wholesale
+  <section class="relative overflow-hidden bg-[#17221b] text-white">
+    <img src="/images/images/hero-bg.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-45" fetchpriority="high" width="1920" height="1080" />
+    <div class="absolute inset-0 bg-gradient-to-r from-[#111d16]/95 via-[#111d16]/70 to-[#111d16]/20"></div>
+    <div class="relative max-w-7xl mx-auto px-6 sm:px-8 py-20 md:py-28 lg:py-32">
+      <p class="text-xs sm:text-sm uppercase tracking-[0.22em] text-[#ffbc78] font-semibold mb-7">PUERH DIRECT · КИТАЙ → РОССИЯ</p>
+      <h1 class="max-w-3xl text-[clamp(2.5rem,6vw,5rem)] leading-[1.08] tracking-tight font-semibold mb-7">
+        Пуэр для<br />вашего бизнеса.
       </h1>
-      <p class="text-lg text-gray-300 leading-relaxed max-w-4xl mx-auto mb-10">
-        Direct from Fangcun, Guangzhou. 2nd Generation Tea Expert Selection. Карго-доставка в РФ (Серый ввоз) | Direct Cargo & Grey Customs Clearance.
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-6">
-        <a href="/contact" class="px-8 py-4 text-sm font-bold tracking-widest uppercase bg-[#F58220] text-white rounded hover:bg-orange-600 transition">ПОЛУЧИТЬ ПРАЙС-ЛИСТ</a>
-        <a href="/catalog" class="px-8 py-4 text-sm font-bold tracking-widest uppercase border-2 border-white text-white rounded hover:bg-white hover:text-black transition">В КАТАЛОГ</a>
+      <p class="max-w-xl text-lg sm:text-xl text-stone-200 leading-relaxed mb-3">Шу и шэн пуэр для вашего ассортимента. Выбирайте чай, знакомьтесь с образцами и запрашивайте условия под свой объём.</p>
+      <p lang="en" class="text-sm text-stone-300 mb-9">Wholesale puerh from China. Your selection. Your order quantity.</p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/catalog/" class="inline-flex justify-center items-center gap-6 px-7 py-4 bg-[#F58220] text-gray-950 rounded-lg font-semibold hover:bg-[#ff9c46]">Выбрать чай <span aria-hidden="true">↗</span></a>
+        <a href="/contact/#inquiry-form" class="inline-flex justify-center items-center px-7 py-4 border border-white/50 rounded-lg font-semibold hover:bg-white/10">Обсудить закупку</a>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-3 mt-12 pt-6 border-t border-white/20 max-w-2xl text-sm text-stone-200">
+        <span>Количество по запросу</span><span>Платные образцы</span><span>Ваш экспедитор — по согласованию</span>
       </div>
     </div>
   </section>
 
-  <!-- ===== 2. 4-CATEGORY GRID ===== -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+  <section class="py-16 md:py-24 bg-[#faf9f6]">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10">
+        <div><p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-3">01 / ВЫБОР ЧАЯ</p><h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Что нужно вашему ассортименту?</h2></div>
+        <a href="/catalog/" class="text-sm font-semibold text-gray-800 underline underline-offset-4">{products.length} позиции пуэра в каталоге →</a>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {categories.map(cat => (
-          <a href={cat.href} class="text-center group">
-            <div class="w-32 h-32 md:w-48 md:h-48 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300">
-              <Picture src={cat.img} alt={cat.ru} class="w-full h-full object-cover" loading="lazy" />
+          <a href={cat.href} class="group bg-white border border-stone-200 rounded-xl overflow-hidden hover:border-orange-400 transition-colors">
+            <div class="aspect-square overflow-hidden bg-stone-100">
+              <Picture src={cat.img} alt={cat.ru} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
             </div>
-            <h3 class="font-bold text-lg mb-1">{cat.ru}</h3>
-            <p class="text-sm text-gray-600">{cat.en}</p>
+            <div class="p-4 md:p-6"><h3 class="font-semibold text-lg md:text-xl">{cat.ru} <span class="float-right text-orange-700" aria-hidden="true">↗</span></h3><p class="text-sm text-gray-600 mt-2">{cat.note}</p><p lang="en" class="text-xs text-gray-500 mt-2">{cat.en}</p></div>
           </a>
+        ))}
+      </div>
+      <p class="text-xs text-gray-600 mt-5">Наличие, фасовку и цену выбранных позиций подтверждаем при подготовке предложения.</p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 grid md:grid-cols-2 gap-10 lg:gap-20 items-center">
+      <div class="rounded-2xl overflow-hidden bg-stone-100">
+        <Picture src="/images/images/expertise.webp" alt="Хранение чая на складе" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-4">02 / ОБРАЗЦЫ</p>
+        <h2 class="text-3xl md:text-4xl font-semibold leading-tight mb-5">Сначала познакомьтесь с чаем.</h2>
+        <p class="text-gray-600 leading-relaxed mb-5">Выберите до пяти позиций для запроса образцов. Сравните вкус и формат перед закупкой для магазина, чайной или другого бизнеса.</p>
+        <p class="text-gray-800 text-sm border-l-2 border-[#F58220] pl-4 mb-8">Образцы платные. Состав, стоимость и доставку согласуем до отправки.</p>
+        <a href="/sample/" class="inline-flex px-6 py-3.5 rounded-lg bg-[#17221b] text-white font-semibold hover:bg-[#2b3c30]">Подобрать образцы →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-[#f4f2ed]">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-3">03 / УСЛОВИЯ ЗАКУПКИ</p>
+      <h2 class="text-3xl md:text-4xl font-semibold mb-10">От выбора к понятному предложению.</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        {[
+          { n: "01", title: "Укажите количество", text: "Фиксированного минимального объёма заказа нет. Расскажите, какой чай и в каком количестве нужен вашему бизнесу." },
+          { n: "02", title: "Согласуем детали", text: "Уточним наличие, упаковку и стоимость выбранных позиций. Для собственного бренда формат и объём обсуждаются отдельно." },
+          { n: "03", title: "Обсудим передачу груза", text: "Если у вас есть экспедитор, укажите это в запросе. Место передачи, сроки и расходы согласуем отдельно. Можно обратиться и без готового маршрута." },
+        ].map(step => (
+          <div class="border-t border-stone-300 pt-6"><span class="text-orange-700 text-sm font-semibold">{step.n}</span><h3 class="text-xl font-semibold mt-4 mb-3">{step.title}</h3><p class="text-gray-600 text-sm leading-relaxed">{step.text}</p></div>
         ))}
       </div>
     </div>
   </section>
-
-  <!-- ===== 3. RARE TEA + CTA ===== -->
-  <section class="py-20 bg-gray-50">
-    <div class="max-w-5xl mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Редкие И Ценные Сорта Пуэра Со Склада В Гуанчжоу.</h2>
-      <p class="text-xl text-gray-600 mb-8">Rare And Valuable Puer Varieties From Our Warehouse In Guangzhou.</p>
-      <a href="/catalog" class="inline-block px-10 py-4 bg-[#F58220] text-white font-semibold rounded hover:bg-orange-600 transition">ALL PRODUCTS</a>
+  <section class="py-16 md:py-20 bg-[#17221b] text-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
+      <div><h2 class="text-3xl md:text-4xl font-semibold mb-3">Обсудим вашу следующую закупку?</h2><p class="text-stone-300">Пришлите список чая, количество и удобный способ связи.</p></div>
+      <div class="flex flex-wrap gap-3 shrink-0"><a href="/contact/#inquiry-form" class="px-6 py-3.5 rounded-lg bg-[#F58220] text-gray-950 font-semibold">Запросить предложение</a><a href="https://t.me/sqvivi777" class="px-6 py-3.5 rounded-lg border border-white/40 font-semibold" target="_blank" rel="noopener noreferrer">Telegram ↗</a></div>
     </div>
   </section>
-
-  <!-- ===== 4. GUANGZHOU ORIGIN + STATS ===== -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-      <div class="order-2 md:order-1">
-        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Прямо Из Гуанчжоу — Колыбели Чайной Культуры</h2>
-        <p class="text-gray-600 mb-6">Directly From Guangzhou — The Cradle Of Tea Culture</p>
-        <p class="text-gray-700 mb-8">Прямые закупки в Юньнани и профессиональное хранение на складах в Фанцунь, Гуанчжоу.</p>
-        <div class="flex gap-8">
-          <div>
-            <div class="text-3xl font-bold text-[#F58220]">500+</div>
-            <div class="text-sm text-gray-600">ОПТОВЫХ ПАРТНЕРОВ<br>WHOLESALE PARTNERS</div>
-          </div>
-        </div>
-      </div>
-      <div class="order-1 md:order-2">
-        <Picture src="/images/images/fangcun-store.webp" alt="Склад Фанцунь" class="rounded-xl shadow-lg w-full" loading="lazy" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 5. MISSION ===== -->
-  <section class="py-24 text-center relative overflow-hidden" style="background-image: url('/images/images/mission-banner.webp'); background-size: cover; background-position: center; background-attachment: fixed; background-repeat: no-repeat;">
-    <div class="absolute inset-0 bg-black/70"></div>
-    <div class="relative z-10 max-w-5xl mx-auto px-4 text-white">
-      <p class="text-sm uppercase tracking-widest text-[#F58220] mb-4">НАША МИССИЯ | OUR MISSION</p>
-      <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6">Прямые Поставки Пуэра Из Гуанчжоу С 2006 Года</h2>
-      <p class="text-xl text-gray-300">Direct Puerh Supply From Guangzhou Since 2006</p>
-    </div>
-  </section>
-
-  <!-- ===== 6. EXPERTISE ===== -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <Picture src="/images/images/expertise.webp" alt="Expertise" class="rounded-xl shadow-lg w-full" loading="lazy" />
-      </div>
-      <div>
-        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Более 20 Лет Экспертизы В Отборе И Хранении Чая</h2>
-        <p class="text-gray-600 mb-6">Over 20 Years Of Expertise In Tea Selection & Storage</p>
-        <p class="text-gray-700 mb-8">Надежная логистика в Россию и СНГ. Гарантия сохранности и свежести каждой партии.</p>
-        <a href="/about" class="inline-block px-10 py-4 bg-[#F58220] text-white font-semibold rounded hover:bg-orange-600 transition">ПОДРОБНЕЕ | LEARN MORE</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 7. 3 VALUE PROPOSITIONS ===== -->
-  <section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Подлинный Чай Из Фанцунь Для Вашего Бизнеса</h2>
-        <p class="text-gray-600 mb-6">Authentic Fangcun Tea For Your Business</p>
-        <p class="text-gray-700 mb-8">Качественный пуэр оптом из первых рук.<br>Premium Wholesale Puerh from First Hands.</p>
-        <div class="space-y-8">
-          <div class="flex items-start gap-6">
-            <span class="text-3xl font-bold text-[#F58220] tracking-tighter flex-shrink-0">01.</span>
-            <div>
-              <h3 class="font-bold text-lg mb-2">Прямые Поставки из Юньнани | Direct from Yunnan Factories</h3>
-              <p class="text-sm text-gray-600">Собственные ресурсы в Мэнхай и Юндэ с 2006 года. Без посредников.</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-6">
-            <span class="text-3xl font-bold text-[#F58220] tracking-tighter flex-shrink-0">02.</span>
-            <div>
-              <h3 class="font-bold text-lg mb-2">Сухой Склад в Гуанчжоу | Guangzhou Dry Storage</h3>
-              <p class="text-sm text-gray-600">Профессиональное хранение в Фанцунь. Идеальные условия для созревания пуэра.</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-6">
-            <span class="text-3xl font-bold text-[#F58220] tracking-tighter flex-shrink-0">03.</span>
-            <div>
-              <h3 class="font-bold text-lg mb-2">Контрактное Производство | Private Label (MOQ 20KG)</h3>
-              <p class="text-sm text-gray-600">Изготовление под вашим брендом. Купаж малой партией от 20 кг.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <Picture src="/images/images/value-prop.webp" alt="Value Proposition" class="rounded-xl shadow-lg w-full" loading="lazy" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 8. PRICE / LOGISTICS ===== -->
-  <section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-      <div class="text-center p-8 border border-gray-200 hover:border-[#F58220] transition-colors duration-300 bg-white">
-        <h3 class="font-bold text-lg mb-3">Оптовый Прайс-лист | Wholesale Prices</h3>
-        <p class="text-gray-600 text-sm">Запросите актуальный прайс-лист в Telegram. Только оптовые партии.</p>
-      </div>
-      <div class="text-center p-8 border border-gray-200 hover:border-[#F58220] transition-colors duration-300 bg-white">
-        <h3 class="font-bold text-lg mb-3">Карго Логистика в РФ | Cargo Delivery to CIS</h3>
-        <p class="text-gray-600 text-sm">Надежный "серый" ввоз (Карго). Оптимальные маршруты и сроки.</p>
-      </div>
-      <div class="text-center p-8 border border-gray-200 hover:border-[#F58220] transition-colors duration-300 bg-white">
-        <h3 class="font-bold text-lg mb-3">Строгий Контроль | Strict QC</h3>
-        <p class="text-gray-600 text-sm">Проверка каждой партии перед отгрузкой. Отправка только целыми коробками.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 9. TELEGRAM CHANNEL CTA ===== -->
-  <section class="py-20 bg-[#1a1a1a] text-white">
-    <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
-      <div>
-        <h2 class="text-3xl font-serif font-bold mb-4">Закрытый Оптовый Telegram-Канал</h2>
-        <p class="text-gray-300 mb-4">Private Wholesale Telegram Channel</p>
-        <p class="text-gray-400 text-sm">Эксклюзивные предложения, остатки на складе в Гуанчжоу и видео с производства.</p>
-      </div>
-      <div class="flex justify-end">
-        <a href="https://t.me/sqvivi777" class="px-10 py-5 bg-[#F58220] text-white font-bold uppercase tracking-widest rounded hover:bg-orange-600 transition inline-block">ПЕРЕЙТИ В TELEGRAM</a>
-      </div>
-    </div>
-  </section>
-
 </Layout>

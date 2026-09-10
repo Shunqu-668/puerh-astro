@@ -6,9 +6,9 @@ import Picture from "../components/Picture.astro";
 
 const formats = [
   { img: "/images/images/shape-200g.webp", ru: "Стандартный блин 200 г", en: "Standard Cake 200g", descRu: "Классический формат пуэра, ходовой объём", descEn: "Classic puerh format, best-selling volume" },
-  { img: "/images/images/shape-357g.webp", ru: "Блин 357 г", en: "Cake 357g", descRu: "Традиционный формат для выдержанного пуэра", descEn: "Traditional format for aged puerh" },
-  { img: "/images/images/shape-500g.webp", ru: "Кирпич 500 г", en: "Brick 500g", descRu: "Популярный оптовый формат", descEn: "Popular wholesale format" },
-  { img: "/images/images/shape-1000g.webp", ru: "Кирпич 1000 г", en: "Brick 1000g", descRu: "Крупный формат для оптовых партий", descEn: "Large format for wholesale batches" },
+  { img: "/images/images/shape-8g.webp", ru: "Мини-точа 8 г", en: "Mini Tuocha 8g", descRu: "Порционный формат для обсуждения", descEn: "Individual serving format to discuss" },
+  { img: "/images/images/shape-50g.webp", ru: "Мини-блин 50 г", en: "Mini Cake 50g", descRu: "Компактный формат для вашего бренда", descEn: "Compact format for your brand" },
+  { img: "/images/images/shape-100g.webp", ru: "Малый блин 100 г", en: "Small Cake 100g", descRu: "Уточните формат и упаковку в запросе", descEn: "Confirm format and packaging in your inquiry" },
 ];
 
 const workflow = [
@@ -20,16 +20,16 @@ const workflow = [
 ---
 
 <Layout
-  title="Контрактное Производство Пуэра | Private Label — MOQ 20 кг"
-  description="Контрактное производство пуэра под вашим брендом. Изготовление блинов и кирпичей от 20 кг на собственных мощностях в Юньнани. Contract puerh manufacturing from 20 kg. Private label wholesale MOQ 20kg."
+  title="Контрактное Производство Пуэра | Private Label — Условия по запросу"
+  description="Пуэр под вашим брендом: выбор чая, формата и упаковки. Объём, стоимость и сроки производства согласуются по запросу. Private label puerh: format, quantity and terms quoted individually."
   ogImage="https://puerhdirect.ru/images/images/hero-private-label.webp"
   canonicalURL="/private-label/"
 >
   <CoverHero
     titleRu="Контрактное Производство Пуэра"
     titleEn="Private Label Puerh Manufacturing"
-    subtitleRu="Изготовление блинов и кирпичей под вашим брендом от 20 кг на собственных мощностях"
-    subtitleEn="Custom cake and brick manufacturing under your brand from 20 kg at our own facilities"
+    subtitleRu="Чай под вашим брендом. Формат, упаковка и условия производства — по запросу."
+    subtitleEn="Tea under your brand. Format, packaging and production terms agreed individually."
     bgImage="/images/images/hero-private-label.webp"
   />
 
@@ -43,8 +43,8 @@ const workflow = [
             <span class="block text-orange-500 text-xl mt-1">Contract Manufacturing</span>
           </h2>
           <p class="text-gray-500 text-sm mb-6">
-            <span>Готовые рецепты или ваш уникальный купаж. Упаковка под вашим брендом в Гуанчжоу. Минимальный заказ — 20 кг.</span>
-            <span class="block text-gray-400 mt-1">Ready recipes or your custom blend. Packed under your brand in Guangzhou. MOQ: 20 kg.</span>
+            <span>Готовые рецепты или ваш уникальный купаж. Упаковка под вашим брендом в Гуанчжоу. Объём и упаковка — по согласованию.</span>
+            <span class="block text-gray-400 mt-1">Ready recipes or your custom blend. Packed under your brand in Guangzhou. Quantity depends on format and packaging.</span>
           </p>
           <ul class="space-y-4">
             <li class="flex gap-3">
@@ -58,7 +58,7 @@ const workflow = [
               <span class="text-orange-500 text-xl shrink-0 mt-0.5">◈</span>
               <div>
                 <h4 class="font-semibold text-gray-900">Уникальный Купаж <span class="text-orange-500 font-normal text-sm">| Custom Blend Recipe</span></h4>
-                <p class="text-gray-500 text-sm">Разработка вкуса под ваших клиентов. Купаж малой партией от 20 кг. <span class="text-gray-400">| Flavor development for your clients. Small-batch blending from 20 kg.</span></p>
+                <p class="text-gray-500 text-sm">Разработка вкуса под ваших клиентов. Купаж малой партией по согласованию. <span class="text-gray-400">| Flavor development for your clients. Small-batch blending by arrangement.</span></p>
               </div>
             </li>
             <li class="flex gap-3">
@@ -92,8 +92,8 @@ const workflow = [
         <span class="block text-orange-500 text-xl mt-1">Wholesale Production Formats</span>
       </h2>
       <p class="text-gray-500 text-center max-w-xl mx-auto mb-12 text-sm">
-        <span>Стандартные форматы для контрактного производства. MOQ: 20 кг.</span>
-        <span class="block text-gray-400 mt-1">Standard formats for contract manufacturing. MOQ: 20 kg.</span>
+        <span>Стандартные форматы для контрактного производства. Объём зависит от формата и упаковки.</span>
+        <span class="block text-gray-400 mt-1">Standard formats for contract manufacturing. Quantity depends on format and packaging.</span>
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {formats.map(f => (
@@ -120,14 +120,14 @@ const workflow = [
         </div>
         <div>
           <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Индивидуальный Купаж от 20 кг</span>
-            <span class="block text-orange-500 text-xl mt-1">Custom Blend from 20 kg</span>
+            <span class="text-gray-900">Индивидуальный Купаж по согласованию</span>
+            <span class="block text-orange-500 text-xl mt-1">Custom Blend by arrangement</span>
           </h2>
           <p class="text-gray-600 leading-relaxed mb-3">
-            <span>Индивидуальный купаж по вашему ТЗ. Прессовка в Юньнани, упаковка в Фанцунь. От 20 кг.</span>
+            <span>Индивидуальный купаж по вашему ТЗ. Прессовка в Юньнани, упаковка в Фанцунь. Объём по согласованию.</span>
           </p>
           <p class="text-gray-400 text-sm leading-relaxed">
-            <span>Custom blend to your specification. Pressed in Yunnan, packed in Fangcun. MOQ: 20 kg.</span>
+            <span>Custom blend to your specification. Pressed in Yunnan, packed in Fangcun. Quantity depends on format and packaging.</span>
           </p>
         </div>
       </div>

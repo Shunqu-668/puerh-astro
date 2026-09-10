@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node scripts/verify-site.mjs",
+    "verify": "npm run build && npm test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -14,5 +16,8 @@
     "astro": "^6.3.8",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

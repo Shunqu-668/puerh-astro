@@ -1,4 +1,6 @@
 ---
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 interface Props {
   src: string;
   alt: string;
@@ -14,12 +16,16 @@ const { src, alt, fallback, class: className = "", loading = "lazy", width, heig
 const srcLower = src.toLowerCase();
 const srcIsWebP = srcLower.endsWith(".webp");
 
-const webpSrc = srcIsWebP ? src : src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
-const imgSrc = srcIsWebP ? (fallback || src.replace(/\.webp$/i, ".jpg")) : src;
+const exists = (asset: string) => !asset.startsWith("/") || existsSync(join(process.cwd(), "public", asset));
+const proposedWebp = srcIsWebP ? src : src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+const webpSrc = exists(proposedWebp) ? proposedWebp : undefined;
+const candidates = srcIsWebP ? [fallback, src.replace(/\.webp$/i, ".jpg"), src.replace(/\.webp$/i, ".png"), src] : [src];
+const imgSrc = candidates.find((candidate): candidate is string => !!candidate && exists(candidate));
+if (!imgSrc) throw new Error(`Missing public image: ${src}`);
 ---
 
 <picture>
-  <source srcset={webpSrc} type="image/webp" />
+  {webpSrc && <source srcset={webpSrc} type="image/webp" />}
   <img
     src={imgSrc}
     alt={alt}

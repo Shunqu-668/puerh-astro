@@ -7,12 +7,7 @@ export default defineConfig({
   output: 'static',
   site: 'https://puerhdirect.ru',
   integrations: [
-    sitemap({
-      serialize(item) {
-        item.lastmod = new Date();
-        return item;
-      },
-    }),
+    sitemap(),
     sitemapXsl(),
   ],
   vite: {

@@ -4,3 +4,13 @@ dist/
 .DS_Store
 *.log
 .env
+
+# Local sessions, credentials and verification output
+.env.*
+!.env.example
+.claude/
+.wrangler/
+.npmrc
+artifacts/
+*.pem
+*.key

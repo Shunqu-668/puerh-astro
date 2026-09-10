@@ -14,6 +14,7 @@ interface Props {
 const { title, description, ogImage, canonicalURL } = Astro.props;
 const baseUrl = "https://puerhdirect.ru";
 const pageUrl = canonicalURL ? `${baseUrl}${canonicalURL}` : new URL(Astro.url.pathname, baseUrl).href;
+const pageTitle = `${title.replace(/\s*[—|]\s*PUERH DIRECT\s*$/i, "")} — PUERH DIRECT`;
 const imageUrl = ogImage || `${baseUrl}/images/images/logo.webp`;
 
 const organizationSchema = {
@@ -23,7 +24,7 @@ const organizationSchema = {
   alternateName: ["Puerh Direct Wholesale", "Пуэр Директ"],
   url: baseUrl,
   logo: `${baseUrl}/images/images/logo.webp`,
-  description: "Прямые оптовые поставки пуэра из Гуанчжоу (Фанцунь). Direct wholesale puerh from Guangzhou, China. MOQ 20kg.",
+  description: "Прямые оптовые поставки пуэра из Гуанчжоу (Фанцунь). Wholesale puerh from China. Order quantity and shipping agreed individually.",
   email: "wholesale@puerhdirect.ru",
   address: {
     "@type": "PostalAddress",
@@ -47,32 +48,28 @@ const organizationSchema = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <ClientRouter />
-    <title>{title} — PUERH DIRECT</title>
+    <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
 
     <!-- Canonical -->
     <link rel="canonical" href={pageUrl} />
 
-    <!-- hreflang: Russian (default) + English + x-default -->
-    <link rel="alternate" hreflang="ru" href={pageUrl} />
-    <link rel="alternate" hreflang="en" href={pageUrl} />
-    <link rel="alternate" hreflang="x-default" href={pageUrl} />
+    <!-- A single bilingual URL is not a separate English language version. -->
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PUERH DIRECT" />
-    <meta property="og:title" content={`${title} — PUERH DIRECT`} />
+    <meta property="og:title" content={pageTitle} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={pageUrl} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="ru_RU" />
-    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} — PUERH DIRECT`} />
+    <meta name="twitter:title" content={pageTitle} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={imageUrl} />
 
@@ -80,42 +77,47 @@ const organizationSchema = {
     <meta property="vk:image" content={imageUrl} />
 
     <!-- GEO tags for Russia/CIS -->
-    <meta name="geo.region" content="RU" />
+    <meta name="geo.region" content="CN-GD" />
     <meta name="geo.placename" content="Гуанчжоу, Китай | Guangzhou, China" />
     <meta name="geo.position" content="23.1291;113.2644" />
 
     <!-- Yandex verification (replace with your code at https://webmaster.yandex.com) -->
     <meta name="yandex-verification" content="93e5aae716cf117c" />
 
-    <link rel="icon" type="image/png" href="/images/images/logo.webp" />
+    <link rel="icon" type="image/webp" href="/images/images/logo.webp" />
 
     <link rel="preload" as="image" href="/images/images/logo.webp" />
 
     <slot name="head" />
 
-    <!-- Yandex.Metrika counter -->
     <script>
-      (function(m,e,t,r,i,k,a){
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
-      ym(109468811, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/109468811" style="position:absolute;left:-9999px" alt="" /></div></noscript>
-    <script>
-      window.addEventListener('error', function(e) {
-        if (e.target && (e.target.src || '').indexOf('mc.yandex') > -1) { e.preventDefault(); }
-      }, true);
+      const productionHost = ['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
+      if (productionHost) {
+        const w = window as any;
+        w.ym = w.ym || function (...args: unknown[]) { (w.ym.a = w.ym.a || []).push(args); };
+        w.ym.l = Date.now();
+        const tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://mc.yandex.ru/metrika/tag.js';
+        document.head.append(tag);
+        w.ym(109468811, 'init', { clickmap: true, accurateTrackBounce: true, trackLinks: true });
+        let previousPage = location.pathname;
+        document.addEventListener('astro:page-load', () => {
+          if (location.pathname !== previousPage) {
+            w.ym(109468811, 'hit', location.pathname, { title: document.title, referer: previousPage });
+            previousPage = location.pathname;
+          }
+        });
+      }
     </script>
 
     <!-- JSON-LD Organization -->
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
   </head>
   <body class="bg-white text-gray-900 antialiased">
+    <a href="#main-content" class="skip-link">К содержанию</a>
     <Nav />
-    <main class="pt-16">
+    <main id="main-content" class="pt-16" tabindex="-1">
       <slot />
     </main>
     <Footer />

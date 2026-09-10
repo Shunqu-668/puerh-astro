@@ -1,85 +1,69 @@
 ---
 const navItems = [
-  { href: "/", ru: "Главная", en: "Home" },
-  { href: "/catalog", ru: "Каталог", en: "Catalog" },
-  { href: "/private-label", ru: "Приватная марка", en: "Private Label" },
-  { href: "/about", ru: "О нас", en: "About" },
-  { href: "/sample", ru: "Образцы", en: "Samples" },
-  { href: "/blog", ru: "Блог", en: "Blog" },
-  { href: "/compliance", ru: "Сертификация", en: "Compliance" },
-  { href: "/faq", ru: "FAQ", en: "FAQ" },
-  { href: "/contact", ru: "Контакты", en: "Contact" },
+  { href: "/catalog/", ru: "Каталог", en: "Catalog" },
+  { href: "/sample/", ru: "Образцы", en: "Samples" },
+  { href: "/private-label/", ru: "Под своим брендом", en: "Private label" },
+  { href: "/about/", ru: "О нас", en: "About" },
+  { href: "/blog/", ru: "Блог", en: "Blog" },
 ];
-
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const active = (href: string) => currentPath === href.replace(/\/$/, "") || currentPath.startsWith(href);
 ---
-
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <a href="/" class="flex items-center gap-2 shrink-0">
-        <img src="/images/images/logo.webp" alt="Puerh Direct" class="h-10 w-auto" width="76" height="40" />
+    <div class="flex items-center justify-between h-16 gap-5">
+      <a href="/" class="flex items-center gap-3 shrink-0" aria-label="PUERH DIRECT — Главная">
+        <img src="/images/images/logo.webp" alt="" class="h-10 w-auto" width="76" height="40" />
+        <span class="hidden sm:block text-xs tracking-[0.16em] text-gray-600 font-semibold">PUERH DIRECT</span>
       </a>
-
-      <nav class="hidden lg:flex items-center gap-1">
+      <nav class="hidden lg:flex items-center gap-1" aria-label="Основная навигация">
         {navItems.map(item => (
-          <a
-            href={item.href}
-            class={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-              currentPath === item.href
-                ? "text-orange-500 bg-orange-50"
-                : "text-gray-700 hover:text-orange-500 hover:bg-gray-50"
-            }`}
-          >
-            <span class="text-orange-500 font-semibold">{item.ru}</span>
-            <span class="text-gray-400 mx-1">|</span>
-            <span class="text-gray-500">{item.en}</span>
+          <a href={item.href} title={item.en} aria-current={active(item.href) ? "page" : undefined}
+            class={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${active(item.href) ? "text-orange-700 bg-orange-50" : "text-gray-700 hover:text-orange-700"}`}>
+            {item.ru}
           </a>
         ))}
       </nav>
-
-      <button id="menu-btn" class="lg:hidden p-2 text-gray-600 hover:text-orange-500" aria-label="Menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/>
-        </svg>
-      </button>
+      <div class="flex items-center gap-3">
+        <a href="/contact/#inquiry-form" class="hidden sm:inline-flex rounded-lg bg-[#F58220] text-gray-950 font-semibold text-sm px-4 py-2.5 hover:bg-[#E07518]">Запросить цену</a>
+        <button id="menu-btn" type="button" class="lg:hidden p-2 text-gray-800" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path id="menu-icon-open" stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+      </div>
     </div>
-
-    <div id="mobile-menu" class="hidden lg:hidden pb-4">
-      {navItems.map(item => (
-        <a
-          href={item.href}
-          class={`block px-3 py-2.5 rounded-md text-sm ${
-            currentPath === item.href
-              ? "text-orange-500 bg-orange-50 font-medium"
-              : "text-gray-700 hover:text-orange-500"
-          }`}
-        >
-          <span class="text-orange-500 font-semibold">{item.ru}</span>
-          <span class="text-gray-400 mx-1">|</span>
-          <span class="text-gray-500">{item.en}</span>
+    <nav id="mobile-menu" class="hidden lg:hidden pb-4 max-h-[calc(100dvh-4rem)] overflow-y-auto" aria-label="Мобильная навигация">
+      {[...navItems, { href: "/faq/", ru: "Вопросы и ответы", en: "FAQ" }, { href: "/contact/", ru: "Контакты / Запросить цену", en: "Contact" }].map(item => (
+        <a href={item.href} aria-current={active(item.href) ? "page" : undefined} class="block px-3 py-3 rounded-md text-sm text-gray-800 hover:bg-orange-50">
+          {item.ru}<span lang="en" class="text-gray-500 ml-2">{item.en}</span>
         </a>
       ))}
-    </div>
+    </nav>
   </div>
 </header>
-
 <script>
+  const menus = new WeakSet<HTMLElement>();
   function setupMobileMenu() {
-    const btn = document.getElementById('menu-btn');
+    const button = document.getElementById('menu-btn');
     const menu = document.getElementById('mobile-menu');
-    const openIcon = document.getElementById('menu-icon-open');
-    const closeIcon = document.getElementById('menu-icon-close');
-    if (!btn || !menu || !openIcon || !closeIcon) return;
-    const newBtn = btn.cloneNode(true);
-    btn.parentNode!.replaceChild(newBtn, btn);
-    newBtn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
-      openIcon.classList.toggle('hidden');
-      closeIcon.classList.toggle('hidden');
+    if (!button || !menu || menus.has(button)) return;
+    menus.add(button);
+    function setOpen(open: boolean) {
+      button!.setAttribute('aria-expanded', String(open));
+      menu!.classList.toggle('hidden', !open);
+      button!.querySelector('#menu-icon-open')?.classList.toggle('hidden', open);
+      button!.querySelector('#menu-icon-close')?.classList.toggle('hidden', !open);
+    }
+    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', event => {
+      if ((event.target as Element).closest('a')) setOpen(false);
+    });
+    button.closest('header')?.addEventListener('keydown', event => {
+      if ((event as KeyboardEvent).key === 'Escape') { setOpen(false); button.focus(); }
     });
   }
   setupMobileMenu();
-  document.addEventListener('astro:after-swap', setupMobileMenu);
+  document.addEventListener('astro:page-load', setupMobileMenu);
 </script>
