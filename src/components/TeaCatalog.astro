@@ -1,0 +1,52 @@
+---
+import ProductCard from "./ProductCard.astro";
+import { products } from "../data/products";
+interface Props { type?: "raw" | "ripe" }
+const { type } = Astro.props;
+const items = type ? products.filter(p => p.type === type) : products;
+const title = type === "raw" ? "Шэн пуэр" : type === "ripe" ? "Шу пуэр" : "Найдите свой пуэр.";
+---
+<section class="catalog-intro section-shell">
+  <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>/</span>{type ? <a href="/catalog/">Каталог</a> : <span>Каталог</span>}{type && <><span>/</span><span>{title}</span></>}</nav>
+  <p class="eyebrow">КОЛЛЕКЦИЯ / PUERH DIRECT</p>
+  <div class="section-heading"><h1 class="display-title">{title}</h1><p>Для вашей чайной полки.<br />Сравните год, форму и вес — запросите условия под свой объём.</p></div>
+  <div class="catalog-tabs"><a aria-current={!type ? "page" : undefined} href="/catalog/">Весь пуэр <span>{products.length}</span></a><a aria-current={type === "ripe" ? "page" : undefined} href="/catalog/ripe-puerh/">Шу</a><a aria-current={type === "raw" ? "page" : undefined} href="/catalog/raw-puerh/">Шэн</a><a href="/catalog/teaware/">Посуда ↗</a><a href="/catalog/other-tea/">Другой чай ↗</a></div>
+</section>
+<section class="section-shell catalog-content" data-catalog>
+  <div class="catalog-tools">
+    <label class="search-label" for="tea-search"><span>Поиск по названию, году или региону</span><input id="tea-search" type="search" placeholder="Например: Иу, 2024, Black Pearl" autocomplete="off" /></label>
+    <label class="shape-label" for="tea-shape"><span>Форма чая</span><select id="tea-shape"><option value="">Все формы</option><option value="cake">Блин</option><option value="brick">Кирпич</option><option value="tuocha">Точа</option></select></label>
+    <p class="catalog-count" role="status" aria-live="polite"><span data-result-count>{items.length}</span> позиций</p>
+  </div>
+  <div class="product-grid">{items.map(p => <ProductCard product={p} />)}</div>
+  <div data-no-results class="empty-results" hidden><h2>Ничего не найдено</h2><p>Попробуйте другое название или снимите фильтры.</p><button type="button" data-reset-filters class="button secondary">Сбросить фильтры</button></div>
+  <p class="spec-note">Вес и упаковка — по каталогу поставщика. Актуальную партию, наличие и цену подтверждаем в предложении.</p>
+  <div class="catalog-help"><div><p class="eyebrow">НЕ ЗНАЕТЕ, С ЧЕГО НАЧАТЬ?</p><h2>Сначала попробуйте чай.</h2></div><a href="/sample/" class="button secondary">Подобрать образцы ↗</a></div>
+</section>
+<script>
+ const ready = new WeakSet<HTMLElement>();
+ function initCatalog() {
+   document.querySelectorAll<HTMLElement>('[data-catalog]').forEach(root => {
+     if (ready.has(root)) return;
+     ready.add(root);
+     const search = root.querySelector<HTMLInputElement>('#tea-search')!;
+     const shape = root.querySelector<HTMLSelectElement>('#tea-shape')!;
+     const cards = [...root.querySelectorAll<HTMLElement>('[data-product-card]')];
+     const normalize = (value: string) => value.toLowerCase().replaceAll('ё', 'е').trim();
+     const update = () => {
+       const terms = normalize(search.value).split(/\s+/).filter(Boolean);
+       let count = 0;
+       for (const card of cards) {
+         const match = (!shape.value || card.dataset.shape === shape.value) && terms.every(term => normalize(card.dataset.search || '').includes(term));
+         card.hidden = !match; if (match) count++;
+       }
+       root.querySelector('[data-result-count]')!.textContent = String(count);
+       (root.querySelector('[data-no-results]') as HTMLElement).hidden = count > 0;
+     };
+     search.addEventListener('input', update); shape.addEventListener('change', update);
+     root.querySelector('[data-reset-filters]')!.addEventListener('click', () => { search.value = ''; shape.value = ''; update(); search.focus(); });
+     update();
+   });
+ }
+ initCatalog(); document.addEventListener('astro:page-load', initCatalog);
+</script>

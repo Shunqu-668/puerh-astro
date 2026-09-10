@@ -1,169 +1,87 @@
 ---
 import Layout from "../../../components/Layout.astro";
-import CTAButton from "../../../components/CTAButton.astro";
 import Picture from "../../../components/Picture.astro";
 import { products, typeLabels, shapeLabels, getProductImg } from "../../../data/products";
 import productDescriptions from "../../../data/product-descriptions.json";
-
-export function getStaticPaths() {
-  return products.map(p => ({ params: { slug: p.slug } }));
-}
-
-const { slug } = Astro.params;
-const p = products.find(x => x.slug === slug);
-
-if (!p) return Astro.redirect("/404");
-
-const descData = productDescriptions[p.slug] || {};
-const hasDesc = descData.descRu || descData.descEn;
-
+export function getStaticPaths() { return products.map(p => ({ params: { slug: p.slug } })); }
+const p = products.find(x => x.slug === Astro.params.slug)!;
+const desc = productDescriptions[p.slug] || {};
 const productUrl = `/catalog/product/${p.slug}/`;
-const productImg = getProductImg(p);
-const origin = p.origin || "Yunnan";
-const isGushu = p.treeAge === "gushu";
-const treeAgeLabel = isGushu ? "100-500 years (gushu ancient trees)" : "40-100 years (arbor & plantation)";
-const treeAgeLabelRu = isGushu ? "Гушу (100–500 лет)" : "Арбор (40–100 лет)";
-const treeAgeLabelShort = isGushu ? "Gushu (100–500 yr)" : "Arbor (40–100 yr)";
-const altitude = "1200–1800 m";
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "PUERH DIRECT", item: "https://puerhdirect.ru/" },
-    { "@type": "ListItem", position: 2, name: "Каталог | Catalog", item: "https://puerhdirect.ru/catalog/" },
-    { "@type": "ListItem", position: 3, name: `${typeLabels[p.type].ru} | ${typeLabels[p.type].en}`, item: `https://puerhdirect.ru/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/` },
-    { "@type": "ListItem", position: 4, name: p.nameEn },
-  ],
-};
-
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: `${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`,
-  description: `${p.year} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en.toLowerCase()}, origin: ${origin} tea mountain, Yunnan, China. Altitude: ${altitude}. Tree age: ${treeAgeLabel}. Stored in Guangzhou warehouse at 20-25°C, 65-75% humidity for natural aging. Direct supply from producer, no middlemen.`,
-  image: `https://puerhdirect.ru${productImg}`,
-  category: `${typeLabels[p.type].en} Pu-erh Tea`,
-  manufacturer: "PUERH DIRECT",
-  brand: { "@type": "Brand", name: "PUERH DIRECT" },
-  productionDate: `${p.year}`,
-};
+const quoteUrl = `/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`;
+const description = `${p.nameRu}, ${p.year}. ${typeLabels[p.type].ru}, ${shapeLabels[p.shape].ru.toLowerCase()}, ${p.unitWeightGrams} г/шт. Запросите цену и наличие для вашего объёма. Параметры партии уточняются в предложении.`;
+const schema = { "@context": "https://schema.org", "@type": "Product", name: `${p.nameRu}, ${p.year}`, description, image: `https://puerhdirect.ru${getProductImg(p)}`, sku: p.slug, category: typeLabels[p.type].ru };
+const breadcrumb = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+  { "@type": "ListItem", position: 1, name: "Каталог", item: "https://puerhdirect.ru/catalog/" },
+  { "@type": "ListItem", position: 2, name: p.nameRu, item: `https://puerhdirect.ru${productUrl}` }
+]};
 ---
-
-<Layout
-  title={`${p.year} ${p.nameRu} | ${p.nameEn} — PUERH DIRECT`}
-  description={hasDesc
-    ? (descData.descRu || descData.descEn).slice(0, 160).replace(/\.[^.]*$/, '.')
-    : `${p.year} ${typeLabels[p.type].ru} ${shapeLabels[p.shape].ru} «${p.nameRu}» — оптом из Гуанчжоу (Фанцунь). ${origin}, Юньнань. ${isGushu ? 'Гушу' : 'Арбор'}. Объём по запросу. ${p.year} ${p.nameEn} ${typeLabels[p.type].en} ${shapeLabels[p.shape].en} wholesale from Guangzhou Fangcun.`}
-  ogImage={`https://puerhdirect.ru${productImg}`}
-  canonicalURL={productUrl}
->
-  <section class="py-12 md:py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="text-sm text-gray-400 mb-8">
-        <a href="/catalog/" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
-        <span class="mx-2">/</span>
-        <a href={`/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/`} class="hover:text-orange-500 transition-colors">{typeLabels[p.type].ru} | {typeLabels[p.type].en}</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-600">{p.nameEn}</span>
-      </nav>
-
-      <div class="grid md:grid-cols-2 gap-10 lg:gap-16">
-        <div class="aspect-square rounded-2xl overflow-hidden bg-[#f5f5f5]">
-          <Picture
-            src={getProductImg(p)}
-            fallback={getProductImg(p).replace(/\.webp$/, ".jpg")}
-            alt={`${p.year} ${p.nameEn} — ${typeLabels[p.type].en} ${shapeLabels[p.shape].en}`}
-            class="w-full h-full object-cover"
-            loading="eager"
-          />
+<Layout title={`${p.nameRu} ${p.year} — ${p.unitWeightGrams} г`} description={description} canonicalURL={productUrl} ogImage={`https://puerhdirect.ru${getProductImg(p)}`}>
+  <section class="section-shell product-section">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/catalog/">Каталог</a><span>/</span><a href={`/catalog/${p.type}-puerh/`}>{typeLabels[p.type].ru}</a><span>/</span><span>{p.nameRu}</span></nav>
+    <div class="product-layout">
+      <div class="product-visual"><div class="product-photo"><Picture src={getProductImg(p)} alt={`${p.nameRu}, ${p.year}`} class="w-full h-full object-contain" loading="eager" /></div><p class="photo-caption">{p.year} / {typeLabels[p.type].ru} / {shapeLabels[p.shape].ru}</p></div>
+      <div class="product-summary">
+        <p class="eyebrow">{typeLabels[p.type].ru} · {p.year}</p>
+        <h1 class="display-title">{p.nameRu}</h1>
+        <p lang="en" class="product-english">{p.nameEn}</p>
+        <dl class="product-specs">
+          <div><dt>Вес одной штуки</dt><dd><span data-unit-weight>{p.unitWeightGrams}</span> г</dd></div>
+          <div><dt>Упаковка по каталогу</dt><dd>{p.unitsPerCarton} шт. / коробка</dd></div>
+          <div><dt>Форма</dt><dd>{shapeLabels[p.shape].ru}</dd></div>
+          <div><dt>Год по каталогу</dt><dd>{p.year}</dd></div>
+        </dl>
+        <p class="spec-note">Параметры указаны по каталогу поставщика. Актуальную партию и упаковку подтвердим в предложении. Заказ не обязательно кратен коробке.</p>
+        <div class="quantity-panel" data-quantity-panel data-weight={p.unitWeightGrams}>
+          <label for="quote-quantity">Какое количество вас интересует?</label>
+          <div class="quantity-row"><input id="quote-quantity" type="number" min="0.001" max="1000000" step="any" inputmode="decimal" placeholder="Количество" aria-describedby="quantity-result" /><select id="quote-unit" aria-label="Единица количества"><option value="pieces">шт.</option><option value="kg">кг</option></select><output id="quantity-result" aria-live="polite">Укажите объём</output></div>
+          <p class="quantity-hint">Расчёт по весу чая, без упаковки. Это запрос, а не оформление заказа.</p>
+          <a href={quoteUrl} data-quote-link class="button primary">Запросить цену <span aria-hidden="true">↗</span></a>
+          <a href={`/sample/?product=${encodeURIComponent(p.slug)}`} class="sample-text-link">Сначала заказать платный образец →</a>
         </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="text-sm font-bold text-white bg-orange-500 px-3 py-1 rounded-full">{p.year}</span>
-            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{typeLabels[p.type].ru} | {typeLabels[p.type].en}</span>
-            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{shapeLabels[p.shape].ru} | {shapeLabels[p.shape].en}</span>
-          </div>
-
-          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {p.nameRu}
-          </h1>
-          <p class="text-xl text-orange-500 font-medium mb-8">{p.nameEn}</p>
-
-          <div class="space-y-4 text-gray-600 text-sm leading-relaxed mb-8">
-            {hasDesc ? (
-              <>
-                <p class="text-gray-800 leading-relaxed">{descData.descRu || descData.descEn}</p>
-                {descData.descEn && descData.descRu && (
-                  <p class="text-gray-400 leading-relaxed">{descData.descEn}</p>
-                )}
-                {descData.descCn && (
-                  <p class="text-gray-300 text-xs leading-relaxed border-t border-gray-100 pt-3 mt-3">
-                    <span class="text-gray-400 font-medium">中文溯源 | Chinese Origin:</span> {descData.descCn}
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                <p>
-                  {p.year} года, {shapeLabels[p.shape].ru.toLowerCase()} пуэра. Чайная гора {origin}, Юньнань. Прямые поставки от производителя.
-                </p>
-                <p class="text-gray-400">
-                  {p.year} {typeLabels[p.type].en} {shapeLabels[p.shape].en.toLowerCase()}. Origin: {origin} tea mountain, Yunnan. Direct from producer.
-                </p>
-              </>
-            )}
-
-          <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm border-t border-gray-100 pt-6 mb-8">
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Происхождение | Origin</dt>
-              <dd class="text-gray-800 font-medium">{origin}, Yunnan, China</dd>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Высота | Altitude</dt>
-              <dd class="text-gray-800 font-medium">{altitude}</dd>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Деревья | Trees</dt>
-              <dd class="text-gray-800 font-medium">{treeAgeLabelRu}<span class="text-gray-400 ml-1">| {treeAgeLabelShort}</span></dd>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Хранение | Storage</dt>
-              <dd class="text-gray-800 font-medium">Гуанчжоу, 20–25°C, 65–75% RH</dd>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Год | Year</dt>
-              <dd class="text-gray-800 font-medium">{p.year} ({new Date().getFullYear() - p.year} лет выдержки | years aged)</dd>
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <dt class="text-xs text-gray-400 uppercase tracking-wide">Поставка | Supply</dt>
-              <dd class="text-gray-800 font-medium">Напрямую от производителя | Direct</dd>
-            </div>
-          </dl>
-
-          <div class="border-t border-gray-100 pt-8">
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-medium">Количество по запросу | Flexible quantity</span>
-              <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Образцы платные | Paid samples</span>
-              {p.origin && <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">{p.origin}, Yunnan</span>}
-              {p.treeAge === "gushu" && <span class="text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-full font-medium">Гушу | Gushu</span>}
-              <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full">Фанцунь | Fangcun</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-4">
-              Заинтересованы в оптовых закупках? Свяжитесь с нами для получения прайс-листа.
-              <span class="block text-gray-400 mt-1">Interested in wholesale? Contact us for a price list.</span>
-            </p>
-            <div class="flex flex-wrap gap-3">
-              <CTAButton href={`/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`}>Запросить цену | Get Quote</CTAButton>
-              <a class="inline-flex items-center px-5 py-3 border border-gray-300 rounded-lg font-medium text-sm hover:border-orange-500" href={`/sample/?product=${encodeURIComponent(p.slug)}`}>Выбрать образец | Sample</a>
-            </div>
-          </div>
-        </div>
+        <p class="product-terms">Без фиксированного минимального объёма. Доставку и передачу экспедитору согласуем отдельно.</p>
+      </div>
+    </div>
+    <div class="product-details">
+      <div><p class="eyebrow">ЗНАКОМСТВО С ЧАЕМ</p><h2>Описание и детали</h2><p class="spec-note">Описание поставщика помогает сориентироваться. Вкус оцените по образцу, происхождение и условия хранения уточните для выбранной партии.</p></div>
+      <div class="product-copy">
+        <p>{desc.descRu || `${typeLabels[p.type].ru} в форме «${shapeLabels[p.shape].ru.toLowerCase()}». Запросите образец, сведения о партии и условия поставки.`}</p>
+        {(desc.descEn || desc.descCn) && <details><summary>Описание на английском и китайском</summary>{desc.descEn && <p lang="en">{desc.descEn}</p>}{desc.descCn && <p lang="zh">{desc.descCn}</p>}</details>}
+        <a href="/blog/kak-vybrat-postavshika-puera-v-kitae/" class="text-link">Что уточнить у поставщика до закупки ↗</a>
       </div>
     </div>
   </section>
-
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)}></script>
-  <script type="application/ld+json" set:html={JSON.stringify(productSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)}></script>
 </Layout>
+<script>
+ const initialized = new WeakSet<HTMLElement>();
+ function setupQuantity() {
+  document.querySelectorAll<HTMLElement>('[data-quantity-panel]').forEach(panel => {
+   if (initialized.has(panel)) return;
+   initialized.add(panel);
+   const input = panel.querySelector<HTMLInputElement>('input')!;
+   const unit = panel.querySelector<HTMLSelectElement>('select')!;
+   const output = panel.querySelector<HTMLOutputElement>('output')!;
+   const link = panel.querySelector<HTMLAnchorElement>('[data-quote-link]')!;
+   const original = link.getAttribute('href')!;
+   const weight = Number(panel.dataset.weight);
+   const format = (n: number) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 3 }).format(n);
+   const update = () => {
+    input.step = unit.value === 'pieces' ? '1' : '0.001';
+    input.min = unit.value === 'pieces' ? '1' : '0.001';
+    const qty = input.valueAsNumber;
+    const valid = Number.isFinite(qty) && input.validity.valid;
+    link.setAttribute('href', original);
+    if (!input.value) { output.textContent = 'Укажите объём'; return; }
+    if (!valid) { output.textContent = unit.value === 'pieces' ? 'Укажите целое число штук' : 'Проверьте количество'; return; }
+    output.textContent = unit.value === 'pieces' ? `≈ ${format(qty * weight / 1000)} кг нетто` : `≈ ${format(qty * 1000 / weight)} шт. · ориентир`;
+    const url = new URL(original, location.origin);
+    url.searchParams.set('quantity', String(qty)); url.searchParams.set('unit', unit.value);
+    link.href = url.pathname + url.search + url.hash;
+   };
+   input.addEventListener('input', update); unit.addEventListener('change', update);
+   update();
+  });
+ }
+ setupQuantity(); document.addEventListener('astro:page-load', setupQuantity);
+</script>

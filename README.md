@@ -20,6 +20,8 @@ npm test
 测试优先使用已安装的 Chrome/Edge；其他环境可设置 BROWSER_EXECUTABLE 或安装 Playwright Chromium。保持 package-lock.json 随源码转交；不要搬运 node_modules。
 
 ## 修改位置
+- 规格来源：docs/imported-product-specs.json；每次更新与src/data/products.ts对照，目录参数不等于批次确认。
+- 共用目录/筛选：src/components/TeaCatalog.astro、ProductCard.astro；主题及手机布局：src/styles/global.css。
 - 首页：src/pages/index.astro；全站导航/页脚：src/components。
 - 商品：src/data/products.ts、product-descriptions.json；图像：public/images/images。
 - 询盘/样品：src/pages/contact.astro、sample.astro 与 src/scripts/inquiry.ts。

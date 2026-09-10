@@ -48,6 +48,14 @@ for (const file of pages) {
 }
 assert.equal(pages.length, 62, 'Expected existing 62 routes');
 assert.deepEqual([...new Set(failures)], [], 'Static site regressions');
+const supplierSpecs = JSON.parse(fs.readFileSync(path.join(root, 'docs/imported-product-specs.json'), 'utf8'));
+assert.equal(supplierSpecs.products.length, 42);
+for (const spec of supplierSpecs.products) {
+  const html = fs.readFileSync(path.join(dist, 'catalog/product', spec.slug, 'index.html'), 'utf8');
+  assert.match(html, new RegExp('data-unit-weight[^>]*>' + spec.unitWeightGrams + '</span>'));
+  assert.ok(html.includes(spec.unitsPerCarton + ' шт. / коробка'), spec.slug + ' carton mismatch');
+  assert.ok(html.includes('Актуальную партию'), spec.slug + ' lacks batch qualification');
+}
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.xml': 'application/xml' };
 const chromeCandidates = [
   process.env.BROWSER_EXECUTABLE,
@@ -80,27 +88,40 @@ await context.route('**/*', async route => {
 });
 const page = await context.newPage();
 page.on('pageerror', error => errors.push(error.message));
-async function screenshot(name) {
+async function screenshot(name, fullPage = true) {
+  await page.evaluate(async () => {
+    await Promise.allSettled(document.getAnimations().map(animation => animation.finished));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
   await page.locator('img').evaluateAll(async images => {
     await Promise.all(images.map(async image => {
       image.loading = 'eager';
       await image.decode();
     }));
   });
-  await page.screenshot({ path: path.join(output, name), fullPage: true });
+  await page.screenshot({ path: path.join(output, name), fullPage, animations: 'disabled' });
 }
 try {
   await page.goto('https://puerhdirect.ru/');
   await page.locator('h1').waitFor();
   await screenshot('home-desktop.png');
+  await screenshot('home-desktop-firstscreen.png', false);
   checks.push('desktop homepage');
   const productPath = '/catalog/product/2024-ripe-puerh-brick-black-pearl-xinwen/';
   await page.goto('https://puerhdirect.ru' + productPath);
-  await page.getByRole('link', { name: 'Запросить цену | Get Quote', exact: true }).click();
+  await page.locator('#quote-quantity').fill('12');
+  assert.match(await page.locator('#quantity-result').innerText(), /3 кг нетто/);
+  assert.match(await page.locator('[data-quote-link]').getAttribute('href'), /quantity=12&unit=pieces/);
+  await screenshot('product-desktop.png');
+  await page.locator('[data-quote-link]').click();
   await page.waitForURL('**/contact/**');
   await page.waitForFunction(() => document.querySelector('[name="product_sku"]')?.value);
   assert.match(await page.locator('[name="product_requested"]').inputValue(), /./);
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '2024-ripe-puerh-brick-black-pearl-xinwen');
+  assert.match(await page.locator('[name="order_volume"]').inputValue(), /12 шт.*3 кг/);
+  assert.equal(await page.locator('[name="product_unit_weight_g"]').inputValue(), '250');
+  await screenshot('contact-desktop.png');
   await page.locator('[name="name"]').fill('LOCAL TEST');
   await page.locator('[name="contact"]').fill('local-test-no-delivery');
   await page.locator('[name="order_volume"]').fill('3 кг');
@@ -130,7 +151,7 @@ try {
   assert.equal(posts.length, 4);
   checks.push('pending request cannot be submitted twice');
   await page.goto('https://puerhdirect.ru' + productPath);
-  await page.getByRole('link', { name: 'Выбрать образец | Sample', exact: true }).click();
+  await page.locator('.sample-text-link').click();
   await page.waitForURL('**/sample/**');
   await page.waitForFunction(() => document.querySelector('#count')?.textContent === '1');
   assert.equal(await page.locator('#count').innerText(), '1');
@@ -161,17 +182,81 @@ try {
   await boxes.nth(0).check();
   assert.equal(await page.locator('#count').innerText(), '1');
   checks.push('sample controls after repeated client navigation');
+  await page.goto('https://puerhdirect.ru/catalog/');
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 42);
+  await page.locator('#tea-search').fill('чёрный');
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 1);
+  await page.locator('#tea-search').fill('черный');
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 1);
+  await page.locator('#tea-shape').selectOption('cake');
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 0);
+  await page.locator('[data-reset-filters]').click();
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 42);
+  await page.locator('#tea-search').fill('Black Pearl');
+  assert.equal(await page.locator('[data-result-count]').innerText(), '1');
+  await page.locator('#tea-search').fill('');
+  await screenshot('catalog-desktop.png', false);
+  await page.locator('header a[href="/"]').click();
+  await page.locator('header a[href="/catalog/"]').first().click();
+  await page.locator('#tea-search').fill('2024');
+  assert.equal(await page.locator('[data-product-card]:visible').count(), 4);
+  checks.push('catalog search, Cyrillic normalization, shape filter, empty/reset and client navigation');
+
+  await page.goto('https://puerhdirect.ru' + productPath);
+  await page.locator('#quote-quantity').fill('-1');
+  assert.ok(!(await page.locator('[data-quote-link]').getAttribute('href')).includes('quantity='));
+  await page.locator('#quote-quantity').fill('1.5');
+  assert.match(await page.locator('#quantity-result').innerText(), /целое/);
+  await page.locator('#quote-unit').selectOption('kg');
+  assert.match(await page.locator('#quantity-result').innerText(), /6 шт/);
+  await page.locator('[data-quote-link]').click();
+  await page.waitForURL('**/contact/**');
+  await page.waitForFunction(() => document.querySelector('[name="order_volume"]')?.value);
+  assert.match(await page.locator('[name="order_volume"]').inputValue(), /1,5 кг.*6 шт/);
+  await page.locator('[name="product_requested"]').fill('Different tea');
+  assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
+  assert.equal(await page.locator('[name="product_unit_weight_g"]').inputValue(), '');
+  assert.equal(await page.locator('[data-product-context]').isVisible(), false);
+  assert.equal(await page.locator('[name="order_volume"]').inputValue(), '');
+  await page.goto('https://puerhdirect.ru/contact/?product=not-a-product&quantity=12&unit=pieces');
+  assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
+  assert.equal(await page.locator('[name="order_volume"]').inputValue(), '');
+  await page.goto('https://puerhdirect.ru/catalog/product/2004-raw-puerh-cake-banzhangshengtai/');
+  await page.locator('#quote-unit').selectOption('kg');
+  await page.locator('#quote-quantity').fill('3');
+  assert.match(await page.locator('#quantity-result').innerText(), /8,403 шт.*ориентир/);
+  checks.push('piece/kg conversion, fractional pieces, invalid quantities and stale/unknown SKU protection');
+
   for (const width of [360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ['/', '/catalog/', productPath, '/contact/', '/sample/']) {
+    for (const route of ['/', '/catalog/', productPath, '/contact/', '/sample/', '/catalog/raw-puerh/', '/catalog/ripe-puerh/', '/private-label/', '/blog/kak-vybrat-postavshika-puera-v-kitae/', '/about/']) {
       await page.goto('https://puerhdirect.ru' + route);
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'horizontal overflow: ' + width + ' ' + route);
     }
   }
-  checks.push('25 route/viewport overflow checks');
+  checks.push('50 route/viewport overflow checks');
+  await page.goto('https://puerhdirect.ru/blog/kak-vybrat-postavshika-puera-v-kitae/');
+  assert.equal(await page.locator('.article-content h2').count(), 6);
+  assert.equal(await page.getByRole('link', { name: 'Получить прайс-лист', exact: true }).count(), 1);
+  await screenshot('buyer-guide-desktop.png');
+  for (const route of ['/blog/', '/compliance/']) {
+    await page.goto('https://puerhdirect.ru' + route);
+    const labels = await page.locator('.tea-cta').allTextContents();
+    assert.ok(labels.length && labels.every(label => label.trim().length > 0), route + ' empty CTA');
+  }
+  checks.push('article, blog and document CTAs have visible accessible names');
+  await page.goto('https://puerhdirect.ru/sample/');
+  await screenshot('sample-desktop.png', false);
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('https://puerhdirect.ru' + productPath);
+  await screenshot('product-mobile.png');
+  await page.goto('https://puerhdirect.ru/catalog/');
+  await screenshot('catalog-mobile.png', false);
+  await page.goto('https://puerhdirect.ru/contact/');
+  await screenshot('contact-mobile.png');
   await page.goto('https://puerhdirect.ru/');
   await screenshot('home-mobile.png');
+  await screenshot('home-mobile-firstscreen.png', false);
   await page.locator('#menu-btn').click();
   assert.equal(await page.locator('#menu-btn').getAttribute('aria-expanded'), 'true');
   assert.equal(await page.locator('#menu-icon-close').isVisible(), true);
