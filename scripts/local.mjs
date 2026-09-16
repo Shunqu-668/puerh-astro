@@ -35,6 +35,7 @@ if (mode === 'setup') {
   else if (mode === 'check') {
     run(astro, ['build']);
     run(path.join(root, 'scripts/verify-site.mjs'), []);
+    run(path.join(root, 'scripts/verify-seo.mjs'), []);
   } else {
     console.error('Supported modes: preview, check, setup');
     process.exit(1);

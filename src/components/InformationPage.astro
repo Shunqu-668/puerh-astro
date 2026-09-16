@@ -1,0 +1,69 @@
+---
+import Layout from './Layout.astro';
+import CoverHero from './CoverHero.astro';
+import CTAButton from './CTAButton.astro';
+import CategoryNav from './CategoryNav.astro';
+interface Props { title: string; description: string; path: string; image?: string; imagePosition?: string; eyebrow?: string; actionTitle?: string; actionText?: string; actionHref?: string; }
+const { title, description, path, image = '/images/images/catalog-header.webp', eyebrow = 'PUERH DIRECT', actionTitle = 'Обсудим ваш запрос', actionText = 'Связаться с нами', actionHref } = Astro.props;
+const topic = ({ '/private-label/': 'private-label', '/catalog/teaware/': 'teaware', '/catalog/other-tea/': 'other-tea', '/compliance/': 'documents' } as Record<string, string>)[path];
+const inquiryHref = actionHref || (topic ? `/contact/?topic=${topic}#inquiry-form` : '/contact/#inquiry-form');
+const guidance = ({
+  '/private-label/': 'Расскажите об идее. Готовый макет пока не нужен.',
+  '/catalog/teaware/': 'Назовите предмет или опишите его. Детали уточним в переписке.',
+  '/catalog/other-tea/': 'Назовите чай или расскажите, что ищете.',
+  '/compliance/': 'Укажите чай и страну назначения, если уже знаете.',
+} as Record<string, string>)[path] || 'Можно начать с вопроса, без точного списка и объёма.';
+---
+<Layout title={title} description={description} canonicalURL={path} ogImage={`https://puerhdirect.ru${image}`}>
+  <CoverHero titleRu={title} titleEn={eyebrow} subtitleRu={description} bgImage={image} imagePosition={Astro.props.imagePosition} />
+  <div class="info-page shell">
+    {path.startsWith('/catalog/') ? <CategoryNav /> : <nav class="info-breadcrumb" aria-label="Хлебные крошки"><a href="/">Главная</a><span aria-hidden="true">/</span><span>{eyebrow === 'PUERH DIRECT' ? title : eyebrow.toLocaleLowerCase('ru')}</span></nav>}
+    <slot />
+    <section class="info-action">
+      <div><h2>{actionTitle}</h2><p>{guidance}</p></div>
+      <CTAButton href={inquiryHref}>{actionText}</CTAButton>
+    </section>
+    <nav class="info-related" aria-label="Продолжить знакомство">
+      <a href="/catalog/">Каталог чая →</a>
+      {path !== '/sample/' && <a href="/sample/">Платные образцы →</a>}
+      {path !== '/faq/' && <a href="/faq/">Вопросы перед заказом →</a>}
+      {path !== '/about/' && <a href="/about/">Как мы работаем →</a>}
+    </nav>
+  </div>
+  <slot name="schema" />
+</Layout>
+<style is:global>
+  .info-page { padding-top: 48px; padding-bottom: 64px; }
+  .info-breadcrumb { display: flex; flex-wrap: wrap; gap: 10px; color: #afb4bd; font-size: .8rem; margin: -16px 0 30px; }
+  .info-breadcrumb a { color: #e8ad73; }
+  .info-related { display: flex; flex-wrap: wrap; gap: 0 28px; margin-top: 28px; }
+  .info-related a { display: inline-flex; align-items: center; min-height: 44px; color: #afb4bd; font-size: .8rem; }
+  .info-related a:hover { color: #e8ad73; }
+  .info-page h2 { font-size: clamp(1.3rem,2.5vw,1.8rem); font-weight: 700; line-height: 1.25; margin-bottom: 18px; }
+  .info-page h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
+  .info-page p, .info-page li { color: #afb4bd; font-size: .95rem; line-height: 1.75; }
+  .info-page p + p { margin-top: 12px; }
+  .info-page ul + p { margin-top: 18px; }
+  .info-page .info-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+  .info-page .info-card { padding: 26px; border: 1px solid #34373c; background: #191b1e; border-radius: 5px; min-width: 0; }
+  .info-page .info-number { display: block; color: #e8ad73; font-size: .75rem; margin-bottom: 22px; }
+  .info-page .info-section { margin-top: 56px; }
+  .info-page .info-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .info-page .info-split img { width: 100%; max-height: 440px; object-fit: cover; border-radius: 5px; }
+  .info-page .info-list { display: grid; gap: 12px; padding-left: 20px; list-style: disc; }
+  .info-page .info-action { margin-top: 56px; border-top: 1px solid #34373c; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+  .info-page .info-action h2 { margin-bottom: 8px; }
+  .info-page .info-action .site-cta { flex-shrink: 0; }
+  .info-page .info-link { color: #e8ad73; text-decoration: underline; text-underline-offset: 4px; }
+  .info-page .faq-list { max-width: 880px; margin: auto; }
+  .info-page .faq-list details { border-bottom: 1px solid #34373c; padding: 22px 0; }
+  .info-page .faq-list summary { cursor: pointer; color: #f5f5f2; font-size: 1.1rem; font-weight: 600; line-height: 1.5; }
+  .info-page .faq-list details[open] summary { color: #e8ad73; margin-bottom: 14px; }
+  @media(max-width: 767px) {
+    .info-page .info-grid, .info-page .info-split { grid-template-columns: 1fr; gap: 20px; }
+    .info-page .info-section, .info-page .info-action { margin-top: 36px; }
+    .info-page .info-action { flex-direction: column; align-items: stretch; }
+    .info-page .info-action .site-cta { justify-content: center; }
+    .info-page { padding-top: 32px; padding-bottom: 40px; }
+  }
+</style>

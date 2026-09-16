@@ -1,92 +1,92 @@
 ---
 import Layout from "../components/Layout.astro";
 import Picture from "../components/Picture.astro";
-import { products } from "../data/products";
-const categories = [
-  { href: "/catalog/ripe-puerh/", img: "/images/images/1.webp", ru: "Шу пуэр", en: "Ripe puerh", note: "Ферментированный пуэр" },
-  { href: "/catalog/raw-puerh/", img: "/images/images/2.webp", ru: "Шэн пуэр", en: "Raw puerh", note: "Пуэр естественной выдержки" },
-  { href: "/catalog/teaware/", img: "/images/images/3.webp", ru: "Чайная посуда", en: "Teaware", note: "Для подачи и дегустации" },
-  { href: "/catalog/other-tea/", img: "/images/images/4.webp", ru: "Другой чай", en: "Other tea", note: "Расширьте ассортимент" },
-];
+import CompanyStory from "../components/CompanyStory.astro";
+import { teaProfiles } from '../data/tea-profiles';
+import { products, getProductImg, typeLabels, shapeLabels } from "../data/products";
+import selection from "../data/home-selection.json";
+import { catalogSpecs } from "../data/catalog-specs";
+import "../styles/home.css";
+const featured = selection.items.map(item => {
+  const product = products.find(p => p.slug === item.slug);
+  if (!product) throw new Error(`Unknown homepage product: ${item.slug}`);
+  return { ...product, grams: catalogSpecs.get(item.slug)!.grams };
+});
 ---
-<Layout title="Пуэр оптом для вашего бизнеса — шу и шэн из Китая"
-  description="Пуэр оптом для чайных магазинов и других закупщиков. Выберите чай, запросите платные образцы и предложение по вашему объёму. Доставка согласовывается отдельно."
+<Layout title="Пуэр оптом из Китая — шу и шэн для бизнеса"
+  description="Шу и шэн пуэр для магазинов и чайных. Количество по запросу, образцы платные, доставка по согласованию."
   ogImage="https://puerhdirect.ru/images/images/hero-bg.webp" canonicalURL="/">
   <link slot="head" rel="preload" as="image" href="/images/images/hero-bg.webp" fetchpriority="high" />
-  <section class="relative overflow-hidden bg-[#17221b] text-white">
-    <img src="/images/images/hero-bg.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-45" fetchpriority="high" width="1920" height="1080" />
-    <div class="absolute inset-0 bg-gradient-to-r from-[#111d16]/95 via-[#111d16]/70 to-[#111d16]/20"></div>
-    <div class="relative max-w-7xl mx-auto px-6 sm:px-8 py-20 md:py-28 lg:py-32">
-      <p class="text-xs sm:text-sm uppercase tracking-[0.22em] text-[#ffbc78] font-semibold mb-7">PUERH DIRECT · КИТАЙ → РОССИЯ</p>
-      <h1 class="max-w-3xl text-[clamp(2.5rem,6vw,5rem)] leading-[1.08] tracking-tight font-semibold mb-7">
-        Пуэр для<br />вашего бизнеса.
-      </h1>
-      <p class="max-w-xl text-lg sm:text-xl text-stone-200 leading-relaxed mb-3">Шу и шэн пуэр для вашего ассортимента. Выбирайте чай, знакомьтесь с образцами и запрашивайте условия под свой объём.</p>
-      <p lang="en" class="text-sm text-stone-300 mb-9">Wholesale puerh from China. Your selection. Your order quantity.</p>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <a href="/catalog/" class="inline-flex justify-center items-center gap-6 px-7 py-4 bg-[#F58220] text-gray-950 rounded-lg font-semibold hover:bg-[#ff9c46]">Выбрать чай <span aria-hidden="true">↗</span></a>
-        <a href="/contact/#inquiry-form" class="inline-flex justify-center items-center px-7 py-4 border border-white/50 rounded-lg font-semibold hover:bg-white/10">Обсудить закупку</a>
+  <div class="puerh-home">
+    <section class="tea-hero">
+      <img src="/images/images/hero-bg.webp" alt="" class="tea-hero-image" fetchpriority="high" width="1920" height="1080" />
+      <div class="tea-hero-overlay"></div>
+      <div class="shell tea-hero-content">
+        <h1>Пуэр оптом<br />для вашего бизнеса</h1>
+        <p class="tea-intro">Отбираем чай в Китае для магазинов и чайных.<br />От первого образца до собственной чайной марки.</p>
+        <div class="tea-actions">
+          <a href="#tea-selection" class="action-flame tea-button">Выбрать пуэр <span aria-hidden="true">→</span></a>
+          <a href="/contact/#inquiry-form" class="tea-button tea-button-outline">Запросить цену</a>
+        </div>
       </div>
-      <div class="flex flex-wrap gap-x-8 gap-y-3 mt-12 pt-6 border-t border-white/20 max-w-2xl text-sm text-stone-200">
-        <span>Количество по запросу</span><span>Платные образцы</span><span>Ваш экспедитор — по согласованию</span>
+    </section>
+    <div class="tea-conditions">
+      <div class="shell">
+        <p><span>Закупка</span>Без фиксированного минимума</p>
+        <p><span>Образцы</span>Платные, до пяти позиций</p>
+        <p><span>Доставка</span>Условия согласуем отдельно</p>
       </div>
     </div>
-  </section>
 
-  <section class="py-16 md:py-24 bg-[#faf9f6]">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10">
-        <div><p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-3">01 / ВЫБОР ЧАЯ</p><h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Что нужно вашему ассортименту?</h2></div>
-        <a href="/catalog/" class="text-sm font-semibold text-gray-800 underline underline-offset-4">{products.length} позиции пуэра в каталоге →</a>
+    <section id="tea-selection" class="tea-selection">
+      <div class="shell">
+        <div class="tea-section-heading">
+          <div><h2>Выберите свой пуэр</h2></div>
+          <a href="/catalog/" class="tea-link">Все {products.length} позиции <span aria-hidden="true">→</span></a>
+        </div>
+        <nav class="tea-category-links" aria-label="Категории чая">
+          <a href="/catalog/ripe-puerh/">Шу пуэр</a>
+          <a href="/catalog/raw-puerh/">Шэн пуэр</a>
+          <a href="/catalog/teaware/">Чайная посуда</a>
+          <a href="/catalog/other-tea/">Другой чай</a>
+        </nav>
+        <div class="tea-product-grid">
+          {featured.map(p => (
+            <article class="tea-product">
+              <a href={`/catalog/product/${p.slug}/`} class="tea-product-image" aria-label={`${p.nameRu}, ${p.year}`}>
+                <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={`${p.nameRu}, ${p.year}`} class="w-full h-full object-cover" loading="lazy" />
+              </a>
+              <div class="tea-product-info">
+                <p class="tea-product-type">{typeLabels[p.type].ru} · {p.year}</p>
+                <h3><a href={`/catalog/product/${p.slug}/`}>{p.nameRu}</a></h3>
+                <p class="tea-product-taste">{teaProfiles[p.slug].notes.slice(0, 2).join(' · ') || teaProfiles[p.slug].occasion}</p>
+                <p class="tea-product-spec">{shapeLabels[p.shape].ru} <span>·</span> {p.grams} г / шт.</p>
+                <div class="tea-product-actions">
+                  <a href={`/catalog/product/${p.slug}/`} class="tea-link">Подробнее <span aria-hidden="true">↗</span></a>
+                  <a href={`/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`} class="tea-quote">Узнать цену</a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {categories.map(cat => (
-          <a href={cat.href} class="group bg-white border border-stone-200 rounded-xl overflow-hidden hover:border-orange-400 transition-colors">
-            <div class="aspect-square overflow-hidden bg-stone-100">
-              <Picture src={cat.img} alt={cat.ru} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-            </div>
-            <div class="p-4 md:p-6"><h3 class="font-semibold text-lg md:text-xl">{cat.ru} <span class="float-right text-orange-700" aria-hidden="true">↗</span></h3><p class="text-sm text-gray-600 mt-2">{cat.note}</p><p lang="en" class="text-xs text-gray-500 mt-2">{cat.en}</p></div>
-          </a>
-        ))}
+    </section>
+    <div class="shell"><CompanyStory /></div>
+    <section class="tea-purchase">
+      <div class="shell tea-purchase-grid">
+        <div>
+          <p class="tea-overline">ПЕРЕД ЗАКУПКОЙ</p>
+          <h2>Сначала попробуйте чай</h2>
+          <p>Выберите до пяти платных образцов.<br />Стоимость и доставку согласуем до отправки.</p>
+          <a href="/sample/" class="tea-link">Выбрать образцы <span aria-hidden="true">→</span></a>
+        </div>
+        <div>
+          <p class="tea-overline">ВАШ БРЕНД</p>
+          <h2>Чай под вашим брендом</h2>
+          <p>Для магазина, чайной или подарочной серии.<br />Начать можно с идеи, без готового макета.</p>
+          <a href="/private-label/" class="tea-link">Обсудить свой бренд <span aria-hidden="true">→</span></a>
+        </div>
       </div>
-      <p class="text-xs text-gray-600 mt-5">Наличие, фасовку и цену выбранных позиций подтверждаем при подготовке предложения.</p>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-24">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 grid md:grid-cols-2 gap-10 lg:gap-20 items-center">
-      <div class="rounded-2xl overflow-hidden bg-stone-100">
-        <Picture src="/images/images/expertise.webp" alt="Хранение чая на складе" class="w-full aspect-[4/3] object-cover" loading="lazy" />
-      </div>
-      <div>
-        <p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-4">02 / ОБРАЗЦЫ</p>
-        <h2 class="text-3xl md:text-4xl font-semibold leading-tight mb-5">Сначала познакомьтесь с чаем.</h2>
-        <p class="text-gray-600 leading-relaxed mb-5">Выберите до пяти позиций для запроса образцов. Сравните вкус и формат перед закупкой для магазина, чайной или другого бизнеса.</p>
-        <p class="text-gray-800 text-sm border-l-2 border-[#F58220] pl-4 mb-8">Образцы платные. Состав, стоимость и доставку согласуем до отправки.</p>
-        <a href="/sample/" class="inline-flex px-6 py-3.5 rounded-lg bg-[#17221b] text-white font-semibold hover:bg-[#2b3c30]">Подобрать образцы →</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-16 md:py-24 bg-[#f4f2ed]">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <p class="text-xs uppercase tracking-[0.2em] text-orange-700 font-semibold mb-3">03 / УСЛОВИЯ ЗАКУПКИ</p>
-      <h2 class="text-3xl md:text-4xl font-semibold mb-10">От выбора к понятному предложению.</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        {[
-          { n: "01", title: "Укажите количество", text: "Фиксированного минимального объёма заказа нет. Расскажите, какой чай и в каком количестве нужен вашему бизнесу." },
-          { n: "02", title: "Согласуем детали", text: "Уточним наличие, упаковку и стоимость выбранных позиций. Для собственного бренда формат и объём обсуждаются отдельно." },
-          { n: "03", title: "Обсудим передачу груза", text: "Если у вас есть экспедитор, укажите это в запросе. Место передачи, сроки и расходы согласуем отдельно. Можно обратиться и без готового маршрута." },
-        ].map(step => (
-          <div class="border-t border-stone-300 pt-6"><span class="text-orange-700 text-sm font-semibold">{step.n}</span><h3 class="text-xl font-semibold mt-4 mb-3">{step.title}</h3><p class="text-gray-600 text-sm leading-relaxed">{step.text}</p></div>
-        ))}
-      </div>
-    </div>
-  </section>
-  <section class="py-16 md:py-20 bg-[#17221b] text-white">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
-      <div><h2 class="text-3xl md:text-4xl font-semibold mb-3">Обсудим вашу следующую закупку?</h2><p class="text-stone-300">Пришлите список чая, количество и удобный способ связи.</p></div>
-      <div class="flex flex-wrap gap-3 shrink-0"><a href="/contact/#inquiry-form" class="px-6 py-3.5 rounded-lg bg-[#F58220] text-gray-950 font-semibold">Запросить предложение</a><a href="https://t.me/sqvivi777" class="px-6 py-3.5 rounded-lg border border-white/40 font-semibold" target="_blank" rel="noopener noreferrer">Telegram ↗</a></div>
-    </div>
-  </section>
+    </section>
+  </div>
 </Layout>

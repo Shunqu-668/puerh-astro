@@ -12,5 +12,8 @@ dist/
 .wrangler/
 .npmrc
 artifacts/
+# Rebuilt from retained originals by the product-images integration.
+public/images/optimized-products/
+src/data/product-image-variants.json
 *.pem
 *.key

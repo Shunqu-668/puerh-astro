@@ -3,28 +3,37 @@ import { ClientRouter } from "astro:transitions";
 import Nav from "./Nav.astro";
 import Footer from "./Footer.astro";
 import "../styles/global.css";
+import { siteOrigin, organizationId, websiteId, canonicalUrl, jsonLd, seoPages } from '../lib/seo';
 
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description, ogImage, canonicalURL } = Astro.props;
-const baseUrl = "https://puerhdirect.ru";
-const pageUrl = canonicalURL ? `${baseUrl}${canonicalURL}` : new URL(Astro.url.pathname, baseUrl).href;
-const pageTitle = `${title.replace(/\s*[—|]\s*PUERH DIRECT\s*$/i, "")} — PUERH DIRECT`;
-const imageUrl = ogImage || `${baseUrl}/images/images/logo.webp`;
+const { title, ogImage, canonicalURL, ogType = 'website' } = Astro.props;
+const baseUrl = siteOrigin;
+const pageUrl = canonicalUrl(canonicalURL || Astro.url.pathname);
+const searchCopy = seoPages[new URL(pageUrl).pathname];
+const description = searchCopy?.description || Astro.props.description;
+const pageTitle = `${(searchCopy?.title || title).replace(/\s*[—|]\s*PUERH DIRECT\s*$/i, "")} — PUERH DIRECT`;
+const imageUrl = new URL(ogImage || '/brand/social-card.png', baseUrl).href;
+const noindex = Astro.props.noindex || import.meta.env.SITE_NOINDEX === 'true';
+const googleVerification = import.meta.env.GOOGLE_SITE_VERIFICATION?.trim();
+const yandexVerification = import.meta.env.YANDEX_SITE_VERIFICATION?.trim() || '93e5aae716cf117c';
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": organizationId,
   name: "PUERH DIRECT",
   alternateName: ["Puerh Direct Wholesale", "Пуэр Директ"],
   url: baseUrl,
-  logo: `${baseUrl}/images/images/logo.webp`,
-  description: "Прямые оптовые поставки пуэра из Гуанчжоу (Фанцунь). Wholesale puerh from China. Order quantity and shipping agreed individually.",
+  logo: { '@type': 'ImageObject', url: `${baseUrl}/brand/logo.png`, width: 512, height: 512 },
+  description: "Пуэр оптом из Китая. Команда в Фанцуне, Гуанчжоу: отбор чая, хранение и изготовление под вашим брендом.",
   email: "wholesale@puerhdirect.ru",
   address: {
     "@type": "PostalAddress",
@@ -38,8 +47,17 @@ const organizationSchema = {
     contactType: "sales",
     availableLanguage: ["Russian", "English", "Chinese"],
   },
-  sameAs: ["https://t.me/sqvivi777"],
+  sameAs: ["https://puerhdirect.com/", "https://t.me/sqvivi777"],
 };
+const websiteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', '@id': websiteId, url: `${baseUrl}/`, name: 'PUERH DIRECT', inLanguage: 'ru-RU', publisher: { '@id': organizationId } };
+const pageSchema = { '@context': 'https://schema.org', '@type': searchCopy?.type || 'WebPage', '@id': `${pageUrl}#webpage`, url: pageUrl, name: pageTitle, description, inLanguage: 'ru-RU', isPartOf: { '@id': websiteId }, publisher: { '@id': organizationId }, primaryImageOfPage: { '@type': 'ImageObject', url: imageUrl } };
+const pathname = new URL(pageUrl).pathname;
+const breadcrumbItems = [{ '@type': 'ListItem', position: 1, name: 'Главная', item: `${baseUrl}/` }];
+if (pathname.startsWith('/blog/') && pathname !== '/blog/') breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: 'Статьи о пуэре', item: `${baseUrl}/blog/` });
+else if (pathname.startsWith('/catalog/') && pathname !== '/catalog/') breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: 'Каталог', item: `${baseUrl}/catalog/` });
+breadcrumbItems.push({ '@type': 'ListItem', position: breadcrumbItems.length + 1, name: title.replace(/\s*[—|]\s*PUERH DIRECT\s*$/i, ''), item: pageUrl });
+const showBreadcrumbSchema = pathname !== '/' && !noindex && !pathname.startsWith('/catalog/product/');
+const breadcrumbSchema = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', '@id': `${pageUrl}#breadcrumbs`, itemListElement: breadcrumbItems };
 ---
 
 <!doctype html>
@@ -50,6 +68,7 @@ const organizationSchema = {
     <ClientRouter />
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
 
     <!-- Canonical -->
     <link rel="canonical" href={pageUrl} />
@@ -57,14 +76,15 @@ const organizationSchema = {
     <!-- A single bilingual URL is not a separate English language version. -->
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="PUERH DIRECT" />
     <meta property="og:title" content={pageTitle} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={pageUrl} />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={searchCopy?.title || title} />
+    {!ogImage && <meta property="og:image:width" content="1200" />}
+    {!ogImage && <meta property="og:image:height" content="630" />}
     <meta property="og:locale" content="ru_RU" />
 
     <!-- Twitter Card -->
@@ -72,21 +92,21 @@ const organizationSchema = {
     <meta name="twitter:title" content={pageTitle} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={searchCopy?.title || title} />
 
     <!-- VK -->
     <meta property="vk:image" content={imageUrl} />
 
-    <!-- GEO tags for Russia/CIS -->
+    <!-- Geographic business location, not generative-search optimization. -->
     <meta name="geo.region" content="CN-GD" />
     <meta name="geo.placename" content="Гуанчжоу, Китай | Guangzhou, China" />
-    <meta name="geo.position" content="23.1291;113.2644" />
 
-    <!-- Yandex verification (replace with your code at https://webmaster.yandex.com) -->
-    <meta name="yandex-verification" content="93e5aae716cf117c" />
+    <!-- DNS verification is preferred. These public tokens support the HTML-tag alternative. -->
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+    <meta name="yandex-verification" content={yandexVerification} />
 
-    <link rel="icon" type="image/webp" href="/images/images/logo.webp" />
-
-    <link rel="preload" as="image" href="/images/images/logo.webp" />
+    <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png" />
 
     <slot name="head" />
 
@@ -112,9 +132,12 @@ const organizationSchema = {
     </script>
 
     <!-- JSON-LD Organization -->
-    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(organizationSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(websiteSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(pageSchema)}></script>
+    {showBreadcrumbSchema && <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)}></script>}
   </head>
-  <body class="bg-white text-gray-900 antialiased">
+  <body class="bg-surface text-ink antialiased">
     <a href="#main-content" class="skip-link">К содержанию</a>
     <Nav />
     <main id="main-content" class="pt-16" tabindex="-1">

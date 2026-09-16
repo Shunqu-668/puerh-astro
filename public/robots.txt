@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://puerhdirect.ru/sitemap-index.xml
+User-agent: Yandex
+Allow: /
+# Only attribution parameters; category/search filters keep their own crawlable content.
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&gclid&yclid&fbclid
 
-Host: puerhdirect.ru
+Sitemap: https://puerhdirect.ru/sitemap-index.xml

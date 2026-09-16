@@ -1,0 +1,44 @@
+.sample-page { padding: 32px 0 72px; }
+.sample-intro { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; margin-bottom: 24px; font-size: .9rem; line-height: 1.6; color: #c4c6cb; }
+.sample-intro a, .sample-note a { color: #e8ad73; text-decoration: underline; text-underline-offset: 4px; }
+#sample-counter { background: #191b1e; border: 1px solid #3c3630; border-left: 3px solid #e8ad73; border-radius: 4px; margin-bottom: 24px; }
+.sample-workspace { display: grid; grid-template-columns: minmax(0,1fr) 340px; align-items: start; gap: 32px; }
+#sample-selection, .sample-details { min-width: 0; }
+#sample-selection { scroll-margin-top: 146px; }
+.sample-filters { margin: 20px 0; }
+.sample-filters[hidden], .sample-results button[hidden], .sample-show-more[hidden], #sample-summary[hidden], #sample-limit-note[hidden] { display: none; }
+.sample-filter-row { display: flex; gap: 10px; margin: 12px 0; }
+.sample-filter-row select { flex: 1; min-width: 0; }
+.sample-filter-row button { border: 1px solid #45484e; border-radius: 4px; padding: 8px 12px; min-height: 44px; font-size: .8rem; color: #d6d8dc; cursor: pointer; }
+.sample-filter-row button[aria-pressed="true"] { border-color: #e8ad73; color: #e8ad73; background: #29221b; }
+.sample-results { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: .75rem; color: #afb4bd; align-items: center; min-height: 32px; }
+.sample-results button { color: #e8ad73; text-decoration: underline; text-underline-offset: 3px; min-height: 32px; cursor: pointer; }
+.sample-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.sample-card-meta { font-size: .7rem; line-height: 1.5; color: #afb4bd; margin-top: 8px; text-align: center; }
+.sample-card:focus-within { outline: 2px solid #e8ad73; outline-offset: 3px; }
+.sample-show-more { display: block; width: 100%; margin: 24px 0 0; border: 1px solid #45484e; border-radius: 4px; min-height: 48px; cursor: pointer; font-size: .85rem; color: #e4e5e7; }
+.sample-show-more:hover, .sample-filter-row button:hover { border-color: #e8ad73; }
+.sample-details { position: sticky; top: 142px; border: 1px solid #34373c; border-radius: 8px; background: #191b1e; padding: 24px; }
+#sample-details { scroll-margin-top: 142px; }
+.sample-details h2 { font-size: 1.2rem; }
+.sample-contact-fields { display: grid; gap: 18px; margin-top: 24px; }
+.sample-details .mt-6 { margin-top: 18px; }
+.sample-details input, .sample-details textarea { background: #111214; min-height: 46px; }
+.sample-details textarea { min-height: 76px; }
+.sample-summary { border-bottom: 1px solid #34373c; padding: 16px 0; }
+.sample-summary-label { color: #afb4bd; font-size: .75rem; margin-bottom: 8px; }
+#sample-selected-list { list-style: none; padding: 0; margin: 0; }
+#sample-selected-list li { display: flex; align-items: center; gap: 8px; border-top: 1px solid #303237; padding: 7px 0; font-size: .8rem; line-height: 1.5; }
+#sample-selected-list li:first-child { border: 0; }
+#sample-selected-list span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+#sample-selected-list button { flex: 0 0 36px; min-height: 44px; font-size: 1.25rem; border-radius: 4px; color: #afb4bd; cursor: pointer; }
+#sample-selected-list button:hover { color: #e8ad73; background: #25272b; }
+.sample-note { font-size: .75rem; line-height: 1.6; color: #afb4bd; }
+#sample-limit-note { margin-top: 10px; color: #e8ad73; }
+.sample-details .border-t { margin-top: 24px; }
+.sample-details #submit-btn { width: 100%; font-size: .9rem; padding: 14px 18px; }
+.sample-submit-note { margin-top: 12px; }
+.sample-privacy { margin-top: 6px; }
+.sample-details #form-preview, .sample-details #form-success, .sample-details #form-error { margin-top: 18px; }
+@media(max-width: 1023px) { .sample-workspace { grid-template-columns: minmax(0,1fr) 310px; gap: 24px; } .sample-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .sample-details { padding: 20px; } }
+@media(max-width: 767px) { .sample-page { padding: 24px 0 48px; } .sample-workspace { grid-template-columns: 1fr; gap: 32px; } .sample-details { position: static; } .sample-intro { font-size: .9rem; margin-bottom: 18px; } .sample-grid { gap: 10px; } #sample-counter { margin-bottom: 20px; } #sample-selection h2 { font-size: 1.25rem; } .sample-card { padding: 8px; border-radius: 4px; } .sample-card-meta, .sample-card-taste { font-size: .8rem; } .sample-details { padding: 20px 16px; } }

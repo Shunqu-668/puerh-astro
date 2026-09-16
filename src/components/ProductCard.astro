@@ -1,0 +1,20 @@
+---
+import Picture from './Picture.astro';
+import { catalogSpecs } from '../data/catalog-specs';
+import { teaProfiles } from '../data/tea-profiles';
+import { typeLabels, shapeLabels, getProductImg, type Product } from '../data/products';
+interface Props { product: Product; }
+const { product: p } = Astro.props;
+const profile = teaProfiles[p.slug];
+---
+<a href={`/catalog/product/${p.slug}/`} class="product-card">
+  <div class="product-card-photo">
+    <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, '.jpg')} alt={`${p.year} · ${p.nameRu}`} class="w-full h-full object-cover" loading="lazy" />
+  </div>
+  <div class="product-card-body">
+    <p class="product-card-kind">{typeLabels[p.type].ru} · {p.year}</p>
+    <div class="product-card-names"><h3>{p.nameRu}</h3><p class="product-card-taste">{profile.notes.slice(0, 2).join(' · ') || profile.occasion}</p></div>
+    <p class="product-card-spec">{shapeLabels[p.shape].ru} · {catalogSpecs.get(p.slug)!.grams} г</p>
+    <span class="product-card-link">Подробнее <span aria-hidden="true">↗</span></span>
+  </div>
+</a>

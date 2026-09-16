@@ -1,0 +1,11 @@
+---
+import { jsonLd, canonicalUrl } from '../lib/seo';
+interface Props { products: { slug: string; nameRu: string; year: number }[]; path: string; }
+const { products, path } = Astro.props;
+const schema = {
+  '@context': 'https://schema.org', '@type': 'ItemList', '@id': `${canonicalUrl(path)}#catalog`,
+  numberOfItems: products.length,
+  itemListElement: products.map((p, index) => ({ '@type': 'ListItem', position: index + 1, name: `${p.nameRu}, ${p.year}`, url: canonicalUrl(`/catalog/product/${p.slug}/`) })),
+};
+---
+<script type="application/ld+json" set:html={jsonLd(schema)}></script>

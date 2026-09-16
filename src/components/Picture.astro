@@ -1,6 +1,8 @@
 ---
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { imageDimensions } from '../lib/image-dimensions';
+import { responsivePhoto } from '../lib/product-images';
 interface Props {
   src: string;
   alt: string;
@@ -9,9 +11,12 @@ interface Props {
   loading?: "lazy" | "eager";
   width?: number;
   height?: number;
+  sizes?: string;
+  thumbnail?: boolean;
 }
 
-const { src, alt, fallback, class: className = "", loading = "lazy", width, height } = Astro.props;
+const { src, alt, fallback, class: className = "", loading = "lazy", width, height, sizes = '(min-width: 1280px) 384px, (min-width: 768px) 50vw, 100vw', thumbnail = false } = Astro.props;
+const responsive = responsivePhoto(src, thumbnail);
 
 const srcLower = src.toLowerCase();
 const srcIsWebP = srcLower.endsWith(".webp");
@@ -22,17 +27,20 @@ const webpSrc = exists(proposedWebp) ? proposedWebp : undefined;
 const candidates = srcIsWebP ? [fallback, src.replace(/\.webp$/i, ".jpg"), src.replace(/\.webp$/i, ".png"), src] : [src];
 const imgSrc = candidates.find((candidate): candidate is string => !!candidate && exists(candidate));
 if (!imgSrc) throw new Error(`Missing public image: ${src}`);
+const intrinsic = width && height ? { width, height } : await imageDimensions(webpSrc || imgSrc);
 ---
 
 <picture>
-  {webpSrc && <source srcset={webpSrc} type="image/webp" />}
+  {!responsive && webpSrc && <source srcset={webpSrc} type="image/webp" />}
   <img
-    src={imgSrc}
+    src={responsive?.src || imgSrc}
+    srcset={responsive?.srcset}
+    sizes={responsive ? sizes : undefined}
     alt={alt}
     class={className}
     loading={loading}
     decoding="async"
-    width={width}
-    height={height}
+    width={width || responsive?.width || intrinsic?.width}
+    height={height || responsive?.height || intrinsic?.height}
   />
 </picture>

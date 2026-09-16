@@ -1,0 +1,110 @@
+---
+import Picture from './Picture.astro';
+import { responsivePhoto } from '../lib/product-images';
+interface Props { src: string; alt: string; details?: string[]; }
+const { src, alt, details = [] } = Astro.props;
+const images = [...new Set([src, ...details])];
+const mainSizes = '(min-width: 1280px) 560px, (min-width: 1024px) 45vw, calc(100vw - 48px)';
+const firstPhoto = responsivePhoto(src);
+---
+<div class="product-image-viewer">
+  <a class="product-image-open" href={firstPhoto?.full.src || src} aria-label={`Увеличить фото: ${alt}`} aria-haspopup="dialog">
+    <Picture src={src} fallback={src.replace(/\.webp$/, '.jpg')} alt={alt} class="w-full h-full object-cover" loading="eager" sizes={mainSizes} />
+    <span aria-hidden="true">Увеличить фото ↗</span>
+  </a>
+  {images.length > 1 && <>
+    <div class="gallery-controls"><span data-gallery-status aria-live="polite">Фото 1 / {images.length}</span><div><button type="button" data-gallery-prev aria-label="Предыдущее фото">←</button><button type="button" data-gallery-next aria-label="Следующее фото">→</button></div></div>
+    <nav class="gallery-thumbnails" aria-label="Фотографии чая">
+      {images.map((image, index) => { const photo = responsivePhoto(image); return <a href={photo?.full.src || image} data-gallery-image data-display-src={photo?.src || image} data-display-srcset={photo?.srcset} data-width={photo?.width} data-height={photo?.height} data-photo-number={index + 1} aria-current={index === 0 ? 'true' : 'false'} aria-label={`Фото ${index + 1}: ${alt}`}>
+        <Picture src={image} alt={`${alt} · фото ${index + 1}`} loading="lazy" thumbnail sizes="(min-width: 1024px) 90px, 15vw" />
+      </a>; })}
+    </nav>
+  </>}
+  <dialog class="product-image-dialog" aria-label={`Фото: ${alt}`}>
+    <div class="image-toolbar"><p>{alt}<span class="image-pan-hint">Сдвиньте фото, чтобы рассмотреть детали.</span></p><button type="button" data-image-close aria-label="Закрыть фото" autofocus>×</button></div>
+    <div class="image-detail"><img alt={alt} decoding="async" /></div>
+    {images.length > 1 && <div class="dialog-gallery-controls"><button type="button" data-gallery-prev>← Предыдущее фото</button><button type="button" data-gallery-next>Следующее фото →</button></div>}
+  </dialog>
+</div>
+<script>
+  const initialized = new WeakSet<Element>();
+  function setupImages() {
+    document.querySelectorAll('.product-image-viewer').forEach(root => {
+      if (initialized.has(root)) return;
+      initialized.add(root);
+      const trigger = root.querySelector<HTMLAnchorElement>('.product-image-open')!;
+      const dialog = root.querySelector<HTMLDialogElement>('dialog')!;
+      const pictures = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-gallery-image]'));
+      const mainImage = trigger.querySelector<HTMLImageElement>('img')!;
+      const enlargedImage = dialog.querySelector<HTMLImageElement>('.image-detail img')!;
+      const originalAlt = mainImage.alt;
+      let selected = 0;
+      function selectImage(index: number) {
+        selected = (index + pictures.length) % pictures.length;
+        const photo = pictures[selected];
+        trigger.querySelectorAll('source').forEach(source => source.removeAttribute('srcset'));
+        if (photo.dataset.displaySrcset) mainImage.srcset = photo.dataset.displaySrcset;
+        else mainImage.removeAttribute('srcset');
+        mainImage.src = photo.dataset.displaySrc || photo.href;
+        if (photo.dataset.width) mainImage.width = Number(photo.dataset.width);
+        if (photo.dataset.height) mainImage.height = Number(photo.dataset.height);
+        mainImage.alt = `${originalAlt} · фото ${selected + 1}`;
+        trigger.href = photo.href;
+        if (dialog.open) enlargedImage.src = photo.href;
+        enlargedImage.alt = mainImage.alt;
+        root.querySelector('[data-gallery-status]')!.textContent = `Фото ${selected + 1} / ${pictures.length}`;
+        pictures.forEach((item, i) => item.setAttribute('aria-current', String(i === selected)));
+        dialog.querySelector('.image-detail')!.scrollTo({ left: 0, top: 0 });
+      }
+      pictures.forEach((photo, index) => photo.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault(); selectImage(index);
+      }));
+      root.querySelectorAll('[data-gallery-prev]').forEach(button => button.addEventListener('click', () => selectImage(selected - 1)));
+      root.querySelectorAll('[data-gallery-next]').forEach(button => button.addEventListener('click', () => selectImage(selected + 1)));
+      dialog.addEventListener('keydown', event => {
+        if (!pictures.length || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        event.preventDefault(); selectImage(selected + (event.key === 'ArrowRight' ? 1 : -1));
+      });
+      trigger.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        enlargedImage.src = trigger.href;
+        enlargedImage.alt = mainImage.alt;
+        dialog.showModal();
+      });
+      dialog.querySelector('[data-image-close]')!.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+      dialog.addEventListener('close', () => trigger.focus({ preventScroll: true }));
+    });
+  }
+  setupImages();
+  document.addEventListener('astro:page-load', setupImages);
+</script>
+<style>
+  :global(body:has(.product-image-dialog[open])) { overflow: hidden; }
+  .image-pan-hint { display: none; }
+  .product-image-open { display: block; position: relative; aspect-ratio: 1; overflow: hidden; background: #111; border: 1px solid #34373c; cursor: zoom-in; }
+  .product-image-open span { position: absolute; bottom: 12px; right: 12px; background: #191b1ef2; border: 1px solid #53565c; border-radius: 4px; padding: 8px 12px; font-size: .75rem; color: #e7e8ea; }
+  .product-image-dialog { margin: auto; padding: 0; width: min(1000px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); overflow: auto; background: #111214; color: #f3f3f1; border: 1px solid #53565c; border-radius: 6px; }
+  .product-image-dialog::backdrop { background: #050607e8; }
+  .image-toolbar { display: flex; align-items: center; gap: 16px; padding: 8px 12px 8px 18px; border-bottom: 1px solid #34373c; background: #191b1e; position: sticky; top: 0; z-index: 1; }
+  .image-toolbar p { flex: 1; font-size: .85rem; line-height: 1.4; }
+  .image-toolbar button { width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #53565c; border-radius: 4px; font-size: 1.7rem; cursor: pointer; }
+  .image-detail { overflow: auto; }
+  .image-detail img { display: block; width: 100%; height: auto; }
+  .gallery-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:12px 0 8px; color:#b5b8bd; font-size:.8rem; }
+  .gallery-controls > div { display:flex; gap:8px; }
+  .gallery-controls button, .dialog-gallery-controls button { min-width:44px; min-height:44px; border:1px solid #53565c; border-radius:4px; color:#f3f3f1; cursor:pointer; }
+  .gallery-thumbnails { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; }
+  .gallery-thumbnails a { display:block; aspect-ratio:1; border:2px solid #34373c; border-radius:3px; overflow:hidden; }
+  .gallery-thumbnails a[aria-current="true"] { border-color:#edb877; }
+  .gallery-thumbnails :global(img) { width:100%; height:100%; object-fit:contain; }
+  .gallery-thumbnails a:focus-visible, .gallery-controls button:focus-visible, .dialog-gallery-controls button:focus-visible { outline:2px solid #edb877; outline-offset:3px; }
+  .dialog-gallery-controls { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; position:sticky; bottom:0; background:#191b1e; border-top:1px solid #34373c; }
+  .dialog-gallery-controls button { padding:6px 12px; font-size:.8rem; }
+  @media(max-width: 639px) {
+    .image-pan-hint { display: block; color: #afb4bd; font-size: .7rem; margin-top: 4px; }
+    .image-detail img { width: 700px; max-width: none; }
+  }
+</style>

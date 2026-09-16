@@ -1,0 +1,26 @@
+---
+interface Props { title?: string; }
+const { title = 'Как начать закупку' } = Astro.props;
+---
+<section class="buying-steps" aria-label={title}>
+  <div class="buying-heading"><h2>{title}</h2><a href="/faq/">Вопросы перед заказом →</a></div>
+  <ol>
+    <li><span class="step-number" aria-hidden="true">01</span><h3>Выберите чай</h3><p>Найдите позицию или расскажите о вашем магазине.</p><a href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором →</a></li>
+    <li><span class="step-number" aria-hidden="true">02</span><h3>При желании — образцы</h3><p>До пяти платных образцов. Стоимость и доставку согласуем заранее.</p><a href="/sample/">Выбрать образцы →</a></li>
+    <li><span class="step-number" aria-hidden="true">03</span><h3>Согласуйте условия</h3><p>Уточним наличие, цену и упаковку. Количество и доставку обсудим в переписке.</p><a href="/contact/#inquiry-form">Обсудить закупку →</a></li>
+  </ol>
+</section>
+<style>
+  .buying-steps { padding: 44px 0; border-top: 1px solid #34373c; }
+  .buying-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; margin-bottom: 30px; }
+  h2 { font-size: clamp(1.5rem,2.4vw,2rem); font-weight: 650; line-height: 1.25; letter-spacing: -.025em; }
+  ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; list-style: none; padding: 0; }
+  li { min-width: 0; }
+  li + li { border-left: 1px solid #34373c; padding-left: 32px; }
+  .step-number { color: #e8ad73; display: block; font-size: .8rem; margin-bottom: 18px; }
+  h3 { color: #f5f5f2; font-size: 1.1rem; line-height: 1.4; font-weight: 600; margin-bottom: 12px; }
+  p { font-size: .9rem; color: #b7bac1; line-height: 1.7; max-width: 320px; }
+  a { display: inline-flex; align-items: center; min-height: 44px; color: #e8ad73; font-size: .8rem; margin-top: 10px; }
+  a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @media(max-width:767px) { .buying-steps { padding: 32px 0; } .buying-heading { flex-direction: column; gap: 0; margin-bottom: 24px; } ol { grid-template-columns: 1fr; gap: 24px; } li + li { border-left: 0; border-top: 1px solid #34373c; padding: 24px 0 0; } .step-number { margin-bottom: 8px; } p { max-width: none; } }
+</style>

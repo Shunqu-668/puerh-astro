@@ -1,0 +1,23 @@
+---
+interface Props { variant?: 'header' | 'footer'; }
+const { variant = 'header' } = Astro.props;
+---
+<span class:list={['brand-logo', `brand-logo--${variant}`]} aria-hidden="true">
+  <span class="brand-logo-name"><span>PUERH</span><span class="brand-logo-direct">DIRECT</span></span>
+  <span class="brand-logo-description">ПУЭР ОПТОМ ИЗ КИТАЯ</span>
+</span>
+
+<style>
+  .brand-logo { --brand-accent: #df793f; display: inline-flex; flex-direction: column; align-items: flex-start; border-left: 2px solid var(--brand-accent); padding-left: 10px; color: #f3f2ef; }
+  .brand-logo-name { display: flex; flex-direction: column; gap: 0; font-family: 'Arial Black', 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: 900; letter-spacing: -.025em; line-height: .96; white-space: nowrap; }
+  .brand-logo-direct { color: var(--brand-accent); }
+  .brand-logo-description { font-family: Arial, sans-serif; font-size: 10px; font-weight: 400; line-height: 1.2; letter-spacing: 0; margin-top: 5px; white-space: nowrap; color: #d6cec3; }
+  .brand-logo--footer { border-left-width: 3px; padding-left: 13px; }
+  .brand-logo--footer .brand-logo-name { font-size: 34px; }
+  .brand-logo--footer .brand-logo-description { font-size: 11px; margin-top: 8px; }
+  @media (max-width: 767px) {
+    .brand-logo--header { padding-left: 8px; border-left-width: 2px; }
+    .brand-logo--header .brand-logo-name { font-size: 19px; }
+    .brand-logo--header .brand-logo-description { font-size: 9px; margin-top: 4px; }
+  }
+</style>

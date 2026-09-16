@@ -1,58 +1,41 @@
 ---
 import Layout from "../../components/Layout.astro";
 import CoverHero from "../../components/CoverHero.astro";
-import Picture from "../../components/Picture.astro";
-import { products, typeLabels, shapeLabels, getProductImg } from "../../data/products";
+import CatalogBrowser from "../../components/CatalogBrowser.astro";
+import CategoryNav from "../../components/CategoryNav.astro";
+import CatalogSchema from '../../components/CatalogSchema.astro';
+import CategoryGuide from '../../components/CategoryGuide.astro';
+import { products } from "../../data/products";
 
 const rawProducts = products.filter(p => p.type === "raw");
 ---
 
 <Layout
-  title="Шэн Пуэр | Raw Puerh — PUERH DIRECT"
-  description="Шэн пуэр оптом из Китая. Натуральная ферментация, сложный вкус с годами выдержки. Хранение на сухом складе в Фанцунь (Гуанчжоу). Количество по запросу. | Raw puerh wholesale from China. Natural aging, complex flavor. Guangzhou Fangcun dry storage."
+  title="Шэн пуэр — каталог для бизнеса"
+  description="Шэн пуэр оптом. Выбор по названию, году и форме. Наличие и условия уточним при запросе."
   ogImage="https://puerhdirect.ru/images/images/2.webp"
   canonicalURL="/catalog/raw-puerh/"
 >
+  <CatalogSchema products={rawProducts} path="/catalog/raw-puerh/" />
   <CoverHero
-    titleRu="Шэн Пуэр"
-    titleEn="Raw Puerh"
-    subtitleRu="Естественная ферментация, сложный аромат, бодрящий эффект"
-    subtitleEn="Natural fermentation, complex aroma, energizing effect"
+    compact
+    titleRu="Шэн пуэр"
+    titleEn="КАТАЛОГ ЧАЯ"
+    subtitleRu="Шэн пуэр из каталога. Выберите чай для вашего бизнеса."
     bgImage="/images/images/2.webp"
   />
-  <section class="py-12 md:py-16 bg-white">
+  <section class="catalog-page-content py-12 md:py-16 bg-surface">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="text-sm text-gray-400 mb-8">
-        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+      <nav class="catalog-breadcrumb text-sm text-gray-400 mb-8" aria-label="Хлебные крошки">
+        <a href="/" class="hover:text-flame transition-colors">Главная</a>
         <span class="mx-2">/</span>
-        <a href="/catalog" class="hover:text-orange-500 transition-colors">Каталог | Catalog</a>
+        <a href="/catalog/" class="hover:text-flame transition-colors">Каталог</a>
         <span class="mx-2">/</span>
-        <span class="text-gray-600">Шэн Пуэр | Raw Puerh</span>
+        <span class="text-muted">Шэн пуэр</span>
       </nav>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {rawProducts.map(p => (
-          <a href={`/catalog/product/${p.slug}/`} class="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300 block">
-            <div class="aspect-square overflow-hidden bg-[#f5f5f5] relative">
-              <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={`${p.year} ${p.nameEn}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-              <span class="absolute top-3 right-3 text-[10px] font-bold text-white bg-orange-500/90 backdrop-blur-sm px-2 py-1 rounded">ОПТ | WHOLESALE</span>
-            </div>
-            <div class="p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-xs font-bold text-white bg-orange-500 px-2 py-0.5 rounded">{p.year}</span>
-                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{typeLabels[p.type]?.ru} <span class="text-gray-400">| {typeLabels[p.type]?.en}</span></span>
-              </div>
-              <h3 class="text-sm font-bold text-gray-900 mb-1">
-                <span class="block">{p.nameRu}</span>
-                <span class="block text-orange-500 text-xs font-medium mt-0.5">{p.nameEn}</span>
-              </h3>
-              <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                <p class="text-xs text-gray-400">{shapeLabels[p.shape]?.ru} <span class="text-gray-300">|</span> <span class="text-gray-400">{shapeLabels[p.shape]?.en}</span></p>
-                <span class="text-[10px] text-orange-500 font-medium">Количество по запросу | Request a quote</span>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+      <CategoryNav />
+      <CatalogBrowser products={rawProducts} fixedType="raw" />
+      <CategoryGuide type="raw" />
     </div>
   </section>
 </Layout>

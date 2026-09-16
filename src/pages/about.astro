@@ -1,134 +1,24 @@
 ---
-import Layout from "../components/Layout.astro";
-import CoverHero from "../components/CoverHero.astro";
-import CTAButton from "../components/CTAButton.astro";
-import Picture from "../components/Picture.astro";
+import InformationPage from '../components/InformationPage.astro';
+import Picture from '../components/Picture.astro';
 ---
-
-<Layout
-  title="О Нас | About Us — Оптовый пуэр из Гуанчжоу с 2006 года | Wholesale Puerh Since 2006"
-  description="Прямые оптовые поставки пуэра из Гуанчжоу (Фанцунь) с 2006 года. Собственный склад, карго-доставка в РФ. Direct wholesale puerh supply from Guangzhou Fangcun since 2006. Own warehouse, cargo delivery to Russia."
-  ogImage="https://puerhdirect.ru/images/images/about-hero.webp"
-  canonicalURL="/about/"
->
-  <CoverHero
-    titleRu="О нас"
-    titleEn="About Us"
-    subtitleRu="Два поколения опыта в отборе и поставках пуэра. Прямой путь из Юньнани в ваш город."
-    subtitleEn="Two generations of expertise in puerh selection and supply. Direct route from Yunnan to your city."
-    bgImage="/images/images/about-hero.webp"
-  />
-
-  <!-- Key Facts — structured for AI extraction -->
-  <section class="py-12 bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div>
-          <div class="text-3xl font-bold text-orange-500">2006</div>
-          <p class="text-xs text-gray-500 mt-1">Начало поставок<br/><span class="text-gray-400">Since</span></p>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-orange-500">20+</div>
-          <p class="text-xs text-gray-500 mt-1">Лет опыта<br/><span class="text-gray-400">Years Experience</span></p>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-orange-500">500+</div>
-          <p class="text-xs text-gray-500 mt-1">Оптовых партнеров<br/><span class="text-gray-400">Wholesale Partners</span></p>
-        </div>
-        <div>
-          <div class="text-3xl font-bold text-orange-500">3</div>
-          <p class="text-xs text-gray-500 mt-1">Языка поддержки<br/><span class="text-gray-400">Languages: RU/EN/CN</span></p>
-        </div>
-      </div>
-    </div>
+<InformationPage title="Ваши люди в чайном Китае" description="Наша команда — в Фанцуне, Гуанчжоу. Отбор пуэра, хранение и подготовка поставок для вашего бизнеса." path="/about/" image="/images/images/about-hero.webp" eyebrow="О НАС" actionTitle="Найдём чай для вашего магазина" actionText="Обсудить закупку">
+  <section class="info-split">
+    <div><h2>Юньнань — производство.<br />Гуанчжоу — наш склад.</h2><p>Работаем с производством в Мэнхае и Юндэ, Юньнань. Наш магазин и склад — в Фанцуне, чайном районе Гуанчжоу. Здесь отбираем чай, храним и готовим заказы к отправке.</p><p>Помогаем выбирать между фабриками, годами и вкусами. Начать можно с небольшой подборки образцов.</p><p><a class="info-link" href="/catalog/">Посмотреть наш чай →</a></p></div>
+    <figure><Picture src="/images/images/about-warehouse.webp" alt="Наш склад: чай в мешках и коробках" class="w-full" loading="lazy" /><figcaption>Хранение чая — часть нашей ежедневной работы.</figcaption></figure>
   </section>
-
-  <!-- Yunnan Origin -->
-  <section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <Picture src="/images/images/about-factory.webp" alt="Yunnan Tea Factory" class="rounded-xl shadow-lg w-full aspect-[4/3] object-cover" loading="lazy" />
-        </div>
-        <div>
-          <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Наше Производство в Юньнани</span>
-            <span class="block text-orange-500 text-xl mt-1">Our Yunnan Origin</span>
-          </h2>
-          <p class="text-gray-600 leading-relaxed mb-3">
-            <span>Завод в Мэнхай с 2006 года. Собственные ресурсы в Юндэ. Контроль с первого листа. Прямые цены без посредников.</span>
-          </p>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            <span>Our uncle's factory in Menghai (Xishuangbanna) and our own resources in Lincang (Yongde) let us control quality from the very first leaf. Direct factory pricing with no hidden fees.</span>
-          </p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Сишуанбаньна | Xishuangbanna</span>
-            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Линьцан | Lincang</span>
-            <span class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full font-medium">Пуэр | Pu'er</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section class="info-split info-section">
+    <figure><Picture src="/images/images/about-selection.webp" alt="Сравнение чаёв на дегустационном столе" class="w-full" loading="lazy" /><figcaption>Выбор начинается с чашки, а не с обёртки.</figcaption></figure>
+    <div><h2>Чай для ваших<br />покупателей</h2><p>Насыщенный шу, мягкий шэн или выразительный чай в подарок. У каждой полки своя задача.</p><p>В каталоге — фабрика, год, формат и характер чая. Образцы помогают принять решение на собственном вкусе.</p><p><a class="info-link" href="/sample/">Собрать свою дегустацию →</a></p></div>
   </section>
-
-  <!-- Guangzhou Warehouse -->
-  <section class="py-16 md:py-24 bg-[#f5f5f5]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div class="order-2 lg:order-1">
-          <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Хаб в Гуанчжоу (Фанцунь)</span>
-            <span class="block text-orange-500 text-xl mt-1">Guangzhou Fangcun Hub</span>
-          </h2>
-          <p class="text-gray-600 leading-relaxed mb-3">
-            <span>Наш склад в Фанцунь — крупнейший чайный оптовый рынок мира. Сухое хранение и отгрузка целыми коробками через карго-каналы в РФ и СНГ.</span>
-          </p>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            <span>Our own warehouse in Guangzhou Fangcun — the largest tea wholesale center in China. Wholesale only, shipping by full boxes. Direct access to international cargo channels.</span>
-          </p>
-        </div>
-        <div class="order-1 lg:order-2">
-          <Picture src="/images/images/fangcun-store.webp" alt="Guangzhou Fangcun Warehouse" class="rounded-xl shadow-lg w-full aspect-[4/3] object-cover" loading="lazy" />
-        </div>
-      </div>
-    </div>
+  <section class="info-split info-section">
+    <div><h2>Ваш бренд.<br />Наша работа с чаем.</h2><p>Прессовка и упаковка под вашим брендом. От выбора чайной основы до оформления.</p><p>Можно прийти с логотипом, примером упаковки или только идеей. Подберём формат и подготовим предложение по изготовлению.</p><p><a class="info-link" href="/private-label/">Как сделать свою серию →</a></p></div>
+    <figure><Picture src="/images/images/about-factory.webp" alt="Производственное помещение с чайным сырьём" class="w-full" loading="lazy" /><figcaption>От чайного сырья к готовой серии.</figcaption></figure>
   </section>
-
-  <!-- Two Generations -->
-  <section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <Picture src="/images/images/about-selection.webp" alt="Tea Selection" class="rounded-xl shadow-lg w-full aspect-[4/3] object-cover" loading="lazy" />
-        </div>
-        <div>
-          <h2 class="text-3xl font-bold mb-4">
-            <span class="text-gray-900">Два поколения экспертизы</span>
-            <span class="block text-orange-500 text-xl mt-1">Two Generations of Expertise</span>
-          </h2>
-          <p class="text-gray-600 leading-relaxed mb-3">
-            <span>В чайном деле с 2006 года: от семейного магазина в Куньмине до международных поставок. Каждый лот отбираем лично — экспертиза второго поколения.</span>
-          </p>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            <span>Our family has been in the tea business for over 20 years. We started with a small shop in Kunming and grew to international supply. Over the years we have visited hundreds of tea farms, selected the best producers, and built a unique collection of aged puerh.</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Partner CTA -->
-  <section class="py-16 md:py-24 bg-[#1a1a1a] text-white text-center">
-    <div class="max-w-2xl mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-4">
-        <span class="text-white">Стать нашим партнёром</span>
-        <span class="block text-orange-500 text-xl mt-1">Become Our Partner</span>
-      </h2>
-      <p class="text-gray-400 text-sm mb-8">
-        <span>Работаем только оптом. Только целыми коробками. Только честный бизнес.</span>
-        <span class="block text-gray-500 mt-1">We are always open to cooperation with tea shops, restaurants, distributors and private labels.</span>
-      </p>
-      <CTAButton href="/contact">Связаться с нами <span class="text-gray-700 ml-1">| Contact Us</span></CTAButton>
-    </div>
-  </section>
-</Layout>
+  <section class="info-section about-terms"><h2>Начать можно с малого</h2><p>Без фиксированного минимума заказа. Образцы платные; цену, упаковку и доставку согласуем до отправки.</p><p>Свой экспедитор для первого запроса не нужен.</p><a class="info-link" href="/compliance/">Документы к заказу →</a></section>
+</InformationPage>
+<style>
+  figcaption { color: #afb4bd; font-size: .75rem; line-height: 1.6; margin-top: 10px; }
+  .about-terms { border-left: 3px solid #b27b47; padding-left: 24px; max-width: 850px; }
+  .about-terms a { display: inline-flex; min-height: 44px; align-items: center; margin-top: 10px; }
+</style>

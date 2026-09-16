@@ -3,25 +3,31 @@ import Layout from "../components/Layout.astro";
 import CoverHero from "../components/CoverHero.astro";
 import Picture from "../components/Picture.astro";
 import { products, typeLabels, shapeLabels, getProductImg } from "../data/products";
+import "../styles/sample.css";
+import { teaProfiles } from '../data/tea-profiles';
 ---
 
 <Layout
-  title="Заказ образцов | Sample Request — PUERH DIRECT"
-  description="Закажите образцы чая пуэр перед оптовой закупкой. Со склада в Фанцунь (Гуанчжоу). Request pu-erh tea samples before wholesale purchase. From Guangzhou Fangcun warehouse. Образцы платные. Стоимость и доставка согласовываются до отправки."
+  title="Образцы пуэра — PUERH DIRECT"
+  description="Выберите до пяти чаёв перед закупкой. Образцы платные. Стоимость и доставку согласуем до отправки."
   ogImage="https://puerhdirect.ru/images/images/catalog-header.webp"
   canonicalURL="/sample/"
 >
   <CoverHero
+    compact
     titleRu="Заказ образцов"
-    titleEn="Sample Request"
-    subtitleRu="Попробуйте перед покупкой — выберите до 5 образцов"
-    subtitleEn="Try before you buy — select up to 5 samples"
+    titleEn=""
+    subtitleRu="Попробуйте чай перед закупкой."
     bgImage="/images/images/catalog-header.webp"
   />
 
-  <section class="py-12 md:py-16 bg-white">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <form id="sample-form" data-inquiry-form action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST" class="space-y-10">
+  <section class="sample-page bg-surface">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="sample-intro">
+        <p>Образцы платные. Стоимость и доставку согласуем до отправки.</p>
+        <a href="/contact/?topic=tea-selection#inquiry-form">Не знаете, что выбрать? Поможем ↗</a>
+      </div>
+      <form id="sample-form" data-inquiry-form action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST">
         <input type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
         <input type="hidden" name="from_name" value="PUERH DIRECT — Образцы | Samples" />
         <input type="hidden" name="subject" value="Новый запрос образцов с puerhdirect.ru" />
@@ -29,95 +35,109 @@ import { products, typeLabels, shapeLabels, getProductImg } from "../data/produc
         <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
         <input type="hidden" name="selected_samples" id="selected-samples-input" value="" />
 
-        <!-- Step 1: Product Selection -->
-        <div>
+        <div id="sample-counter" aria-live="polite" class="sample-toolbar">
+          <span>Выбрано: <span id="count">0</span>/5</span><a href="#sample-details" class="sample-continue">К заявке ↓</a>
+        </div>
+        <div class="sample-workspace">
+        <div id="sample-selection">
           <h2 class="text-2xl font-bold mb-2">
-            <span class="text-gray-900">1. Выберите образцы</span>
-            <span class="block text-orange-500 text-lg mt-1">1. Select Samples</span>
+            <span class="text-ink">1. Выберите чай</span>
           </h2>
-          <p class="text-gray-500 text-sm mb-6">
-            <span>Выберите до 5 позиций для дегустации. Образцы платные. Стоимость выбранных образцов и доставки согласуем до отправки.</span>
-            <span class="block text-gray-400 mt-1">Select up to 5 teas to taste. Samples are paid. Sample prices and shipping are agreed before dispatch.</span>
-          </p>
 
-          <div id="sample-counter" aria-live="polite" class="text-sm text-orange-500 font-medium mb-4">
-            Выбрано | Selected: <span id="count">0</span>/5
+          <div id="sample-search-control" class="sample-filters" hidden>
+            <label for="sample-search" class="form-label">Найти образец</label><input id="sample-search" type="search" class="form-input" placeholder="Название или год" />
+            <div class="sample-filter-row">
+              <label for="sample-type" class="sr-only">Вид чая</label>
+              <select id="sample-type" class="form-input">
+                <option value="">Все виды чая</option>
+                <option value="ripe">Шу пуэр</option>
+                <option value="raw">Шэн пуэр</option>
+              </select>
+              <button type="button" id="sample-only-selected" aria-pressed="false">Только выбранные</button>
+            </div>
+            <div class="sample-results"><span id="sample-visible-count" role="status"></span><button type="button" id="sample-reset-filters" hidden>Сбросить фильтры</button></div>
           </div>
-
-          <p id="selection-error" class="hidden text-red-700 text-sm mb-4" role="alert">Выберите от 1 до 5 образцов. | Select 1–5 samples.</p>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <p id="sample-empty" class="hidden text-muted mb-5" role="status">Ничего не найдено. Измените или сбросьте фильтры.</p>
+          <p id="selection-error" class="hidden text-error text-sm mb-4" role="alert">Выберите от 1 до 5 образцов.</p>
+          <div id="sample-grid" class="sample-grid">
             {products.map((p, i) => (
-              <label class={`sample-card relative flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-orange-300 transition-all has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50`}>
-                <input type="checkbox" name={`sample_${i}`} value={p.slug} class="absolute top-2 right-2 w-4 h-4 text-orange-500 rounded focus:ring-orange-500 peer" data-product={p.nameEn} />
-                <div class="w-full aspect-square rounded-lg overflow-hidden bg-[#f5f5f5] mb-2">
-                  <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={p.nameEn} class="w-full h-full object-cover" loading="lazy" />
+              <label class={`sample-card relative flex flex-col items-center p-3 rounded-xl border-2 border-line cursor-pointer hover:border-flame/60 transition-all has-[:checked]:border-flame has-[:checked]:bg-accent-wash`}>
+                <input type="checkbox" name={`sample_${i}`} value={p.slug} aria-label={`${p.nameRu} · ${p.year} · ${typeLabels[p.type]?.ru}`} class="absolute top-2 right-2 w-4 h-4 text-flame rounded focus:ring-orange-500 peer" data-product={p.nameRu} data-year={p.year} data-type={p.type} />
+                <div class="w-full aspect-square rounded-lg overflow-hidden bg-panel mb-2">
+                  <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={p.nameRu} class="w-full h-full object-cover" loading="lazy" />
                 </div>
-                <span class="text-xs font-bold text-gray-800 text-center leading-tight">{p.nameRu}</span>
-                <span class="text-[10px] text-orange-500 mt-0.5">{p.nameEn}</span>
-                <span class="text-[10px] text-gray-400 mt-0.5">{p.year} · {typeLabels[p.type]?.en} · {shapeLabels[p.shape]?.en}</span>
+                <span class="text-xs font-bold text-ink text-center leading-tight">{p.nameRu}</span>
+                <span class="sample-card-meta">{p.year} · {typeLabels[p.type]?.ru} · {shapeLabels[p.shape]?.ru}</span>
+                <span class="sample-card-taste">{teaProfiles[p.slug].notes.slice(0, 2).join(' · ') || teaProfiles[p.slug].occasion}</span>
+                <span class="sr-only" lang="en">{p.nameEn}</span>
               </label>
             ))}
           </div>
+          <button type="button" id="sample-show-more" class="sample-show-more" hidden>Показать ещё</button>
+          <noscript><p class="sample-note">Для заявки нужен JavaScript. <a href="https://t.me/sqvivi777">Напишите нам в Telegram</a>.</p></noscript>
         </div>
 
         <!-- Step 2: Contact Info -->
-        <div class="border-t border-gray-200 pt-10">
+        <div id="sample-details" class="sample-details" tabindex="-1">
           <h2 class="text-2xl font-bold mb-2">
-            <span class="text-gray-900">2. Контактные данные</span>
-            <span class="block text-orange-500 text-lg mt-1">2. Contact Information</span>
+            <span class="text-ink">2. Ваша заявка</span>
           </h2>
+          <div id="sample-summary" class="sample-summary" hidden>
+            <p class="sample-summary-label">Выбранный чай</p>
+            <p id="sample-summary-empty" class="sample-note">Выберите хотя бы один чай из списка.</p>
+            <ul id="sample-selected-list" aria-label="Выбранные образцы"></ul>
+            <p id="sample-limit-note" class="sample-note" hidden>Выбрано пять. Уберите один, чтобы добавить другой.</p>
+          </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <div class="sample-contact-fields">
             <div>
-              <label for="sample-name" class="block text-sm font-medium text-gray-700 mb-1.5">
-                Имя <span class="text-orange-500">*</span>
-                <span class="text-gray-400 font-normal ml-1">| Name</span>
+              <label for="sample-name" class="block text-sm font-medium text-soft mb-1.5">
+                Имя <span class="text-flame">*</span>
               </label>
-              <input type="text" id="sample-name" name="name" maxlength="120" autocomplete="name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm" placeholder="Александр">
+              <input type="text" id="sample-name" name="name" maxlength="120" autocomplete="name" required class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="Александр">
             </div>
             <div>
-              <label for="sample-contact" class="block text-sm font-medium text-gray-700 mb-1.5">
-                Telegram / WhatsApp / Телефон <span class="text-orange-500">*</span>
-                <span class="text-gray-400 font-normal ml-1">| Contact</span>
+              <label for="sample-contact" class="block text-sm font-medium text-soft mb-1.5">
+                Телефон <span class="text-flame">*</span>
               </label>
-              <input type="text" id="sample-contact" name="contact" maxlength="120" autocomplete="off" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm" placeholder="@username / +7...">
+              <input type="tel" id="sample-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel" required class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="+7 …">
             </div>
           </div>
 
           <div class="mt-6">
-            <label for="sample-destination" class="block text-sm font-medium text-gray-700 mb-1.5">
-              Город назначения <span class="text-orange-500">*</span>
-              <span class="text-gray-400 font-normal ml-1">| Destination city</span>
+            <label for="sample-destination" class="block text-sm font-medium text-soft mb-1.5">
+              Город назначения <span class="text-muted">(необязательно)</span>
             </label>
-            <textarea id="sample-destination" name="destination" required rows="2" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm resize-y" placeholder="Страна и город. Полный адрес уточним перед отправкой.&#10;Country and city. Full address confirmed before dispatch."></textarea>
+            <input id="sample-destination" name="destination" type="text" maxlength="200" autocomplete="address-level2" class="form-input" placeholder="Страна и город" />
           </div>
 
           <div class="mt-6">
-            <label for="sample-message" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="sample-message" class="block text-sm font-medium text-soft mb-1.5">
               Комментарий
-              <span class="text-gray-400 font-normal ml-1">| Comment</span>
-              <span class="text-gray-400 text-xs ml-1">(необязательно | optional)</span>
+              <span class="text-gray-400 text-xs ml-1">(необязательно)</span>
             </label>
-            <textarea id="sample-message" name="message" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition text-sm resize-y" placeholder="Дополнительные пожелания...&#10;Additional preferences..."></textarea>
+            <textarea id="sample-message" name="message" rows="3" class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm resize-y" placeholder="Дополнительные пожелания..."></textarea>
           </div>
-        </div>
-
         <!-- Submit -->
-        <div class="text-center pt-4 border-t border-gray-200">
-          <button type="submit" id="submit-btn" aria-describedby="form-preview" class="inline-flex items-center justify-center px-10 py-4 text-base font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[48px] bg-[#F58220] text-gray-900 hover:bg-[#E07518] hover:shadow-orange-500/25">
-            Заказать образцы <span class="text-gray-700 ml-1">| Request Samples</span>
+        <div class="text-center pt-4 border-t border-line">
+          <button type="submit" id="submit-btn" aria-describedby="form-preview" class="inline-flex items-center justify-center px-10 py-4 text-base font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[48px] bg-flame text-gray-950 hover:bg-acid hover:shadow-orange-500/25">
+            Запросить образцы
           </button>
+          <p class="sample-note sample-submit-note">Это запрос стоимости, а не оплата.</p>
+          <p class="sample-note sample-privacy">Контакт нужен для ответа. <a href="/privacy/">Конфиденциальность</a></p>
         </div>
 
-        <p id="form-preview" class="hidden text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4" role="status" tabindex="-1"></p>
-        <div id="form-success" role="status" tabindex="-1" class="hidden text-center p-6 bg-green-50 rounded-xl border border-green-200">
-          <p class="text-green-700 font-semibold text-lg">Запрос отправлен! | Request Sent!</p>
-          <p class="text-green-600 text-sm mt-1">Мы свяжемся с вами для уточнения деталей доставки. | We'll contact you to confirm shipping details.</p>
+        <p id="form-preview" class="hidden text-sm text-acid bg-accent-wash border border-line rounded-lg p-4" role="status" tabindex="-1"></p>
+        <div id="form-success" role="status" tabindex="-1" class="hidden text-center p-6 bg-success-wash rounded-xl border border-success/40">
+          <p class="text-success font-semibold text-lg">Запрос отправлен!</p>
+          <p class="text-success text-sm mt-1">Обсудим стоимость и условия отправки.</p>
         </div>
 
-        <div id="form-error" role="alert" tabindex="-1" class="hidden text-center p-6 bg-red-50 rounded-xl border border-red-200">
-          <p class="text-red-700 font-semibold">Ошибка отправки | Submission Error</p>
-          <p class="text-red-600 text-sm mt-1">Пожалуйста, попробуйте ещё раз или напишите нам в Telegram @sqvivi777. | Please try again or contact us on Telegram @sqvivi777.</p>
+        <div id="form-error" role="alert" tabindex="-1" class="hidden text-center p-6 bg-error-wash rounded-xl border border-error/40">
+          <p class="text-error font-semibold">Ошибка отправки</p>
+          <p class="text-error text-sm mt-1">Попробуйте ещё раз или <a href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer">напишите в Telegram</a>.</p>
+        </div>
+        </div>
         </div>
       </form>
     </div>

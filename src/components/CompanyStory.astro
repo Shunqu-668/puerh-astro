@@ -1,0 +1,30 @@
+---
+import Picture from './Picture.astro';
+---
+<section class="company-story" aria-labelledby="company-story-title">
+  <div class="company-story-photo">
+    <Picture src="/images/images/expertise.webp" alt="Чай на хранении на нашем складе в Китае" loading="lazy" class="w-full h-full object-cover" />
+    <span>ФАНЦУНЬ · ГУАНЧЖОУ</span>
+  </div>
+  <div class="company-story-copy">
+    <p class="tea-overline">ЛЮДИ ЗА ВАШИМ ЧАЕМ</p>
+    <h2 id="company-story-title">От фабрик Юньнани<br />до вашей полки</h2>
+    <p>Наша команда — в чайном районе Фанцунь, Гуанчжоу. Отбор пуэра, хранение и подготовка поставок для вашего бизнеса.</p>
+    <ul><li>Шу и шэн разных фабрик и годов</li><li>Образцы для собственной дегустации</li><li>Прессовка и упаковка под ваш бренд</li></ul>
+    <a class="tea-link" href="/about/">Познакомиться с нами <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+<style>
+  .company-story { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; padding: 48px 0; border-top: 1px solid #292b2e; }
+  .company-story-photo { position: relative; aspect-ratio: 4/3; overflow: hidden; background: #191b1e; }
+  .company-story-photo :global(img) { height: 100%; width: 100%; object-fit: cover; }
+  .company-story-photo span { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px 18px; background: linear-gradient(transparent,rgba(8,9,10,.95)); font-size: .7rem; color: #eee8df; letter-spacing: .1em; }
+  .company-story-copy > p:not(.tea-overline) { color: #bcb7b1; line-height: 1.8; font-size: .9rem; margin: 18px 0; }
+  .company-story-copy ul { margin: 0 0 20px; display: grid; gap: 10px; color: #e1dad2; font-size: .85rem; }
+  .company-story-copy li { border-left: 2px solid #9e6536; padding-left: 13px; }
+  @media(max-width:767px) {
+    .company-story { grid-template-columns: 1fr; gap: 24px; padding: 32px 0; }
+    .company-story-photo { aspect-ratio: 16/9; }
+    .company-story-copy h2 { font-size: 1.55rem; }
+  }
+</style>

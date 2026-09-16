@@ -1,0 +1,20 @@
+---
+const items = [
+  ['/catalog/', 'Весь пуэр'],
+  ['/catalog/ripe-puerh/', 'Шу пуэр'],
+  ['/catalog/raw-puerh/', 'Шэн пуэр'],
+  ['/catalog/teaware/', 'Посуда'],
+  ['/catalog/other-tea/', 'Другой чай'],
+];
+const current = Astro.url.pathname.replace(/\/$/, '') + '/';
+---
+<nav class="category-nav" aria-label="Категории каталога">
+  {items.map(([href, label]) => <a href={href} aria-current={current === href ? 'page' : undefined}>{label}</a>)}
+</nav>
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 6px 22px; border-bottom: 1px solid #34373c; margin-bottom: 24px; padding-bottom: 10px; }
+  a { display: inline-flex; align-items: center; min-height: 44px; color: #b7bac1; font-size: .85rem; border-bottom: 2px solid transparent; }
+  a:hover { color: #f5f5f2; }
+  a[aria-current] { color: #e8ad73; border-color: #e8ad73; }
+  @media(max-width:639px) { .category-nav { gap: 0 20px; margin-bottom: 20px; } a { font-size: .8rem; } }
+</style>

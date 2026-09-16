@@ -1,0 +1,55 @@
+---
+import ProductCard from './ProductCard.astro';
+import SelectionHelp from './SelectionHelp.astro';
+import { type Product, typeLabels, shapeLabels } from '../data/products';
+import { catalogSpecs } from '../data/catalog-specs';
+import { teaProfiles } from '../data/tea-profiles';
+interface Props { products: Product[]; fixedType?: 'raw' | 'ripe'; }
+const { products, fixedType } = Astro.props;
+---
+<div data-catalog-browser>
+  <form class="catalog-controls" role="search" hidden>
+    <div class="catalog-search">
+      <div class="catalog-search-heading"><label for="tea-search" class="form-label">Найти чай</label><button type="button" data-toggle-filters aria-expanded="false" aria-controls="tea-filter-kind tea-filter-shape tea-sort-control">Фильтры и порядок</button></div>
+      <input id="tea-search" type="search" name="q" class="form-input" placeholder="Название, год, вкус или фабрика" autocomplete="off" />
+    </div>
+    <div id="tea-filter-kind" class="catalog-filter-field" hidden={!!fixedType}>
+    {!fixedType && <>
+      <label for="tea-type" class="form-label">Вид</label>
+      <select id="tea-type" name="type" class="form-input"><option value="">Все виды</option><option value="ripe">Шу пуэр</option><option value="raw">Шэн пуэр</option></select>
+    </>}
+    </div>
+    <div id="tea-filter-shape" class="catalog-filter-field">
+      <label for="tea-shape" class="form-label">Форма</label>
+      <select id="tea-shape" name="shape" class="form-input"><option value="">Все формы</option><option value="cake">Блин</option><option value="brick">Кирпич</option><option value="tuocha">Точа</option></select>
+    </div>
+  </form>
+  <div class="catalog-results-bar">
+    <p role="status" aria-live="polite" aria-atomic="true">Найдено: <strong data-result-count>{products.length}</strong> <span>из {products.length}</span></p>
+    <button type="button" data-reset-filters hidden>Сбросить фильтры</button>
+    <div id="tea-sort-control" class="catalog-sort" hidden>
+      <label for="tea-sort">Порядок</label>
+      <select id="tea-sort" name="sort" class="form-input">
+        <option value="">Как в каталоге</option>
+        <option value="year-desc">Год: сначала новые</option>
+        <option value="year-asc">Год: сначала старые</option>
+        <option value="weight-asc">Вес: по возрастанию</option>
+        <option value="weight-desc">Вес: по убыванию</option>
+      </select>
+    </div>
+  </div>
+  <div class="catalog-grid">
+    {products.map(p => <div data-catalog-item data-year={p.year} data-weight={catalogSpecs.get(p.slug)!.grams} data-kind={p.type} data-shape={p.shape} data-search={`${p.nameRu} ${p.nameEn} ${p.year} ${typeLabels[p.type].ru} ${shapeLabels[p.shape].ru} ${catalogSpecs.get(p.slug)!.grams} ${teaProfiles[p.slug].maker || ''} ${teaProfiles[p.slug].notes.join(' ')} ${teaProfiles[p.slug].occasion}`}>
+      <ProductCard product={p} />
+    </div>)}
+  </div>
+  <div class="catalog-empty" hidden>
+    <h2>Такой чай не найден</h2>
+    <p>Попробуйте другое название или сбросьте фильтры.</p>
+    <a href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором →</a>
+  </div>
+</div>
+<SelectionHelp />
+<script>
+  import '../scripts/catalog';
+</script>

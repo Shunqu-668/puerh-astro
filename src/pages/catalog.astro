@@ -1,86 +1,41 @@
 ---
 import Layout from "../components/Layout.astro";
 import CoverHero from "../components/CoverHero.astro";
-import Picture from "../components/Picture.astro";
-import { products, typeLabels, shapeLabels, getProductImg } from "../data/products";
+import CatalogBrowser from "../components/CatalogBrowser.astro";
+import CategoryNav from "../components/CategoryNav.astro";
+import CatalogSchema from '../components/CatalogSchema.astro';
+import { products } from "../data/products";
 ---
 
 <Layout
-  title="Каталог Пуэра | Puerh Catalog — Оптовый каталог чая из Гуанчжоу"
-  description="Оптовый каталог чая пуэр из Гуанчжоу (Фанцунь). Шу и шэн пуэр от 1996 года. 42 позиции в каталоге. Прямые поставки, карго-доставка в РФ. Количество по запросу. | Wholesale puerh tea catalog from Guangzhou Fangcun. 42 varieties. Direct supply since 2006."
+  title="Каталог пуэра — шу и шэн для бизнеса"
+  description="Шу и шэн пуэр оптом из Китая. Выберите чай и запросите цену под свой объём."
   ogImage="https://puerhdirect.ru/images/images/catalog-header.webp"
   canonicalURL="/catalog/"
 >
+  <CatalogSchema products={products} path="/catalog/" />
   <CoverHero
-    titleRu="Каталог Пуэра"
-    titleEn="Puerh Catalog"
-    subtitleRu="Оптом из Фанцунь (Гуанчжоу). Получите полный оптовый прайс-лист (600+ позиций)"
-    subtitleEn="Premium quality tea wholesale directly from Guangzhou. Get our full wholesale price list (600+ SKU)"
+    compact
+    titleRu="Каталог пуэра"
+    titleEn="ВЫБОР ЧАЯ"
+    subtitleRu="Шу и шэн из Китая. Количество по вашему запросу."
     bgImage="/images/images/catalog-header.webp"
   />
 
-  <section class="py-12 md:py-16 bg-white">
+  <section class="catalog-page-content py-12 md:py-16 bg-surface">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Breadcrumb -->
-      <nav class="text-sm text-gray-400 mb-8">
-        <a href="/" class="hover:text-orange-500 transition-colors">Главная | Home</a>
+      <nav class="catalog-breadcrumb text-sm text-gray-400 mb-8" aria-label="Хлебные крошки">
+        <a href="/" class="hover:text-flame transition-colors">Главная</a>
         <span class="mx-2">/</span>
-        <span class="text-gray-600">Каталог | Catalog</span>
+        <span class="text-muted">Каталог</span>
       </nav>
 
       <!-- Category quick links -->
-      <div class="flex flex-wrap gap-3 justify-center mb-10">
-        <a href="/catalog/raw-puerh" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Шэн Пуэр <span class="text-gray-400">| Raw</span></a>
-        <a href="/catalog/ripe-puerh" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Шу Пуэр <span class="text-gray-400">| Ripe</span></a>
-        <a href="/catalog/teaware" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Посуда <span class="text-gray-400">| Teaware</span></a>
-        <a href="/catalog/other-tea" class="px-4 py-2 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full text-sm font-medium transition-colors">Другой чай <span class="text-gray-400">| Other</span></a>
-      </div>
+      <CategoryNav />
 
-      <!-- Price List CTA -->
-      <div class="text-center mb-10 p-6 bg-orange-50 rounded-xl border border-orange-200">
-        <p class="text-gray-700 font-semibold mb-2">
-          <span>Получите полный оптовый прайс-лист (600+ SKU) в Telegram</span>
-        </p>
-        <p class="text-gray-500 text-sm mb-3">
-          <span>Get the full wholesale price list (600+ SKU) via Telegram</span>
-        </p>
-        <a href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2 bg-[#26A5E4] text-white text-sm font-medium rounded-lg hover:bg-[#1E96D4] transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248c-.182 1.915-1.06 6.586-1.504 8.724-.184.986-.543 1.316-1.076 1.348-.933.086-1.64-.66-2.543-1.294-1.408-.99-2.208-1.61-3.575-2.583-.792-.56-.027-1.08.557-1.64.384-.37 2.6-2.54 2.648-2.757.006-.027.012-.13-.05-.184-.06-.054-.15-.036-.214-.02-.09.02-1.532.99-4.328 2.85-.41.28-.78.42-1.11.41-.364-.01-1.07-.21-1.595-.38-.642-.22-1.152-.34-1.107-.71.023-.2.29-.4.794-.6 3.13-1.36 5.215-2.26 6.256-2.69 2.98-1.24 3.6-1.45 4-1.46.09 0 .29.02.42.12.1.08.13.18.14.28.01.08.02.27 0 .42z"/></svg>
-          <span>Telegram @sqvivi777</span>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map(p => (
-          <a href={`/catalog/product/${p.slug}/`} class="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-orange-300 transition-all duration-300 block">
-            <div class="aspect-square overflow-hidden bg-[#f5f5f5] relative">
-              <Picture
-                src={getProductImg(p)}
-                fallback={getProductImg(p).replace(/\.webp$/, ".jpg")}
-                alt={`${p.year} ${p.nameEn}`}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <span class="absolute top-3 right-3 text-[10px] font-bold text-white bg-orange-500/90 backdrop-blur-sm px-2 py-1 rounded">ОПТ | WHOLESALE</span>
-            </div>
-            <div class="p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-xs font-bold text-white bg-orange-500 px-2 py-0.5 rounded">{p.year}</span>
-                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{typeLabels[p.type]?.ru} <span class="text-gray-400">| {typeLabels[p.type]?.en}</span></span>
-              </div>
-              <h3 class="text-sm font-bold text-gray-900 mb-1">
-                <span class="block">{p.nameRu}</span>
-                <span class="block text-orange-500 text-xs font-medium mt-0.5">{p.nameEn}</span>
-              </h3>
-              <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                <p class="text-xs text-gray-400">{shapeLabels[p.shape]?.ru} <span class="text-gray-300">|</span> <span class="text-gray-400">{shapeLabels[p.shape]?.en}</span></p>
-                <span class="text-[10px] text-orange-500 font-medium">Количество по запросу | Request a quote</span>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+      <CatalogBrowser products={products} />
     </div>
   </section>
 </Layout>

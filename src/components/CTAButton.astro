@@ -3,18 +3,20 @@ interface Props {
   href: string;
   variant?: "primary" | "secondary";
   class?: string;
+  textRu?: string;
+  textEn?: string;
 }
 
-const { href, variant = "primary", class: extraClass = "" } = Astro.props;
+const { href, variant = "primary", class: extraClass = "", textRu, textEn } = Astro.props;
 
 const base = "inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98] min-h-[44px]";
 
 const variants = {
-  primary: "bg-[#F58220] text-gray-900 hover:bg-[#E07518] hover:shadow-orange-500/25",
-  secondary: "bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 hover:border-gray-400",
+  primary: "site-cta-primary",
+  secondary: "site-cta-secondary",
 };
 ---
 
-<a href={href} class={`${base} ${variants[variant]} ${extraClass}`}>
-  <slot />
+<a href={href} class={`site-cta ${base} ${variants[variant]} ${extraClass}`} title={textEn}>
+  {textRu ? <span>{textRu}</span> : <slot />}
 </a>

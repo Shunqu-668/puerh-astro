@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node scripts/verify-site.mjs",
+    "test": "node scripts/verify-site.mjs && node scripts/verify-seo.mjs",
+    "test:seo": "node scripts/verify-seo.mjs",
+    "brand:assets": "node scripts/generate-brand-assets.mjs",
     "verify": "npm run build && npm test"
   },
   "dependencies": {

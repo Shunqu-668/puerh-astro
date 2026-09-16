@@ -1,0 +1,26 @@
+{
+  "checkedOn": "2026-09-10",
+  "note": "Four illustrative catalogue entries, not bestsellers or guaranteed stock. Weight is a supplier catalogue statement; confirm the batch in quotation.",
+  "items": [
+    {
+      "slug": "2024-ripe-puerh-brick-black-pearl-xinwen",
+      "unitWeightGrams": 250,
+      "source": "https://puerhdirect.com/catalog/2024-ripe-puerh-brick-black-pearl-xinwen/"
+    },
+    {
+      "slug": "2018-raw-puerh-cake-yiwu",
+      "unitWeightGrams": 357,
+      "source": "https://puerhdirect.com/catalog/2018-raw-puerh-cake-yiwu/"
+    },
+    {
+      "slug": "2023-ripe-puerh-cake-bulangjinya",
+      "unitWeightGrams": 357,
+      "source": "https://puerhdirect.com/catalog/2023-ripe-puerh-cake-bulangjinya/"
+    },
+    {
+      "slug": "2005-raw-puerh-cake-laochendecha",
+      "unitWeightGrams": 357,
+      "source": "https://puerhdirect.com/catalog/2005-raw-puerh-cake-laochendecha/"
+    }
+  ]
+}
