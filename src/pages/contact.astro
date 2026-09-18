@@ -1,8 +1,9 @@
 ---
 import Layout from "../components/Layout.astro";
 import { products } from "../data/products";
+import { productInquiryLabel } from "../data/catalog-specs";
 import { inquiryTopics } from "../data/inquiry-topics";
-const catalogue = products.map(({ slug, nameRu, year }) => ({ slug, name: `${nameRu} · ${year}` }));
+const catalogue = products.map(product => ({ slug: product.slug, name: productInquiryLabel(product) }));
 ---
 <Layout
   title="Обсудим ваш чай — Контакты"

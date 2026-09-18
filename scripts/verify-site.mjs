@@ -270,7 +270,26 @@ try {
   await page.locator('.product-purchase').getByRole('link', { name: 'Запросить цену', exact: true }).click();
   await page.waitForURL('**/contact/**');
   await page.waitForFunction(() => document.querySelector('[name="product_sku"]')?.value);
-  assert.match(await page.locator('[name="product_requested"]').inputValue(), /./);
+  const inquiryLabel = 'Чёрный Жемчуг Синьвэнь · 2024 · Шу Пуэр · 250 г';
+  assert.equal(await page.locator('[name="product_requested"]').inputValue(), inquiryLabel);
+  assert.equal(await page.locator('#selected-product-name').textContent(), inquiryLabel);
+  // All inquiry choices carry the existing source-backed weight and tea type, not query text.
+  const inquiryCatalogue = JSON.parse(await page.locator('#inquiry-form').getAttribute('data-product-catalog'));
+  assert.equal(inquiryCatalogue.length, 42);
+  for (const spec of specs.items) {
+    const choice = inquiryCatalogue.find(item => item.slug === spec.slug);
+    assert.ok(choice, `Missing inquiry choice ${spec.slug}`);
+    assert.ok(choice.name.endsWith(` · ${spec.grams} г`), `Wrong inquiry weight ${spec.slug}`);
+    assert.ok(choice.name.includes(spec.slug.includes('-raw-') ? 'Шэн Пуэр' : 'Шу Пуэр'), `Wrong inquiry tea type ${spec.slug}`);
+  }
+  await screenshot('inquiry-context-desktop.png');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('#selected-product').scrollIntoViewIfNeeded();
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Inquiry context fits mobile');
+  await screenshot('inquiry-context-mobile.png');
+  await page.setViewportSize({ width: 320, height: 740 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Inquiry context fits narrow mobile');
+  await page.setViewportSize({ width: 1440, height: 1000 });
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '2024-ripe-puerh-brick-black-pearl-xinwen');
   assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
   await page.locator('#submit-btn').click();
@@ -293,6 +312,7 @@ try {
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.equal(posts.length, 1);
   assert.ok(posts[0].body.includes('2024-ripe-puerh-brick-black-pearl-xinwen'));
+  assert.ok(posts[0].body.includes(inquiryLabel), 'Submitted inquiry must retain the displayed tea type and weight');
   assert.ok(posts[0].body.includes('LOCAL TEST'));
   assert.ok(posts[0].body.includes('+7 000 000-00-00'));
   checks.push('required name and phone, blank/invalid input rejection, optional message, product context');
@@ -336,6 +356,7 @@ try {
   await page.goto('https://puerhdirect.ru/contact/?product=2024-ripe-puerh-brick-black-pearl-xinwen&tea=Injected-name');
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.ok(!(await page.locator('[name="product_requested"]').inputValue()).includes('Injected-name'));
+  assert.equal(await page.locator('#selected-product-name').textContent(), inquiryLabel, 'URL text cannot override verified product facts');
   await page.locator('header a[href="/catalog/"]').first().click();
   await page.locator('header a[href="/contact/#inquiry-form"]').click();
   await page.waitForURL('**/contact/**');
