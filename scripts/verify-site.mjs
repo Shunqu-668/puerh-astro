@@ -308,6 +308,10 @@ try {
   await page.locator('#submit-btn').click();
   assert.equal(posts.length, 0, 'Whitespace contact must not submit');
   await page.locator('[name="contact"]').fill('+7 000 000-00-00');
+  await page.locator('[name="email"]').fill('not-an-email');
+  await page.getByRole('button', { name: /Отправить запрос/ }).click();
+  assert.equal(posts.length, 0, 'Optional email must be valid when supplied');
+  await page.locator('[name="email"]').fill('');
   await page.getByRole('button', { name: /Отправить запрос/ }).click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.equal(posts.length, 1);
@@ -315,15 +319,22 @@ try {
   assert.ok(posts[0].body.includes(inquiryLabel), 'Submitted inquiry must retain the displayed tea type and weight');
   assert.ok(posts[0].body.includes('LOCAL TEST'));
   assert.ok(posts[0].body.includes('+7 000 000-00-00'));
+  assert.ok(!posts[0].body.includes('name="email"'), 'Omit blank optional email');
+  assert.ok(!posts[0].body.includes('name="Тема запроса"'), 'Omit absent topic');
+  assert.ok(posts[0].body.includes('name="Телефон"') && posts[0].body.includes('name="Товар"'));
+  assert.ok(posts[0].body.includes('name="Страница"'));
   checks.push('required name and phone, blank/invalid input rejection, optional message, product context');
   await page.locator('[name="name"]').fill('LOCAL TEST');
   await page.locator('[name="message"]').fill('LOCAL TEST QUESTION');
+  await page.locator('[name="email"]').fill('buyer@example.com');
   await page.locator('[name="contact"]').fill('+7 000 000-00-00');
   mode = 'error';
   await page.locator('#submit-btn').click();
   await page.locator('#form-error:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="message"]').inputValue(), 'LOCAL TEST QUESTION');
   assert.equal(await page.locator('[name="contact"]').inputValue(), '+7 000 000-00-00');
+  assert.equal(await page.locator('[name="email"]').inputValue(), 'buyer@example.com');
+  assert.ok(posts.at(-1).body.includes('name="email"') && posts.at(-1).body.includes('buyer@example.com'), 'Reserved email enables Reply-To');
   assert.equal(await page.locator('#submit-btn').isEnabled(), true);
   checks.push('server error preserves input and permits retry');
   mode = 'network-error';
@@ -348,6 +359,9 @@ try {
   await page.locator('#submit-btn').click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.ok(!posts.at(-1).body.includes('2024-ripe-puerh-brick-black-pearl-xinwen'));
+  for (const label of ['Товар', 'Артикул', 'Тема запроса', 'Комментарий']) {
+    assert.ok(!posts.at(-1).body.includes(`name="${label}"`), `Do not emit an empty ${label} email row`);
+  }
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '', 'Reset must not restore removed product');
   await page.goto('https://puerhdirect.ru/contact/?product=not-a-real-tea&tea=Injected-name');
   await page.waitForFunction(() => document.querySelector('form')?.action.includes('web3forms'));
@@ -398,11 +412,17 @@ try {
   assert.equal(await page.locator('.sample-card input:disabled').count(), 0);
   await page.locator('[name="name"]').fill('LOCAL SAMPLE TEST');
   await page.locator('[name="contact"]').fill('+7 000 000-00-00');
+  assert.equal(await page.locator('[name="email"]').getAttribute('required'), null);
+  await page.locator('[name="email"]').fill('samples@example.com');
   await page.locator('[name="destination"]').fill('Local test city');
   mode = 'success';
   await page.locator('#submit-btn').click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.equal(await page.locator('#count').innerText(), '0');
+  assert.ok(posts.at(-1).body.includes('name="Образцы"'));
+  assert.ok(posts.at(-1).body.includes('samples@example.com'));
+  assert.ok(!/name="sample_\d+"/.test(posts.at(-1).body), 'Selected samples appear once, without raw checkbox duplicates');
+  assert.equal(await page.locator('[name="email"]').inputValue(), '', 'Successful submission clears optional email');
   await page.locator('[name="name"]').fill('LOCAL SAMPLE TEST');
   await page.locator('[name="contact"]').fill('+7 000 000-00-00');
   await page.locator('[name="destination"]').fill('Local test city');

@@ -1,3 +1,5 @@
+import { inquiryPayload } from './inquiry-payload';
+
 const initialized = new WeakSet<HTMLFormElement>();
 const isLocalPreview = () => !['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
 
@@ -171,6 +173,8 @@ function setupInquiries() {
         name.value = name.value.trim();
         name.setCustomValidity(name.value ? '' : 'Укажите ваше имя.');
       }
+      const email = form.querySelector<HTMLInputElement>('[name="email"]');
+      if (email) email.value = email.value.trim();
       if (!form.reportValidity()) return;
       if (isLocalPreview()) {
         preview.textContent = 'Форма заполнена корректно. В локальном просмотре запрос не отправляется. | 填写校验通过；本地预览未发送询盘。';
@@ -186,7 +190,7 @@ function setupInquiries() {
       const timeout = window.setTimeout(() => controller.abort(), 15000);
       try {
         const response = await fetch(form.action, {
-          method: 'POST', body: new FormData(form), signal: controller.signal,
+          method: 'POST', body: inquiryPayload(form, location.pathname), signal: controller.signal,
         });
         const data = await response.json();
         if (!response.ok || data.success !== true) throw new Error('Submission rejected');

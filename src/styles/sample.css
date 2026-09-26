@@ -18,7 +18,7 @@
 .sample-card:focus-within { outline: 2px solid #e8ad73; outline-offset: 3px; }
 .sample-show-more { display: block; width: 100%; margin: 24px 0 0; border: 1px solid #45484e; border-radius: 4px; min-height: 48px; cursor: pointer; font-size: .85rem; color: #e4e5e7; }
 .sample-show-more:hover, .sample-filter-row button:hover { border-color: #e8ad73; }
-.sample-details { position: sticky; top: 142px; border: 1px solid #34373c; border-radius: 8px; background: #191b1e; padding: 24px; }
+.sample-details { position: relative; border: 1px solid #34373c; border-radius: 8px; background: #191b1e; padding: 24px; }
 #sample-details { scroll-margin-top: 142px; }
 .sample-details h2 { font-size: 1.2rem; }
 .sample-contact-fields { display: grid; gap: 18px; margin-top: 24px; }
