@@ -4,6 +4,8 @@ import Layout from "../../components/Layout.astro";
 import CTAButton from "../../components/CTAButton.astro";
 import { articlePaths } from "../../data/article-paths";
 import "../../styles/editorial.css";
+import "../../styles/article-reading.css";
+import { articleMedia } from "../../data/article-media";
 import { canonicalUrl, organizationId, jsonLd } from '../../lib/seo';
 
 export async function getStaticPaths() {
@@ -23,7 +25,8 @@ export async function getStaticPaths() {
 const { post, Content, headings } = Astro.props;
 const slug = post.id.replace(/\.md$/, "");
 const articleUrl = canonicalUrl(`/blog/${slug}/`);
-const articleImage = post.data.ogImage || 'https://puerhdirect.ru/brand/social-card.png';
+const media = articleMedia[slug];
+const articleImage = post.data.ogImage || canonicalUrl(media?.src || '/brand/social-card.png');
 const next = articlePaths[slug] || { category: 'О пуэре', label: 'Посмотреть каталог', href: '/catalog/' };
 const furtherReading = (await getCollection('blog')).filter(item => item.id !== post.id).slice(0, 2);
 
@@ -64,64 +67,20 @@ const articleSchema = {
   ogImage={articleImage}
   ogType="article"
 >
-  <article class="reading-article max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <header class="mb-10">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-flame transition-colors mb-6">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        <span class="text-flame font-semibold">Блог</span>
-      </a>
-      <p class="reading-category">{next.category}</p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-ink leading-tight mb-4">
-        {post.data.title}
-      </h1>
-      <p class="article-lead">{post.data.description}</p>
-
-      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400">
-        <span>Редакция PUERH DIRECT</span>
-        <time datetime={post.data.date.toISOString()}>
-          {post.data.date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}
-        </time>
-        {post.data.updated && <span>Обновлено: <time datetime={post.data.updated.toISOString()}>{post.data.updated.toLocaleDateString("ru-RU")}</time></span>}
-      </div>
-    </header>
-
-    <details class="article-toc">
-      <summary>В этой статье</summary>
-      <nav aria-label="Содержание статьи">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav>
-    </details>
-    <div class="article-body prose prose-gray prose-lg max-w-none
-      prose-headings:text-ink prose-headings:font-bold
-      prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-line
-      prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-      prose-p:text-soft prose-p:leading-relaxed prose-p:mb-4
-      prose-strong:text-ink
-      prose-ul:my-4 prose-li:text-soft
-      prose-blockquote:border-l-4 prose-blockquote:border-flame prose-blockquote:bg-accent-wash prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
-      ">
-      <Content />
-    </div>
-
-    <hr class="my-12 border-line" />
-
-    <div class="article-next">
-      <h2>От чтения к выбору</h2>
-      <p>Можно начать с вопроса. Точный объём пока не нужен.</p>
-      <CTAButton href={next.href}>{next.label}</CTAButton>
-      <a class="article-help" href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором чая →</a>
-    </div>
-    <section class="article-further" aria-label="Ещё по теме"><h2>Полезно перед закупкой</h2>{furtherReading.map(item => <a href={`/blog/${item.id}/`}>{item.data.title}<span aria-hidden="true">→</span></a>)}</section>
-
-    <nav class="mt-12 flex justify-between items-center">
-      <a href="/blog/" class="inline-flex items-center gap-2 text-sm text-muted hover:text-flame transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        <span class="text-flame font-semibold">Все статьи</span>
-      </a>
-    </nav>
-  </article>
+  <section class="reading-surface" data-theme="light">
+    <div class="reading-progress" aria-hidden="true"></div>
+    <div class="reading-tools"><a href="/blog/">Блог / {next.category}</a><div><button type="button" data-reading-theme aria-pressed="false">Тёмный фон</button><button type="button" data-reading-size aria-pressed="false">A+ Крупнее текст</button></div></div>
+    <header class="article-header"><h1>{post.data.title}</h1><p class="article-lead">{post.data.description}</p><div class="reading-byline"><span>Редакция PUERH DIRECT</span><time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}</time>{post.data.updated && <span>Обновлено: <time datetime={post.data.updated.toISOString()}>{post.data.updated.toLocaleDateString("ru-RU")}</time></span>}</div></header>
+    {media && <figure class:list={["article-hero", {paired: !!media.second}]}><div><img src={media.src} alt={media.alt} width="800" height="600" fetchpriority="high" />{media.second && <img src={media.second} alt="Шэн пуэр Иу 2018 — целый чайный блин" width="800" height="800" />}<span class="photo-credit" aria-hidden="true">PUERH DIRECT</span></div><figcaption>{media.caption}</figcaption></figure>}
+    <div class="reading-layout"><aside class="reading-toc"><strong>В этой статье</strong><nav aria-label="Содержание статьи">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></aside><div class="reading-content">
+      <details class="article-toc"><summary>В этой статье</summary><nav aria-label="Мобильное содержание">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>
+      <article class="article-body"><Content /></article>
+      <div class="article-next"><h2>От чтения к выбору</h2><p>Можно начать с вопроса. Точный объём пока не нужен.</p><CTAButton href={next.href}>{next.label}</CTAButton><a class="article-help" href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором чая →</a></div>
+      <section class="article-further" aria-label="Ещё по теме"><h2>Полезно перед закупкой</h2>{furtherReading.map(item => <a href={`/blog/${item.id}/`}>{item.data.title}<span aria-hidden="true">→</span></a>)}</section>
+      <a class="reading-back" href="/blog/">Все статьи →</a>
+    </div></div>
+  </section>
+  <script>import '../../scripts/article-reading';</script>
 
   <script slot="head" type="application/ld+json" set:html={jsonLd(articleSchema)}></script>
 </Layout>
