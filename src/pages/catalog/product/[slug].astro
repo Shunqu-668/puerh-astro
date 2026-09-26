@@ -25,7 +25,7 @@ const productUrl = `/catalog/product/${p.slug}/`;
 const productImg = getProductImg(p);
 const detailImages = (galleryData as Record<string, string[]>)[p.slug] || [];
 const categoryUrl = `/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/`;
-const shortDescription = `${p.nameRu}, ${p.year}: ${typeLabels[p.type].ru.toLowerCase()}, ${spec.grams} г. ${profile.summary} Оптовая цена и наличие — по запросу; доступны платные образцы.`;
+const shortDescription = `${p.nameRu}, ${p.year}: ${typeLabels[p.type].ru.toLowerCase()}, ${spec.grams} г. Оптовая цена и наличие — по запросу. Платные образцы перед закупкой. ${profile.summary}`;
 const telegramHref = `https://t.me/sqvivi777?text=${encodeURIComponent(`Здравствуйте! Интересует ${p.nameRu}, ${p.year}, ${spec.grams} г.\nhttps://puerhdirect.ru${productUrl}`)}`;
 const breadcrumbSchema = {
   "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -53,7 +53,7 @@ const productSchema = {
   ],
 };
 ---
-<Layout title={`${p.nameRu}, ${p.year} — ${typeLabels[p.type].ru}`}
+<Layout title={`${p.nameRu}, ${p.year} — ${typeLabels[p.type].ru} оптом`}
   description={shortDescription} ogImage={`https://puerhdirect.ru${productImg}`} canonicalURL={productUrl}>
   <section class="py-8 md:py-12 bg-surface">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

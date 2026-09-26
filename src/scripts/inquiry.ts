@@ -1,4 +1,5 @@
 import { inquiryPayload } from './inquiry-payload';
+import { trackGoal } from './analytics';
 
 const initialized = new WeakSet<HTMLFormElement>();
 const isLocalPreview = () => !['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
@@ -17,6 +18,18 @@ function setupInquiries() {
     const selectedField = form.querySelector<HTMLInputElement>('[name="selected_samples"]');
     const originalButton = button.innerHTML;
     let pending = false;
+    let started = false;
+    const formType = boxes.length ? 'sample' : 'contact';
+    form.addEventListener('input', event => {
+      const field = event.target as HTMLInputElement;
+      if (!started && ['name', 'contact', 'email', 'message'].includes(field.name)) {
+        started = true;
+        trackGoal('pd_inquiry_start', { form: formType });
+      }
+    });
+    boxes.forEach(box => box.addEventListener('change', () => {
+      if (box.checked) trackGoal('pd_sample_select', { form: 'sample', sku: box.value });
+    }));
     const selected = () => boxes.filter(box => box.checked);
     const sampleSearch = form.querySelector<HTMLInputElement>('#sample-search');
     const sampleType = form.querySelector<HTMLSelectElement>('#sample-type');
@@ -194,6 +207,8 @@ function setupInquiries() {
         });
         const data = await response.json();
         if (!response.ok || data.success !== true) throw new Error('Submission rejected');
+        trackGoal(formType === 'sample' ? 'pd_sample_success' : 'pd_inquiry_success', { form: formType });
+        started = false;
         form.reset();
         updateSamples();
         // Retain the product context for a possible follow-up request.

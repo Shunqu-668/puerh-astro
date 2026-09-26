@@ -56,7 +56,8 @@ for (const file of pages) {
     try { JSON.parse(match[1]); } catch { failures.push(name + ': invalid JSON-LD'); }
   }
 }
-assert.equal(pages.length, 62, 'Expected existing 62 routes');
+const blogCount = fs.readdirSync(path.join(root, 'src/content/blog')).filter(name => name.endsWith('.md')).length;
+assert.equal(pages.length, 57 + blogCount, 'Expected core routes plus published articles');
 assert.deepEqual([...new Set(failures)], [], 'Static site regressions');
 const specs = JSON.parse(fs.readFileSync(path.join(root, 'src/data/catalog-specs.json'), 'utf8'));
 const sourceSpecs = JSON.parse(fs.readFileSync(path.join(root, '../research/upstream-20260910/spec-candidates.json'), 'utf8'));
@@ -91,6 +92,9 @@ let mode = 'success';
 const posts = [];
 const errors = [];
 const checks = [];
+const goals = [];
+await context.exposeBinding('__captureGoal', (_source, args) => { if (args[1] === 'reachGoal') goals.push(args); });
+await context.addInitScript(() => { window.ym = (...args) => { window.__captureGoal(args); }; });
 await context.route('**/*', async route => {
   const url = new URL(route.request().url());
   if (url.hostname === 'api.web3forms.com') {
@@ -311,10 +315,13 @@ try {
   await page.locator('[name="email"]').fill('not-an-email');
   await page.getByRole('button', { name: /Отправить запрос/ }).click();
   assert.equal(posts.length, 0, 'Optional email must be valid when supplied');
+  assert.equal(goals.filter(g => /success$/.test(g[2])).length, 0, 'Invalid forms never produce successful conversion events');
+  assert.equal(goals.filter(g => g[2] === 'pd_inquiry_start').length, 1, 'Only one start event per form attempt');
   await page.locator('[name="email"]').fill('');
   await page.getByRole('button', { name: /Отправить запрос/ }).click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.equal(posts.length, 1);
+  assert.equal(goals.filter(g => g[2] === 'pd_inquiry_success').length, 1, 'Only acknowledged service success is a conversion');
   assert.ok(posts[0].body.includes('2024-ripe-puerh-brick-black-pearl-xinwen'));
   assert.ok(posts[0].body.includes(inquiryLabel), 'Submitted inquiry must retain the displayed tea type and weight');
   assert.ok(posts[0].body.includes('LOCAL TEST'));
@@ -419,6 +426,15 @@ try {
   await page.locator('#submit-btn').click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.equal(await page.locator('#count').innerText(), '0');
+  assert.equal(goals.filter(g => g[2] === 'pd_sample_success').length, 1, 'Sample success is separate from contact success');
+  assert.ok(goals.some(g => g[2] === 'pd_sample_select'), 'Sample selection is measured');
+  assert.ok(goals.some(g => g[2] === 'pd_inquiry_click'), 'Consultation entry is measured');
+  for (const event of goals) {
+    assert.ok(Object.keys(event[3]).every(k => ['page','form','destination','channel','sku'].includes(k)), 'Only allowlisted non-personal context');
+    assert.ok(!JSON.stringify(event).includes('LOCAL TEST') && !JSON.stringify(event).includes('@') && !JSON.stringify(event).includes('+7 000'), 'No form values in analytics');
+    assert.ok(!event[3].page?.includes('?'), 'Query strings are excluded from event context');
+  }
+  checks.push('Metrica: intent/start/selection/success separated; no invalid-form success or personal form values');
   assert.ok(posts.at(-1).body.includes('name="Образцы"'));
   assert.ok(posts.at(-1).body.includes('samples@example.com'));
   assert.ok(!/name="sample_\d+"/.test(posts.at(-1).body), 'Selected samples appear once, without raw checkbox duplicates');
@@ -485,7 +501,7 @@ try {
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'horizontal overflow: ' + width + ' ' + route);
     }
   }
-  checks.push('310 route/viewport overflow checks: all 62 pages at five widths');
+  checks.push(`${pages.length * 5} route/viewport overflow checks: all ${pages.length} pages at five widths`);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('https://puerhdirect.ru/');
   await screenshot('home-mobile.png');
@@ -571,7 +587,7 @@ try {
   assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
   checks.push('category active state and FAQ-to-documents-to-short-inquiry path');
   await page.goto('https://puerhdirect.ru/blog/');
-  assert.equal(await page.locator('.reading-feature, .reading-card').count(), 5);
+  assert.equal(await page.locator('.reading-feature, .reading-card').count(), blogCount);
   const articleUrls = await page.locator('.reading-feature, .reading-card a').evaluateAll(links => links.map(a => a.href));
   for (const url of articleUrls) {
     await page.goto(url);

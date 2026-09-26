@@ -111,6 +111,7 @@ const breadcrumbSchema = { '@context': 'https://schema.org', '@type': 'Breadcrum
     <slot name="head" />
 
     <script>
+      import '../scripts/analytics';
       const productionHost = ['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
       if (productionHost) {
         const w = window as any;
