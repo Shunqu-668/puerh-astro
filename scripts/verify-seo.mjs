@@ -14,6 +14,17 @@ const decode = s => s.replaceAll('&amp;', '&').replaceAll('&quot;', '"').replace
 const attrs = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(m => [m[1], decode(m[2])]));
 const issues = [], warnings = [], rows = [];
 const check = (ok, route, message) => { if (!ok) issues.push({ route, message }); };
+// A host-specific robots header must never suppress indexing on the live domain.
+const headersText = fs.readFileSync(path.join(dist, '_headers'), 'utf8');
+let headerRule = '';
+const robotsHeaderRules = [];
+for (const line of headersText.split(/\r?\n/)) {
+  if (!line.trim() || line.trim().startsWith('#')) continue;
+  if (!/^\s/.test(line)) headerRule = line.trim();
+  else if (/^\s*X-Robots-Tag:.*noindex/i.test(line)) robotsHeaderRules.push(headerRule);
+}
+check(robotsHeaderRules.includes('https://puerh-astro.pages.dev/*'), '_headers', 'Hosting alias must be excluded from indexing');
+check(robotsHeaderRules.every(rule => rule === 'https://puerh-astro.pages.dev/*'), '_headers', 'Noindex header must not affect the production domain');
 const seen = { title: new Map(), description: new Map(), canonical: new Map() };
 const inbound = new Map();
 const outgoing = new Map();

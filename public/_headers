@@ -6,3 +6,7 @@
 
 /images/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Keep the public hosting alias out of search; the custom domain stays indexable.
+https://puerh-astro.pages.dev/*
+  X-Robots-Tag: noindex
