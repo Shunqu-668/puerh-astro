@@ -7,6 +7,8 @@ import SelectionHelp from "../../../components/SelectionHelp.astro";
 import { catalogSpecs } from "../../../data/catalog-specs";
 import { products, typeLabels, shapeLabels, getProductImg } from "../../../data/products";
 import { teaProfiles } from "../../../data/tea-profiles";
+import { buyerNotes } from '../../../data/buyer-notes';
+import { productAlt, productDetailAlts } from '../../../lib/product-alt';
 import galleryData from "../../../data/product-gallery.json";
 import { canonicalUrl, jsonLd } from '../../../lib/seo';
 
@@ -21,6 +23,10 @@ const related = products.filter(item => item.slug !== p.slug && item.type === p.
   .sort((a, b) => Number(b.shape === p.shape) - Number(a.shape === p.shape) || Math.abs(a.year - p.year) - Math.abs(b.year - p.year))
   .slice(0, 4);
 const profile = teaProfiles[p.slug];
+const buying = buyerNotes[p.slug];
+const isLongzhu = p.slug === '2017-raw-puerh-tuocha-bulanglongzhu';
+const displayShape = isLongzhu ? 'Лунчжу · чайные шарики' : shapeLabels[p.shape].ru;
+const cartonKg = (spec.grams * spec.cartonUnits / 1000).toLocaleString('ru-RU', {maximumFractionDigits:3});
 const productUrl = `/catalog/product/${p.slug}/`;
 const productImg = getProductImg(p);
 const detailImages = (galleryData as Record<string, string[]>)[p.slug] || [];
@@ -49,7 +55,7 @@ const productSchema = {
   weight: { '@type': 'QuantitativeValue', value: spec.grams, unitCode: 'GRM' },
   additionalProperty: [
     { '@type': 'PropertyValue', name: 'Год выпуска', value: p.year },
-    { '@type': 'PropertyValue', name: 'Форма', value: shapeLabels[p.shape].ru },
+    { '@type': 'PropertyValue', name: 'Форма', value: displayShape },
   ],
 };
 ---
@@ -66,12 +72,12 @@ const productSchema = {
           <div class="product-meta mb-5">
             <span class="text-sm font-bold text-gray-950 bg-acid px-3 py-1">{p.year}</span>
             <span class="text-sm text-soft bg-raised px-3 py-1">{typeLabels[p.type].ru}</span>
-            <span class="text-sm text-soft bg-raised px-3 py-1">{shapeLabels[p.shape].ru}</span>
+            <span class="text-sm text-soft bg-raised px-3 py-1">{displayShape}</span>
           </div>
           <h1 class="text-3xl lg:text-4xl font-bold text-ink mb-3 leading-tight">{p.nameRu}</h1>
           <p class="product-maker">{profile.maker ? `Фабрика ${profile.maker}` : p.nameEn}</p>
         </div>
-        <ProductImage src={productImg} alt={`${p.year} · ${p.nameRu}`} details={detailImages} />
+        <ProductImage src={productImg} alt={productAlt(p)} details={detailImages} detailAlts={productDetailAlts} />
         <div class="product-details">
           <div class="product-character">
             {profile.notes.length > 0 && <ul class="tea-tasting-notes" aria-label="Вкус и аромат">{profile.notes.map(note => <li>{note}</li>)}</ul>}
@@ -81,10 +87,11 @@ const productSchema = {
           <dl class="product-specs">
             <div><dt>Вид чая</dt><dd>{typeLabels[p.type].ru}</dd></div>
             <div><dt>Год выпуска</dt><dd>{p.year}</dd></div>
-            <div><dt>Форма</dt><dd>{shapeLabels[p.shape].ru}</dd></div>
-            <div><dt>Вес единицы</dt><dd>{spec.grams} г</dd></div>
+            <div><dt>Форма</dt><dd>{displayShape}</dd></div>
+            <div><dt>{isLongzhu ? 'Фасовка по каталогу' : 'Вес единицы'}</dt><dd>{spec.grams} г{isLongzhu && ' · состав упаковки уточняется'}</dd></div>
             <div><dt>В коробке</dt><dd>{spec.cartonUnits} шт.</dd></div>
           </dl>
+          {!isLongzhu && <p class="carton-note">{spec.cartonUnits} × {spec.grams} г = {cartonKg} кг чая в коробке по каталогу. Это комплектация, а не минимальный заказ; транспортная упаковка добавляет вес.</p>}
           <div class="product-purchase">
             <h2 class="purchase-title">Цена по запросу</h2>
             <p>Без фиксированного минимума. Цена зависит от чая и количества.</p>
@@ -103,6 +110,7 @@ const productSchema = {
           <p class="catalog-source-note">Вкус описан по нашему каталогу. Оцените чай на образце; наличие и фасовку партии подтвердим в предложении.</p>
         </div>
       </div>
+      {buying && <section class="product-buying" aria-labelledby="buying-heading"><h2 id="buying-heading">{buying.title}</h2><p>{buying.use}</p><div class="buying-columns"><div><h3>Что проверить на образце</h3><p>{buying.compare}</p><a href={`/sample/?product=${encodeURIComponent(p.slug)}`}>Выбрать этот образец →</a></div><div><h3>Повторная поставка и упаковка</h3><p>{buying.repeat}</p><a href="/private-label/">Упаковка под вашим брендом →</a></div></div></section>}
       <section class="product-related" aria-labelledby="related-heading">
         <h2 id="related-heading">Другие варианты</h2>
         <div class="catalog-grid">{related.map(item => <ProductCard product={item} />)}</div>
@@ -113,3 +121,12 @@ const productSchema = {
   <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)}></script>
   <script type="application/ld+json" set:html={jsonLd(productSchema)}></script>
 </Layout>
+<style>
+  .carton-note{color:#b7bac1;font-size:.82rem;line-height:1.7;margin:14px 0 24px}
+  .product-buying{margin-top:48px;padding-top:32px;border-top:1px solid #34373c;max-width:1050px}
+  .product-buying h2{font-size:clamp(1.35rem,2.5vw,1.8rem);line-height:1.35;font-weight:650;margin-bottom:16px}
+  .product-buying p{color:#b7bac1;line-height:1.8;margin-bottom:14px;font-size:.95rem}
+  .buying-columns{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:26px}
+  .buying-columns h3{font-size:1.06rem;font-weight:600;margin-bottom:12px}.buying-columns a{color:#e8ad73;font-size:.9rem;display:inline-flex;align-items:center;min-height:44px}
+  @media(max-width:767px){.buying-columns{grid-template-columns:1fr;gap:20px}.product-buying{margin-top:32px}}
+</style>

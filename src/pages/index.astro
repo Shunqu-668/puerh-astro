@@ -2,8 +2,10 @@
 import Layout from "../components/Layout.astro";
 import Picture from "../components/Picture.astro";
 import CompanyStory from "../components/CompanyStory.astro";
+import SupplyOptions from "../components/SupplyOptions.astro";
 import { teaProfiles } from '../data/tea-profiles';
 import { products, getProductImg, typeLabels, shapeLabels } from "../data/products";
+import { productAlt } from '../lib/product-alt';
 import selection from "../data/home-selection.json";
 import { catalogSpecs } from "../data/catalog-specs";
 import "../styles/home.css";
@@ -14,7 +16,7 @@ const featured = selection.items.map(item => {
 });
 ---
 <Layout title="Пуэр оптом из Китая — шу и шэн для бизнеса"
-  description="Шу и шэн пуэр для магазинов и чайных. Количество по запросу, образцы платные, доставка по согласованию."
+  description="Пуэр для магазинов и небольших брендов: подбор шу и шэна, оптовые партии и повторные поставки. Рассыпной чай, блины, кирпичи, лунчжу и своя упаковка."
   ogImage="https://puerhdirect.ru/images/images/hero-bg.webp" canonicalURL="/">
   <link slot="head" rel="preload" as="image" href="/images/images/hero-bg.webp" fetchpriority="high" />
   <div class="puerh-home">
@@ -23,7 +25,7 @@ const featured = selection.items.map(item => {
       <div class="tea-hero-overlay"></div>
       <div class="shell tea-hero-content">
         <h1>Пуэр оптом<br />для вашего бизнеса</h1>
-        <p class="tea-intro">Отбираем чай в Китае для магазинов и небольших брендов.<br />Для продажи онлайн, чайной и повторных закупок.</p>
+        <p class="tea-intro">Подбираем шу и шэн в Китае для магазинов и небольших брендов.<br />Помогаем найти нужный чай, подготовить запас и повторить закупку.</p>
         <div class="tea-actions">
           <a href="#tea-selection" class="action-flame tea-button">Выбрать пуэр <span aria-hidden="true">→</span></a>
           <a href="/contact/#inquiry-form" class="tea-button tea-button-outline">Запросить цену</a>
@@ -54,7 +56,7 @@ const featured = selection.items.map(item => {
           {featured.map(p => (
             <article class="tea-product">
               <a href={`/catalog/product/${p.slug}/`} class="tea-product-image" aria-label={`${p.nameRu}, ${p.year}`}>
-                <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={`${p.nameRu}, ${p.year}`} class="w-full h-full object-cover" loading="lazy" />
+                <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={productAlt(p)} class="w-full h-full object-cover" loading="lazy" />
               </a>
               <div class="tea-product-info">
                 <p class="tea-product-type">{typeLabels[p.type].ru} · {p.year}</p>
@@ -71,7 +73,7 @@ const featured = selection.items.map(item => {
         </div>
       </div>
     </section>
-    <div class="shell"><CompanyStory /></div>
+    <div class="shell"><SupplyOptions /><CompanyStory /></div>
     <section class="tea-purchase">
       <div class="shell tea-purchase-grid">
         <div>
@@ -84,7 +86,7 @@ const featured = selection.items.map(item => {
         <div>
           <p class="tea-overline">ВАШ БРЕНД</p>
           <h2>Чай под вашим брендом</h2>
-          <p>Для магазина, чайной или подарочной серии.<br />Начать можно с идеи, без готового макета.</p>
+          <p>Обёртка, коробка или порционная серия для уже выбранного чая.<br />Подбор основы и собственную прессовку обсуждаем отдельно.</p>
           <a href="/private-label/" class="tea-link">Обсудить свой бренд <span aria-hidden="true">→</span></a>
         </div>
       </div>

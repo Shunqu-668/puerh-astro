@@ -1,8 +1,9 @@
 ---
 import Picture from './Picture.astro';
 import { responsivePhoto } from '../lib/product-images';
-interface Props { src: string; alt: string; details?: string[]; }
-const { src, alt, details = [] } = Astro.props;
+interface Props { src: string; alt: string; details?: string[]; detailAlts?: Record<string,string>; }
+const { src, alt, details = [], detailAlts = {} } = Astro.props;
+const photoAlt = (image: string, index: number) => detailAlts[image] || (index === 0 ? alt : `${alt} · дополнительный снимок ${index}`);
 const images = [...new Set([src, ...details])];
 const mainSizes = '(min-width: 1280px) 560px, (min-width: 1024px) 45vw, calc(100vw - 48px)';
 const firstPhoto = responsivePhoto(src);
@@ -15,8 +16,8 @@ const firstPhoto = responsivePhoto(src);
   {images.length > 1 && <>
     <div class="gallery-controls"><span data-gallery-status aria-live="polite">Фото 1 / {images.length}</span><div><button type="button" data-gallery-prev aria-label="Предыдущее фото">←</button><button type="button" data-gallery-next aria-label="Следующее фото">→</button></div></div>
     <nav class="gallery-thumbnails" aria-label="Фотографии чая">
-      {images.map((image, index) => { const photo = responsivePhoto(image); return <a href={photo?.full.src || image} data-gallery-image data-display-src={photo?.src || image} data-display-srcset={photo?.srcset} data-width={photo?.width} data-height={photo?.height} data-photo-number={index + 1} aria-current={index === 0 ? 'true' : 'false'} aria-label={`Фото ${index + 1}: ${alt}`}>
-        <Picture src={image} alt={`${alt} · фото ${index + 1}`} loading="lazy" thumbnail sizes="(min-width: 1024px) 90px, 15vw" />
+      {images.map((image, index) => { const photo = responsivePhoto(image); return <a href={photo?.full.src || image} data-gallery-image data-alt={photoAlt(image,index)} data-display-src={photo?.src || image} data-display-srcset={photo?.srcset} data-width={photo?.width} data-height={photo?.height} data-photo-number={index + 1} aria-current={index === 0 ? 'true' : 'false'} aria-label={`Увеличить: ${photoAlt(image,index)}`}>
+        <Picture src={image} alt={photoAlt(image,index)} loading="lazy" thumbnail sizes="(min-width: 1024px) 90px, 15vw" />
       </a>; })}
     </nav>
   </>}
@@ -48,7 +49,8 @@ const firstPhoto = responsivePhoto(src);
         mainImage.src = photo.dataset.displaySrc || photo.href;
         if (photo.dataset.width) mainImage.width = Number(photo.dataset.width);
         if (photo.dataset.height) mainImage.height = Number(photo.dataset.height);
-        mainImage.alt = `${originalAlt} · фото ${selected + 1}`;
+        mainImage.alt = photo.dataset.alt || originalAlt;
+        trigger.setAttribute('aria-label', `Увеличить фото: ${mainImage.alt}`);
         trigger.href = photo.href;
         if (dialog.open) enlargedImage.src = photo.href;
         enlargedImage.alt = mainImage.alt;

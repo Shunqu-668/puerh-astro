@@ -67,7 +67,9 @@ for (const file of files) {
     check(product.url === canonical && product['@id'] === canonical + '#product', route, 'Product URL/id missing');
     check(product.offers === undefined && product.aggregateRating === undefined && product.review === undefined, route, 'Unverified price/review introduced');
     check(product.image?.length > 0 && product.weight?.value > 0, route, 'Product identity/specification missing');
-    check(['Вид чая', 'Год выпуска', 'Форма', 'Вес единицы', 'В коробке'].every(label => html.includes(label)), route, 'Visible product specifications missing');
+    const weightLabel = route.includes('2017-raw-puerh-tuocha-bulanglongzhu') ? 'Фасовка по каталогу' : 'Вес единицы';
+    check(['Вид чая', 'Год выпуска', 'Форма', weightLabel, 'В коробке'].every(label => html.includes(label)), route, 'Visible product specifications missing');
+    if (weightLabel === 'Фасовка по каталогу') check(html.includes('состав упаковки уточняется') && html.includes('500'), route, 'Longzhu packaging uncertainty must remain visible');
   }
   const faq = nodes.find(n => n['@type'] === 'FAQPage');
   if (faq) {

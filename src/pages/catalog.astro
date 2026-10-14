@@ -4,12 +4,13 @@ import CoverHero from "../components/CoverHero.astro";
 import CatalogBrowser from "../components/CatalogBrowser.astro";
 import CategoryNav from "../components/CategoryNav.astro";
 import CatalogSchema from '../components/CatalogSchema.astro';
+import SupplyOptions from '../components/SupplyOptions.astro';
 import { products } from "../data/products";
 ---
 
 <Layout
-  title="Каталог пуэра — шу и шэн для бизнеса"
-  description="Шу и шэн пуэр оптом из Китая. Выберите чай и запросите цену под свой объём."
+  title="Пуэр оптом: каталог шу и шэна, подбор и повторные поставки"
+  description="Фабричные блины, кирпичи и порционный пуэр с фотографиями и весом. Подбор рассыпного чая, поиск знакомых выпусков и упаковка под своим брендом."
   ogImage="https://puerhdirect.ru/images/images/catalog-header.webp"
   canonicalURL="/catalog/"
 >
@@ -18,7 +19,7 @@ import { products } from "../data/products";
     compact
     titleRu="Каталог пуэра"
     titleEn="ВЫБОР ЧАЯ"
-    subtitleRu="Шу и шэн из Китая. Количество по вашему запросу."
+    subtitleRu="Фабричные выпуски для вашей полки. Подбор и количество — под задачу магазина."
     bgImage="/images/images/catalog-header.webp"
   />
 
@@ -36,6 +37,7 @@ import { products } from "../data/products";
       <CategoryNav />
 
       <CatalogBrowser products={products} />
+      <SupplyOptions />
     </div>
   </section>
 </Layout>

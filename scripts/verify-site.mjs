@@ -385,7 +385,7 @@ try {
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
   checks.push('removable verified product context, invalid query ignored and client navigation reset');
   await page.goto('https://puerhdirect.ru/private-label/');
-  await page.getByRole('link', { name: 'Обсудить идею', exact: true }).click();
+  await page.getByRole('link', { name: 'Обсудить упаковку', exact: true }).click();
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Чай под своим брендом');
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
