@@ -1,5 +1,6 @@
 // Existing company/catalog photographs. Never substitute generated product evidence.
 export const articleMedia: Record<string, {src:string; alt:string; caption:string; second?:string}> = {
+  'povtornaya-zakupka-shu-puera': {src:'/images/images/about-warehouse.webp',alt:'Мешки и картонные коробки в складском помещении',caption:'Складское помещение из материалов PUERH DIRECT. Наличие нужного выпуска и объём партии уточняем перед заказом.'},
   'stoimost-partii-puera': {src:'/images/images/fangcun-store.webp',alt:'Упакованные коробки с маркировкой перед отправкой',caption:'Коробки из материалов PUERH DIRECT. Укладка и масса груза уточняются для выбранного заказа.'},
   'dannye-dlya-kartochki-puera': {src:'/images/product-details/2023-ripe-puerh-cake-bulangjinya/ff8d57fb415c513b.jpg',alt:'Маркировка на упаковке шу Булан Цзинья 2023',caption:'Фотография маркировки из каталога. Для карточки нужна упаковка именно выбранного товара.'},
   'shu-i-shen-puer-raznica': {src:'/images/product-details/2023-ripe-puerh-cake-bulangjinya/15acb6450bb0b6f8.jpg', second:'/images/product-details/2018-raw-puerh-cake-yiwu/24b36e2ca112d9f5.jpg', alt:'Открытый блин шу Булан Цзинья 2023, обратная сторона с углублением', caption:'Слева — шу Булан Цзинья (2023), справа — шэн Иу (2018). Два блина по 357 г из нашего каталога; фотографии сделаны при разном освещении.'},
