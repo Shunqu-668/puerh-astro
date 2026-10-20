@@ -1,5 +1,6 @@
 // Navigation choices point to existing pages; article claims remain in content.
 export const articlePaths: Record<string, { category: string; label: string; href: string }> = {
+  'maket-upakovki-puera-pered-pechatyu': { category: 'Упаковка', label: 'Обсудить макет и упаковку', href: '/contact/?topic=private-label#inquiry-form' },
   'povtornaya-zakupka-shu-puera': { category: 'Повторная закупка', label: 'Обсудить повторную поставку', href: '/contact/#inquiry-form' },
   'stoimost-partii-puera': { category: 'Расчёт закупки', label: 'Запросить расчёт партии', href: '/contact/#inquiry-form' },
   'dannye-dlya-kartochki-puera': { category: 'Для продавцов', label: 'Обсудить чай для своей линейки', href: '/contact/?topic=private-label#inquiry-form' },

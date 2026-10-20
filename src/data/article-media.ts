@@ -1,5 +1,6 @@
 // Existing company/catalog photographs. Never substitute generated product evidence.
-export const articleMedia: Record<string, {src:string; alt:string; caption:string; second?:string}> = {
+export const articleMedia: Record<string, {src:string; alt:string; caption:string; second?:string; width?:number; height?:number}> = {
+  'maket-upakovki-puera-pered-pechatyu': {src:'/images/product-details/2023-ripe-puerh-cake-bulangjinya/b8ed0e044e23da82.jpg',alt:'Блин пуэра в белой бумажной обёртке со складками, лежащий на раскрытой внешней обёртке',caption:'Внутренняя бумажная обёртка блина из каталога PUERH DIRECT. Расположение складок проверяют на выбранном изделии.',width:800,height:800},
   'povtornaya-zakupka-shu-puera': {src:'/images/images/about-warehouse.webp',alt:'Мешки и картонные коробки в складском помещении',caption:'Складское помещение из материалов PUERH DIRECT. Наличие нужного выпуска и объём партии уточняем перед заказом.'},
   'stoimost-partii-puera': {src:'/images/images/fangcun-store.webp',alt:'Упакованные коробки с маркировкой перед отправкой',caption:'Коробки из материалов PUERH DIRECT. Укладка и масса груза уточняются для выбранного заказа.'},
   'dannye-dlya-kartochki-puera': {src:'/images/product-details/2023-ripe-puerh-cake-bulangjinya/ff8d57fb415c513b.jpg',alt:'Маркировка на упаковке шу Булан Цзинья 2023',caption:'Фотография маркировки из каталога. Для карточки нужна упаковка именно выбранного товара.'},

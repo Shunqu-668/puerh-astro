@@ -550,7 +550,17 @@ try {
   // Clicking the logo must not pin the header open on later mouse/touch scrolling.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('https://puerhdirect.ru/');
+  // ClientRouter may finish a same-URL navigation after click() returns.
+  // Wait for its public lifecycle event before measuring scroll behaviour.
+  const logoNavigation = page.evaluate(() => new Promise(resolve => {
+    const timer = setTimeout(() => resolve(false), 5000);
+    document.addEventListener('astro:page-load', () => {
+      clearTimeout(timer);
+      resolve(true);
+    }, { once: true });
+  }));
   await page.locator('.nav-identity').click();
+  assert.equal(await logoNavigation, true, 'Logo navigation must finish before the scroll assertion');
   await page.evaluate(() => window.scrollTo(0, 450));
   await page.waitForFunction(() => getComputedStyle(document.querySelector('.site-nav')).opacity === '0');
   await page.evaluate(() => window.scrollTo(0, 400));
