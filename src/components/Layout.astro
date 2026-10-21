@@ -111,25 +111,8 @@ const breadcrumbSchema = { '@context': 'https://schema.org', '@type': 'Breadcrum
     <slot name="head" />
 
     <script>
-      import '../scripts/analytics';
-      const productionHost = ['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
-      if (productionHost) {
-        const w = window as any;
-        w.ym = w.ym || function (...args: unknown[]) { (w.ym.a = w.ym.a || []).push(args); };
-        w.ym.l = Date.now();
-        const tag = document.createElement('script');
-        tag.async = true;
-        tag.src = 'https://mc.yandex.ru/metrika/tag.js';
-        document.head.append(tag);
-        w.ym(109468811, 'init', { clickmap: true, accurateTrackBounce: true, trackLinks: true });
-        let previousPage = location.pathname;
-        document.addEventListener('astro:page-load', () => {
-          if (location.pathname !== previousPage) {
-            w.ym(109468811, 'hit', location.pathname, { title: document.title, referer: previousPage });
-            previousPage = location.pathname;
-          }
-        });
-      }
+      import { initializeAnalytics } from '../scripts/analytics';
+      initializeAnalytics();
     </script>
 
     <!-- JSON-LD Organization -->

@@ -27,13 +27,13 @@ import { teaProfiles } from '../data/tea-profiles';
         <p>Образцы платные. Стоимость и доставку согласуем до отправки.</p>
         <a href="/contact/?topic=tea-selection#inquiry-form">Не знаете, что выбрать? Поможем ↗</a>
       </div>
-      <form id="sample-form" data-inquiry-form action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST">
-        <input type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
-        <input type="hidden" name="from_name" value="PUERH DIRECT — Образцы | Samples" />
-        <input type="hidden" name="subject" value="Новый запрос образцов с puerhdirect.ru" />
-        <input type="hidden" name="redirect" value="false" />
-        <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
-        <input type="hidden" name="selected_samples" id="selected-samples-input" value="" />
+      <form class="ym-disable-submit" id="sample-form" data-inquiry-form action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST">
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="from_name" value="PUERH DIRECT — Образцы | Samples" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="subject" value="Новый запрос образцов с puerhdirect.ru" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="redirect" value="false" />
+        <input type="checkbox" name="botcheck" class="ym-disable-keys ym-hide-content hidden" style="display:none" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="selected_samples" id="selected-samples-input" value="" />
 
         <div id="sample-counter" aria-live="polite" class="sample-toolbar">
           <span>Выбрано: <span id="count">0</span>/5</span><a href="#sample-details" class="sample-continue">К заявке ↓</a>
@@ -45,7 +45,7 @@ import { teaProfiles } from '../data/tea-profiles';
           </h2>
 
           <div id="sample-search-control" class="sample-filters" hidden>
-            <label for="sample-search" class="form-label">Найти образец</label><input id="sample-search" type="search" class="form-input" placeholder="Название или год" />
+            <label for="sample-search" class="form-label">Найти образец</label><input id="sample-search" type="search" class="ym-disable-keys ym-hide-content form-input" placeholder="Название или год" />
             <div class="sample-filter-row">
               <label for="sample-type" class="sr-only">Вид чая</label>
               <select id="sample-type" class="form-input">
@@ -62,7 +62,7 @@ import { teaProfiles } from '../data/tea-profiles';
           <div id="sample-grid" class="sample-grid">
             {products.map((p, i) => (
               <label class={`sample-card relative flex flex-col items-center p-3 rounded-xl border-2 border-line cursor-pointer hover:border-flame/60 transition-all has-[:checked]:border-flame has-[:checked]:bg-accent-wash`}>
-                <input type="checkbox" name={`sample_${i}`} value={p.slug} aria-label={`${p.nameRu} · ${p.year} · ${typeLabels[p.type]?.ru}`} class="absolute top-2 right-2 w-4 h-4 text-flame rounded focus:ring-orange-500 peer" data-product={p.nameRu} data-year={p.year} data-type={p.type} />
+                <input type="checkbox" name={`sample_${i}`} value={p.slug} aria-label={`${p.nameRu} · ${p.year} · ${typeLabels[p.type]?.ru}`} class="ym-disable-keys ym-hide-content absolute top-2 right-2 w-4 h-4 text-flame rounded focus:ring-orange-500 peer" data-product={p.nameRu} data-year={p.year} data-type={p.type} />
                 <div class="w-full aspect-square rounded-lg overflow-hidden bg-panel mb-2">
                   <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={p.nameRu} class="w-full h-full object-cover" loading="lazy" />
                 </div>
@@ -94,13 +94,13 @@ import { teaProfiles } from '../data/tea-profiles';
               <label for="sample-name" class="block text-sm font-medium text-soft mb-1.5">
                 Имя <span class="text-flame">*</span>
               </label>
-              <input type="text" id="sample-name" name="name" maxlength="120" autocomplete="name" required class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="Александр">
+              <input type="text" id="sample-name" name="name" maxlength="120" autocomplete="name" required class="ym-disable-keys ym-hide-content w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="Александр">
             </div>
             <div>
               <label for="sample-contact" class="block text-sm font-medium text-soft mb-1.5">
                 Телефон <span class="text-flame">*</span>
               </label>
-              <input type="tel" id="sample-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel" required class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="+7 …">
+              <input type="tel" id="sample-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel" required class="ym-disable-keys ym-hide-content w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="+7 …">
             </div>
           </div>
 
@@ -109,13 +109,13 @@ import { teaProfiles } from '../data/tea-profiles';
               Email <span class="text-muted">(необязательно)</span>
             </label>
             <input id="sample-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email"
-              autocapitalize="none" spellcheck="false" class="form-input" placeholder="name@example.com" />
+              autocapitalize="none" spellcheck="false" class="ym-disable-keys ym-hide-content form-input" placeholder="name@example.com" />
           </div>
           <div class="mt-6">
             <label for="sample-destination" class="block text-sm font-medium text-soft mb-1.5">
               Город назначения <span class="text-muted">(необязательно)</span>
             </label>
-            <input id="sample-destination" name="destination" type="text" maxlength="200" autocomplete="address-level2" class="form-input" placeholder="Страна и город" />
+            <input id="sample-destination" name="destination" type="text" maxlength="200" autocomplete="address-level2" class="ym-disable-keys ym-hide-content form-input" placeholder="Страна и город" />
           </div>
 
           <div class="mt-6">
@@ -123,7 +123,7 @@ import { teaProfiles } from '../data/tea-profiles';
               Комментарий
               <span class="text-gray-400 text-xs ml-1">(необязательно)</span>
             </label>
-            <textarea id="sample-message" name="message" rows="3" class="w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm resize-y" placeholder="Дополнительные пожелания..."></textarea>
+            <textarea id="sample-message" name="message" rows="3" class="ym-disable-keys ym-hide-content w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm resize-y" placeholder="Дополнительные пожелания..."></textarea>
           </div>
         <!-- Submit -->
         <div class="text-center pt-4 border-t border-line">
@@ -134,7 +134,7 @@ import { teaProfiles } from '../data/tea-profiles';
           <p class="sample-note sample-privacy">Контакт нужен для ответа. <a href="/privacy/">Конфиденциальность</a></p>
         </div>
 
-        <p id="form-preview" class="hidden text-sm text-acid bg-accent-wash border border-line rounded-lg p-4" role="status" tabindex="-1"></p>
+        <p id="form-preview" class="ym-hide-content hidden text-sm text-acid bg-accent-wash border border-line rounded-lg p-4" role="status" tabindex="-1"></p>
         <div id="form-success" role="status" tabindex="-1" class="hidden text-center p-6 bg-success-wash rounded-xl border border-success/40">
           <p class="text-success font-semibold text-lg">Запрос отправлен!</p>
           <p class="text-success text-sm mt-1">Обсудим стоимость и условия отправки.</p>

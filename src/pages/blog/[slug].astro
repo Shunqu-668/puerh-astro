@@ -74,7 +74,7 @@ const articleSchema = {
     {media && <figure class:list={["article-hero", {paired: !!media.second}]}><div><img src={media.src} alt={media.alt} width={media.width || 800} height={media.height || 600} fetchpriority="high" />{media.second && <img src={media.second} alt="Шэн пуэр Иу 2018 — целый чайный блин" width="800" height="800" />}<span class="photo-credit" aria-hidden="true">PUERH DIRECT</span></div><figcaption>{media.caption}</figcaption></figure>}
     <div class="reading-layout"><aside class="reading-toc"><strong>В этой статье</strong><nav aria-label="Содержание статьи">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></aside><div class="reading-content">
       <details class="article-toc"><summary>В этой статье</summary><nav aria-label="Мобильное содержание">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>
-      <article class="article-body"><Content /></article>
+      <article class="article-body" data-analytics-article={slug}><Content /></article>
       <div class="article-next"><h2>От чтения к выбору</h2><p>Можно начать с вопроса. Точный объём пока не нужен.</p><CTAButton href={next.href}>{next.label}</CTAButton><a class="article-help" href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором чая →</a></div>
       <section class="article-further" aria-label="Ещё по теме"><h2>Полезно перед закупкой</h2>{furtherReading.map(item => <a href={`/blog/${item.id}/`}>{item.data.title}<span aria-hidden="true">→</span></a>)}</section>
       <a class="reading-back" href="/blog/">Все статьи →</a>

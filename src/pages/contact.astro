@@ -22,50 +22,50 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
       </div>
 
       <form id="inquiry-form" data-inquiry-form data-product-catalog={JSON.stringify(catalogue)} data-inquiry-topics={JSON.stringify(inquiryTopics)}
-        action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST" class="contact-form">
-        <input type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
-        <input type="hidden" name="from_name" value="PUERH DIRECT — Контакты" />
-        <input type="hidden" name="subject" value="Новый запрос с puerhdirect.ru" />
-        <input type="hidden" name="redirect" value="false" />
-        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" aria-hidden="true" />
+        action={import.meta.env.DEV ? "#" : "https://api.web3forms.com/submit"} method="POST" class="contact-form ym-disable-submit">
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="access_key" value="a1ae9002-3a5a-473b-8030-7559a8252650" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="from_name" value="PUERH DIRECT — Контакты" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="subject" value="Новый запрос с puerhdirect.ru" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="redirect" value="false" />
+        <input type="checkbox" name="botcheck" class="ym-disable-keys ym-hide-content hidden" style="display:none" tabindex="-1" aria-hidden="true" />
 
         <div id="selected-product" class="selected-product hidden">
-          <div><span>Вас интересует</span><p id="selected-product-name"></p></div>
+          <div><span>Вас интересует</span><p id="selected-product-name" class="ym-hide-content"></p></div>
           <button type="button" id="clear-product" aria-label="Убрать выбор">×</button>
         </div>
-        <input type="hidden" name="product_requested" />
-        <input type="hidden" name="product_sku" />
-        <input type="hidden" name="inquiry_topic" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="product_requested" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="product_sku" />
+        <input class="ym-disable-keys ym-hide-content" type="hidden" name="inquiry_topic" />
 
         <div>
           <label for="contact-name" class="form-label">Имя <span aria-hidden="true">*</span></label>
           <input type="text" id="contact-name" name="name" maxlength="120" autocomplete="name"
-            required class="form-input" placeholder="Как к вам обращаться?" />
+            required class="ym-disable-keys ym-hide-content form-input" placeholder="Как к вам обращаться?" />
         </div>
         <div>
           <label for="contact-contact" class="form-label">Телефон <span aria-hidden="true">*</span></label>
           <input type="tel" id="contact-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel"
-            required class="form-input" placeholder="+7 …" aria-describedby="contact-hint" />
+            required class="ym-disable-keys ym-hide-content form-input" placeholder="+7 …" aria-describedby="contact-hint" />
           <p id="contact-hint" class="contact-hint">Укажите номер с кодом страны.</p>
         </div>
         <div>
           <label for="contact-email" class="form-label">Email <span>Необязательно</span></label>
           <input type="email" id="contact-email" name="email" maxlength="254" autocomplete="email" inputmode="email"
-            autocapitalize="none" spellcheck="false" class="form-input" placeholder="name@example.com" />
+            autocapitalize="none" spellcheck="false" class="ym-disable-keys ym-hide-content form-input" placeholder="name@example.com" />
         </div>
         <div>
           <label for="contact-message" class="form-label">Что вас интересует? <span>Необязательно</span></label>
-          <textarea id="contact-message" name="message" maxlength="2000" rows="3" class="form-input"
+          <textarea id="contact-message" name="message" maxlength="2000" rows="3" class="ym-disable-keys ym-hide-content form-input"
             placeholder="Например: помогите выбрать шу пуэр для магазина"></textarea>
         </div>
         <button type="submit" id="submit-btn" aria-describedby="form-preview" class="contact-submit">Отправить запрос <span aria-hidden="true">↗</span></button>
         <p class="contact-privacy">Используем контакт, чтобы ответить на ваш запрос. <a href="/privacy/">Конфиденциальность</a></p>
 
-        <p id="form-preview" class="hidden contact-status contact-preview" role="status" tabindex="-1"></p>
-        <div id="form-success" class="hidden contact-status contact-success" role="status" tabindex="-1">
+        <p id="form-preview" class="ym-hide-content hidden contact-status contact-preview" role="status" tabindex="-1"></p>
+        <div id="form-success" class="ym-hide-content hidden contact-status contact-success" role="status" tabindex="-1">
           <p><strong>Запрос отправлен.</strong></p><p>Ответим по указанному контакту.</p>
         </div>
-        <div id="form-error" class="hidden contact-status contact-error" role="alert" tabindex="-1">
+        <div id="form-error" class="ym-hide-content hidden contact-status contact-error" role="alert" tabindex="-1">
           <p><strong>Не удалось отправить запрос.</strong></p>
           <p>Попробуйте ещё раз или <a href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer">напишите в Telegram</a>.</p>
         </div>

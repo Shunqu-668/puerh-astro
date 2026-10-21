@@ -436,7 +436,7 @@ try {
   assert.equal(goals.filter(g => g[2] === 'pd_contact_click').length, beforeContact + 1, 'One contact event for one channel click');
   assert.equal(goals.at(-1)[3].channel, 'telegram');
   for (const event of goals) {
-    assert.ok(Object.keys(event[3]).every(k => ['page','form','destination','channel','sku'].includes(k)), 'Only allowlisted non-personal context');
+    assert.ok(Object.keys(event[3]).every(k => ['page','form','destination','channel','sku','depth_percent','error_type'].includes(k)), 'Only allowlisted non-personal context');
     assert.ok(!JSON.stringify(event).includes('LOCAL TEST') && !JSON.stringify(event).includes('@') && !JSON.stringify(event).includes('+7 000'), 'No form values in analytics');
     assert.ok(!event[3].page?.includes('?'), 'Query strings are excluded from event context');
   }

@@ -1,5 +1,5 @@
 import { inquiryPayload } from './inquiry-payload';
-import { trackGoal } from './analytics';
+import { trackGoal, type FormError } from './analytics';
 
 const initialized = new WeakSet<HTMLFormElement>();
 const isLocalPreview = () => !['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
@@ -20,6 +20,17 @@ function setupInquiries() {
     let pending = false;
     let started = false;
     const formType = boxes.length ? 'sample' : 'contact';
+    let validationQueued = false;
+    form.addEventListener('invalid', () => {
+      if (validationQueued) return;
+      validationQueued = true;
+      // Native constraint validation can flush microtasks between invalid fields.
+      // Coalesce those fields into one failed submission attempt.
+      window.setTimeout(() => {
+        trackGoal('pd_form_error', { form: formType, error: 'validation' });
+        validationQueued = false;
+      }, 0);
+    }, true);
     form.addEventListener('input', event => {
       const field = event.target as HTMLInputElement;
       if (!started && ['name', 'contact', 'email', 'message'].includes(field.name)) {
@@ -168,6 +179,7 @@ function setupInquiries() {
       success.classList.add('hidden');
       error.classList.add('hidden');
       if (boxes.length && (selected().length < 1 || selected().length > 5)) {
+        trackGoal('pd_form_error', { form: formType, error: 'selection' });
         selectionError?.classList.remove('hidden');
         selectionError?.scrollIntoView({ block: 'center' });
         return;
@@ -201,12 +213,15 @@ function setupInquiries() {
       form.setAttribute('aria-busy', 'true');
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), 15000);
+      let failure: FormError = 'network';
       try {
         const response = await fetch(form.action, {
           method: 'POST', body: inquiryPayload(form, location.pathname), signal: controller.signal,
         });
+        if (!response.ok) { failure = 'server'; throw new Error('Submission rejected'); }
+        failure = 'response';
         const data = await response.json();
-        if (!response.ok || data.success !== true) throw new Error('Submission rejected');
+        if (data.success !== true) { failure = 'server'; throw new Error('Submission rejected'); }
         trackGoal(formType === 'sample' ? 'pd_sample_success' : 'pd_inquiry_success', { form: formType });
         started = false;
         form.reset();
@@ -216,6 +231,7 @@ function setupInquiries() {
         success.classList.remove('hidden');
         success.focus();
       } catch {
+        trackGoal('pd_form_error', { form: formType, error: controller.signal.aborted ? 'timeout' : failure });
         error.classList.remove('hidden');
         error.focus();
       } finally {
