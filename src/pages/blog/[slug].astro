@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../../components/Layout.astro";
 import CTAButton from "../../components/CTAButton.astro";
-import { articlePaths } from "../../data/article-paths";
+import { articlePaths, articleRelated } from "../../data/article-paths";
 import "../../styles/editorial.css";
 import "../../styles/article-reading.css";
 import { articleMedia } from "../../data/article-media";
@@ -28,7 +28,10 @@ const articleUrl = canonicalUrl(`/blog/${slug}/`);
 const media = articleMedia[slug];
 const articleImage = post.data.ogImage || canonicalUrl(media?.src || '/brand/social-card.png');
 const next = articlePaths[slug] || { category: 'О пуэре', label: 'Посмотреть каталог', href: '/catalog/' };
-const furtherReading = (await getCollection('blog')).filter(item => item.id !== post.id).slice(0, 2);
+const publishedArticles = new Map((await getCollection('blog')).map(item => [item.id.replace(/\.md$/, ''), item]));
+const relatedSlugs = articleRelated[slug];
+if (!relatedSlugs || relatedSlugs.length !== 2 || new Set(relatedSlugs).size !== 2 || relatedSlugs.includes(slug)) throw new Error('Invalid reading path: ' + slug);
+const furtherReading = relatedSlugs.map(id => { const item = publishedArticles.get(id); if (!item) throw new Error('Unpublished reading target: ' + id); return item; });
 
 const articleSchema = {
   "@context": "https://schema.org",
@@ -76,7 +79,7 @@ const articleSchema = {
       <details class="article-toc"><summary>В этой статье</summary><nav aria-label="Мобильное содержание">{headings.filter(h => h.depth === 2).map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>
       <article class="article-body" data-analytics-article={slug}><Content /></article>
       <div class="article-next"><h2>От чтения к выбору</h2><p>Можно начать с вопроса. Точный объём пока не нужен.</p><CTAButton href={next.href}>{next.label}</CTAButton><a class="article-help" href="/contact/?topic=tea-selection#inquiry-form">Помочь с выбором чая →</a></div>
-      <section class="article-further" aria-label="Ещё по теме"><h2>Полезно перед закупкой</h2>{furtherReading.map(item => <a href={`/blog/${item.id}/`}>{item.data.title}<span aria-hidden="true">→</span></a>)}</section>
+      <section class="article-further" data-related-articles aria-label="Ещё по теме"><h2>Полезно перед закупкой</h2>{furtherReading.map(item => <a href={`/blog/${item.id}/`}>{item.data.title}<span aria-hidden="true">→</span></a>)}</section>
       <a class="reading-back" href="/blog/">Все статьи →</a>
     </div></div>
   </section>
