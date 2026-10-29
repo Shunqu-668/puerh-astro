@@ -80,3 +80,22 @@
   .puerh-home .tea-purchase-grid { grid-template-columns: 1fr; gap: 28px; }
   .puerh-home .tea-purchase-grid > div + div { border-left: 0; padding-left: 0; border-top: 1px solid #292b2e; padding-top: 28px; }
 }
+
+@media (max-width:639px) {
+  .puerh-home .tea-hero-content { padding-top: calc(104px + env(safe-area-inset-top)); padding-bottom: 28px; }
+  .puerh-home h1 { font-size: clamp(1.75rem,8vw,2.25rem); line-height: 1.12; margin-bottom: 18px; }
+  .puerh-home .tea-intro { line-height: 1.6; }
+  .puerh-home .tea-actions { margin-top: 20px; gap: 8px; }
+  .puerh-home .tea-button { min-height: 48px; }
+  .puerh-home .tea-button-outline { min-height: 44px; padding-block: 10px; }
+  .puerh-home .tea-conditions .shell { gap: 10px; padding-bottom: 20px; }
+  .puerh-home .tea-conditions p { font-size: .8125rem; }
+  .puerh-home .tea-category-links { flex-wrap: nowrap; gap: 22px; overflow-x: auto; overscroll-behavior-inline: contain; margin: 14px 0 22px; scrollbar-width: none; }
+  .puerh-home .tea-category-links a { flex: 0 0 auto; }
+  .puerh-home .tea-product h3 { font-size: 1rem; line-height: 1.4; }
+  .puerh-home .tea-product-type { font-size: .75rem; }
+  .puerh-home .tea-product-spec { font-size: .8125rem; }
+  .puerh-home .tea-product-info { padding-top: 14px; }
+}
+
+@media(max-width:639px){.puerh-home .tea-category-links::-webkit-scrollbar{display:none}.puerh-home .tea-category-links a:focus-visible{outline-offset:-2px}}

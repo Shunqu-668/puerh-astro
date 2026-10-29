@@ -16,5 +16,25 @@ const current = Astro.url.pathname.replace(/\/$/, '') + '/';
   a { display: inline-flex; align-items: center; min-height: 44px; color: #b7bac1; font-size: .85rem; border-bottom: 2px solid transparent; }
   a:hover { color: #f5f5f2; }
   a[aria-current] { color: #e8ad73; border-color: #e8ad73; }
-  @media(max-width:639px) { .category-nav { gap: 0 20px; margin-bottom: 20px; } a { font-size: .8rem; } }
+  @media(max-width:767px) {
+    .category-nav { flex-wrap: nowrap; gap: 22px; overflow-x: auto; overscroll-behavior-inline: contain; margin-bottom: 18px; padding-bottom: 8px; scrollbar-width: none; }
+    .category-nav::-webkit-scrollbar { display: none; }
+    a:focus-visible { outline-offset: -2px; }
+    a { flex: 0 0 auto; font-size: .875rem; }
+  }
 </style>
+
+<script>
+  const revealCurrentCategory = () => {
+    document.querySelectorAll<HTMLElement>('.category-nav').forEach(nav => {
+      const active = nav.querySelector<HTMLElement>('[aria-current="page"]');
+      if (!active || nav.scrollWidth <= nav.clientWidth) return;
+      const item = active.getBoundingClientRect();
+      const frame = nav.getBoundingClientRect();
+      nav.scrollLeft += item.left - frame.left - (nav.clientWidth - item.width) / 2;
+    });
+  };
+  revealCurrentCategory();
+  document.addEventListener('astro:page-load', revealCurrentCategory);
+  window.addEventListener('resize', revealCurrentCategory, {passive:true});
+</script>

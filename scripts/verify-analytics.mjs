@@ -64,7 +64,7 @@ try {
   await page.evaluate(() => document.dispatchEvent(new Event('astro:page-load')));
   await page.waitForTimeout(1100);
   assert.equal(goal('pd_article_read').length, 4);
-  await page.locator('.article-help').click();
+  await page.locator('.article-next .site-cta').click();
   await page.waitForURL('**/contact/**');
   await masked();
   await page.waitForTimeout(1100);

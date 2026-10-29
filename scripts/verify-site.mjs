@@ -500,14 +500,14 @@ try {
   await page.waitForURL('**/contact/**');
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Помощь с выбором чая');
   checks.push('sample batches, type filters, cross-filter review/removal, retry preservation and selection help');
-  for (const width of [360, 390, 768, 1024, 1440]) {
+  for (const width of [320, 360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of pages.map(file => '/' + path.relative(dist, file).replaceAll('\\', '/').replace(/index\.html$/, ''))) {
       await page.goto('https://puerhdirect.ru' + route);
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'horizontal overflow: ' + width + ' ' + route);
     }
   }
-  checks.push(`${pages.length * 5} route/viewport overflow checks: all ${pages.length} pages at five widths`);
+  checks.push(`${pages.length * 6} route/viewport overflow checks: all ${pages.length} pages at six widths`);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('https://puerhdirect.ru/');
   await screenshot('home-mobile.png');
@@ -630,6 +630,21 @@ try {
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Чай под своим брендом');
   checks.push('all five reading paths, article sharing metadata, related reading and brand inquiry context');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('https://puerhdirect.ru/catalog/product/2024-ripe-puerh-brick-black-pearl-xinwen/');
+  await page.locator('.product-mobile-action').waitFor({ state: 'visible' });
+  await page.locator('#menu-btn').click();
+  await page.locator('.product-mobile-action').waitFor({ state: 'hidden' });
+  assert.equal(await page.locator('.product-mobile-action').isVisible(), false, 'Menu must not compete with the bottom quote bar');
+  await page.keyboard.press('Escape');
+  await page.locator('.product-mobile-action .site-cta').click();
+  await page.waitForURL('**/contact/?product=*#inquiry-form');
+  await page.locator('#selected-product:not(.hidden)').waitFor();
+  assert.equal(new URL(page.url()).searchParams.get('product'), '2024-ripe-puerh-brick-black-pearl-xinwen');
+  assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
+  checks.push('mobile product quote bar preserves selected tea, hides under the menu, and opens the short inquiry');
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('https://puerhdirect.ru/catalog/other-tea/');
   await page.getByRole('contentinfo').getByRole('link', { name: 'Политика конфиденциальности' }).click();

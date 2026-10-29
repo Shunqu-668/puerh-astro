@@ -118,6 +118,10 @@ const productSchema = {
       <SelectionHelp />
     </div>
   </section>
+  <aside class="product-mobile-action" aria-label="Запрос цены на этот чай">
+    <div><span>Цена по запросу</span><strong>{p.nameRu}</strong></div>
+    <CTAButton href={`/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`}>Запросить цену</CTAButton>
+  </aside>
   <script type="application/ld+json" set:html={jsonLd(breadcrumbSchema)}></script>
   <script type="application/ld+json" set:html={jsonLd(productSchema)}></script>
 </Layout>

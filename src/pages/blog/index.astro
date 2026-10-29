@@ -4,13 +4,14 @@ import Layout from "../../components/Layout.astro";
 import CoverHero from "../../components/CoverHero.astro";
 import SelectionHelp from "../../components/SelectionHelp.astro";
 import { articlePaths } from "../../data/article-paths";
+import { articleMedia } from "../../data/article-media";
 import "../../styles/editorial.css";
 
 const posts = await getCollection("blog");
 posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const description = "Как выбрать чай и подготовиться к закупке. Образцы, свой бренд и вопросы к поставщику.";
-const firstRead = posts.find(post => post.id === 'shu-i-shen-puer-raznica');
+const firstRead = posts.find(post => post.id === 'kak-vybrat-postavshika-puera-v-kitae');
 ---
 
 <Layout
@@ -28,13 +29,15 @@ const firstRead = posts.find(post => post.id === 'shu-i-shen-puer-raznica');
 
   <div class="shell reading-index">
     {firstRead && <a class="reading-feature" href={`/blog/${firstRead.id}/`}>
-      <img src="/images/images/hero-bg.webp" alt="" width="1920" height="1080" loading="lazy" />
-      <div><span class="reading-category">С ЧЕГО НАЧАТЬ</span><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Разобраться перед выбором →</span></div>
+      <img src={articleMedia[firstRead.id].src} alt={articleMedia[firstRead.id].alt} width="800" height="600" loading="lazy" />
+      <div><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Разобраться перед выбором →</span></div>
     </a>}
     <div class="reading-grid">
       {posts.filter(post => post !== firstRead).map(post => <article class="reading-card"><a href={`/blog/${post.id}/`}>
-        <span class="reading-category">{articlePaths[post.id]?.category || 'О пуэре'}</span>
-        <h2>{post.data.title}</h2><p>{post.data.description}</p>
+        <div class="reading-card-top">
+          {articleMedia[post.id] && <img src={articleMedia[post.id].src} alt="" width="88" height="88" loading="lazy" />}
+          <div><h2>{post.data.title}</h2><span class="reading-card-meta">{articlePaths[post.id]?.category || 'О пуэре'}</span></div>
+        </div><p>{post.data.description}</p>
         <span class="reading-link">Читать статью →</span>
       </a></article>)}
     </div>

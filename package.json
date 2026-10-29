@@ -7,11 +7,12 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node scripts/verify-site.mjs && node scripts/verify-analytics.mjs && node scripts/verify-seo.mjs",
+    "test": "node scripts/verify-site.mjs && node scripts/verify-analytics.mjs && node scripts/verify-seo.mjs && node scripts/verify-blog-links.mjs",
     "test:analytics": "node scripts/verify-analytics.mjs",
     "test:seo": "node scripts/verify-seo.mjs",
     "brand:assets": "node scripts/generate-brand-assets.mjs",
-    "verify": "npm run build && npm test"
+    "verify": "npm run build && npm test",
+    "test:links": "node scripts/verify-blog-links.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
