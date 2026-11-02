@@ -498,6 +498,8 @@ try {
   assert.equal(await page.locator('.sample-card:visible').count(), 12);
   await page.locator('a[href="/contact/?topic=tea-selection#inquiry-form"]').click();
   await page.waitForURL('**/contact/**');
+  // URL arrival can precede the contact module applying the selected topic.
+  await page.locator('#selected-product-name').filter({ hasText: 'Помощь с выбором чая' }).waitFor({ state: 'visible' });
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Помощь с выбором чая');
   checks.push('sample batches, type filters, cross-filter review/removal, retry preservation and selection help');
   for (const width of [320, 360, 390, 768, 1024, 1440]) {
