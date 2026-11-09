@@ -1,11 +1,13 @@
 export interface Product {
   year: number;
   type: "ripe" | "raw";
-  shape: "cake" | "brick" | "tuocha";
+  shape: "cake" | "brick" | "tuocha" | "longzhu";
   slug: string;
   nameRu: string;
   nameEn: string;
   imgFile?: string;
+  heroPhoto?: string;
+  unitWeightUnconfirmed?: boolean;
   origin?: string;
   treeAge?: "gushu" | "arbor";
   descRu?: string;
@@ -23,7 +25,7 @@ export const products: Product[] = [
   { year: 2011, type: "ripe", shape: "brick", slug: "2011-ripe-puerh-brick-gongtingchazhuan-xiongfeng", nameRu: "Гунтин Чачжуань Сюнфэн", nameEn: "Gongting Chazhuan Xiongfeng", origin: "Menghai" },
   { year: 2012, type: "ripe", shape: "brick", slug: "2012-ripe-puerh-brick-ginseng", nameRu: "Женьшеневый Кирпич", nameEn: "Ginseng Brick", origin: "Yongde" },
   { year: 2012, type: "ripe", shape: "brick", slug: "2012-ripe-puerh-brick-jinzhenbailian", nameRu: "Цзиньчжэнь Байлянь", nameEn: "Jinzhen Bailian", origin: "Menghai" },
-  { year: 2012, type: "ripe", shape: "cake", slug: "2012-ripe-puerh-cake-bandaogongcha", nameRu: "Баньдао Гунча", nameEn: "Bandao Gongcha", origin: "Nannuo" },
+  { year: 2012, type: "ripe", shape: "cake", slug: "2012-ripe-puerh-cake-bandaogongcha", nameRu: "Биндао Гунтин Гунча", nameEn: "Bingdao Gongting Gongcha", origin: "Bingdao", heroPhoto: "/images/product-details/2012-ripe-puerh-cake-bandaogongcha/01f54690380b7fdc.jpg" },
   { year: 2013, type: "ripe", shape: "brick", slug: "2013-ripe-puerh-brick-banzhanggushu-yongfa", nameRu: "Баньчжан Гушу Юнфа", nameEn: "Banzhang Gushu Yongfa", origin: "Banzhang", treeAge: "gushu" },
   { year: 2013, type: "ripe", shape: "brick", slug: "2013-ripe-puerh-brick-bingdao-yongfa", nameRu: "Биндао Юнфа", nameEn: "Bingdao Yongfa", origin: "Bingdao", treeAge: "gushu" },
   { year: 2013, type: "ripe", shape: "brick", slug: "2013-ripe-puerh-brick-jujube-yongfa", nameRu: "Ююба Юнфа", nameEn: "Jujube Yongfa", origin: "Lincang" },
@@ -36,7 +38,7 @@ export const products: Product[] = [
   { year: 2014, type: "ripe", shape: "cake", slug: "2014-ripe-puerh-cake-gongtinggongpin-tianming", nameRu: "Гунтин Гунпинь Тяньмин", nameEn: "Gongting Gongpin Tianming", origin: "Menghai" },
   { year: 2016, type: "ripe", shape: "cake", slug: "2016-ripe-puerh-cake-chenyunchenpi-fuguiyuan", nameRu: "Чэньюнь Чэньпи Фугуйюань", nameEn: "Chenyun Chenpi Fuguiyuan", origin: "Menghai" },
   { year: 2017, type: "raw", shape: "cake", slug: "2017-raw-puerh-cake-bingdaogushu", nameRu: "Биндао Гушу", nameEn: "Bingdao Gushu", origin: "Bingdao", treeAge: "gushu", imgFile: "2017-raw-puerh-cake-bingdaogushu-0.jpg" },
-  { year: 2017, type: "raw", shape: "tuocha", slug: "2017-raw-puerh-tuocha-bulanglongzhu", nameRu: "Булан Лунчжу", nameEn: "Bulang Longzhu", origin: "Bulang", treeAge: "gushu" },
+  { year: 2017, type: "raw", shape: "longzhu", slug: "2017-raw-puerh-tuocha-bulanglongzhu", nameRu: "Булан Лунчжу", nameEn: "Bulang Longzhu", origin: "Bulang", treeAge: "gushu", unitWeightUnconfirmed: true, heroPhoto: "/images/product-details/2017-raw-puerh-tuocha-bulanglongzhu/334857f7fdf3ab0b.jpg" },
   { year: 2017, type: "ripe", shape: "cake", slug: "2017-ripe-puerh-cake-xiongfeng7571-xiongfeng", nameRu: "Сюнфэн 7571", nameEn: "Xiongfeng 7571", origin: "Menghai" },
   { year: 2017, type: "ripe", shape: "cake", slug: "2017-ripe-puerh-cake-xiongfengzhencanggongpin-xiongfeng", nameRu: "Сюнфэн Чжэньцан Гунпинь", nameEn: "Xiongfeng Zhencang Gongpin", origin: "Menghai" },
   { year: 2018, type: "raw", shape: "cake", slug: "2018-raw-puerh-cake-bulangchunyun", nameRu: "Булан Чуньюнь", nameEn: "Bulang Chunyun", origin: "Bulang", treeAge: "arbor" },
@@ -67,9 +69,11 @@ export const shapeLabels: Record<string, { ru: string; en: string }> = {
   cake: { ru: "Блин", en: "Cake" },
   brick: { ru: "Кирпич", en: "Brick" },
   tuocha: { ru: "Точа", en: "Tuocha" },
+  longzhu: { ru: "Лунчжу", en: "Longzhu" },
 };
 
 export function getProductImg(p: Product): string {
+  if (p.heroPhoto) return p.heroPhoto;
   let file = p.imgFile || `${p.slug}.jpg`;
   file = file.replace(/\.(jpg|jpeg|png)$/i, ".webp");
   return `/images/images/products/${p.slug}/${file}`;

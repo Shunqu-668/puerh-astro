@@ -61,17 +61,25 @@ assert.equal(pages.length, 57 + blogCount, 'Expected core routes plus published 
 assert.deepEqual([...new Set(failures)], [], 'Static site regressions');
 const specs = JSON.parse(fs.readFileSync(path.join(root, 'src/data/catalog-specs.json'), 'utf8'));
 const sourceSpecs = JSON.parse(fs.readFileSync(path.join(root, '../research/upstream-20260910/spec-candidates.json'), 'utf8'));
+const longzhuSlug = '2017-raw-puerh-tuocha-bulanglongzhu';
+const longzhuPath = `/catalog/product/${longzhuSlug}/`;
 assert.equal(specs.items.length, 42);
+assert.ok(specs.items.some(spec => spec.slug === longzhuSlug), 'Expected the source record with unconfirmed unit weight');
 assert.equal(new Set(specs.items.map(s => s.slug)).size, 42);
 for (const spec of specs.items) {
   const source = sourceSpecs.products.find(s => s.slug === spec.slug);
   assert.deepEqual([spec.grams, spec.cartonUnits, spec.source], [source.unitWeightGrams, source.unitsPerCartonCandidate, source.source]);
   const html = fs.readFileSync(path.join(dist, 'catalog/product', spec.slug, 'index.html'), 'utf8');
-  assert.ok(html.includes(spec.grams + ' г') && html.includes(spec.cartonUnits + ' шт.'));
   const structured = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([^]*?)<\/script>/g)].map(m => JSON.parse(m[1]));
   const productData = structured.find(item => item['@type'] === 'Product');
-  assert.equal(productData.weight.value, spec.grams);
-  assert.equal(productData.weight.unitCode, 'GRM');
+  assert.ok(productData, `Missing Product for ${spec.slug}`);
+  if (spec.slug === longzhuSlug) {
+    assert.equal(Object.hasOwn(productData, 'weight'), false, 'Longzhu has no confirmed single-piece weight');
+  } else {
+    assert.ok(html.includes(spec.grams + ' г') && html.includes(spec.cartonUnits + ' шт.'), `Missing verified measures for ${spec.slug}`);
+    assert.equal(productData.weight.value, spec.grams, spec.slug);
+    assert.equal(productData.weight.unitCode, 'GRM', spec.slug);
+  }
   assert.equal(productData.offers, undefined, 'Do not invent price or stock for structured data');
   for (const picture of html.matchAll(/<picture[^>]*>([^]*?)<\/picture>/g)) {
     const image = picture[1].match(/<img\b[^>]*>/)?.[0] || '';
@@ -165,12 +173,24 @@ try {
   checks.push('catalogue search, combined filters, empty/reset, reload/back and category controls');
   checks.push('all 42 specifications match captured supplier sources and product pages');
   await page.goto('https://puerhdirect.ru/catalog/');
-  const initialOrder = await page.locator('[data-catalog-item] a').evaluateAll(links => links.map(a => a.getAttribute('href')));
+  const catalogLinks = page.locator('[data-catalog-item]:visible a.product-card');
+  const readOrder = () => catalogLinks.evaluateAll(links => links.map(a => a.getAttribute('href')));
+  const initialOrder = await readOrder();
+  const knownWeights = new Map(specs.items.filter(spec => spec.slug !== longzhuSlug)
+    .map(spec => [`/catalog/product/${spec.slug}/`, spec.grams]));
+  assert.deepEqual(new Set(initialOrder), new Set([...knownWeights.keys(), longzhuPath]));
   for (const sorting of ['year-desc', 'year-asc', 'weight-asc', 'weight-desc']) {
     await page.locator('#tea-sort').selectOption(sorting);
     const [key, direction] = sorting.split('-');
-    const values = await page.locator('[data-catalog-item]:visible').evaluateAll((items, key) => items.map(i => Number(i.dataset[key])), key);
-    assert.deepEqual(values, [...values].sort((a, b) => (a - b) * (direction === 'desc' ? -1 : 1)));
+    const sign = direction === 'desc' ? -1 : 1;
+    if (key === 'weight') {
+      const knownOrder = initialOrder.filter(href => knownWeights.has(href));
+      knownOrder.sort((a, b) => sign * (knownWeights.get(a) - knownWeights.get(b)));
+      assert.deepEqual(await readOrder(), [...knownOrder, longzhuPath], sorting);
+    } else {
+      const years = await page.locator('[data-catalog-item]:visible').evaluateAll(items => items.map(i => Number(i.dataset.year)));
+      assert.deepEqual(years, [...years].sort((a, b) => sign * (a - b)));
+    }
   }
   await page.locator('#tea-type').selectOption('raw');
   await page.reload();
@@ -182,6 +202,14 @@ try {
   assert.equal(await page.locator('#tea-sort').inputValue(), '');
   checks.push('catalog year/weight ordering, combined filter persistence, original order reset and invalid query');
   await page.goto('https://puerhdirect.ru/catalog/');
+  await page.locator('#tea-shape').selectOption('longzhu');
+  assert.deepEqual(await readOrder(), [longzhuPath], 'The portioned tea has its own catalogue shape');
+  await page.reload();
+  assert.equal(await page.locator('#tea-shape').inputValue(), 'longzhu');
+  await page.locator('[data-reset-filters]').click();
+  await page.locator('#tea-search').fill('500');
+  assert.ok(await catalogLinks.count() > 0, 'The catalogue contains confirmed 500 g products');
+  assert.ok(!(await readOrder()).includes(longzhuPath), 'Searching by weight must not suggest Longzhu as a 500 g piece');
   await page.locator('#tea-search').fill('медов');
   assert.ok(await page.locator('[data-catalog-item]:visible').count() > 3, 'Taste search returns a useful selection');
   assert.ok(await page.locator('[data-catalog-item]:visible').evaluateAll(items => items.every(i => /медов/i.test(i.dataset.search))));
@@ -277,13 +305,17 @@ try {
   const inquiryLabel = 'Чёрный Жемчуг Синьвэнь · 2024 · Шу Пуэр · 250 г';
   assert.equal(await page.locator('[name="product_requested"]').inputValue(), inquiryLabel);
   assert.equal(await page.locator('#selected-product-name').textContent(), inquiryLabel);
-  // All inquiry choices carry the existing source-backed weight and tea type, not query text.
+  // Check the same product identity buyers see in a prefilled inquiry.
   const inquiryCatalogue = JSON.parse(await page.locator('#inquiry-form').getAttribute('data-product-catalog'));
   assert.equal(inquiryCatalogue.length, 42);
   for (const spec of specs.items) {
     const choice = inquiryCatalogue.find(item => item.slug === spec.slug);
     assert.ok(choice, `Missing inquiry choice ${spec.slug}`);
-    assert.ok(choice.name.endsWith(` · ${spec.grams} г`), `Wrong inquiry weight ${spec.slug}`);
+    if (spec.slug === longzhuSlug) {
+      assert.doesNotMatch(choice.name, /500/, 'Unconfirmed weight in Longzhu inquiry');
+    } else {
+      assert.ok(choice.name.endsWith(` · ${spec.grams} г`), `Wrong inquiry weight ${spec.slug}`);
+    }
     assert.ok(choice.name.includes(spec.slug.includes('-raw-') ? 'Шэн Пуэр' : 'Шу Пуэр'), `Wrong inquiry tea type ${spec.slug}`);
   }
   await screenshot('inquiry-context-desktop.png');
@@ -400,6 +432,19 @@ try {
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), '');
   assert.equal(await page.locator('#selected-product').isVisible(), false);
   checks.push('service inquiry carries verified removable topic without extra fields');
+  await page.goto('https://puerhdirect.ru' + longzhuPath);
+  const telegramDraft = new URL(await page.locator('.product-direct-chat').getAttribute('href')).searchParams.get('text');
+  assert.ok(telegramDraft.includes('Булан Лунчжу') && telegramDraft.includes(longzhuPath));
+  assert.doesNotMatch(telegramDraft, /500/, 'Telegram must ask about the correct SKU without inventing a unit weight');
+  await page.getByRole('link', { name: 'Выбрать образец', exact: true }).click();
+  await page.waitForURL('**/sample/**');
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '1');
+  const longzhuSample = page.locator('.sample-card').filter({ has: page.locator(`input[value="${longzhuSlug}"]`) });
+  assert.ok(await longzhuSample.locator('input').isChecked());
+  assert.doesNotMatch(await longzhuSample.innerText(), /500/);
+  const sampleRequest = await page.locator('[name="selected_samples"]').inputValue();
+  assert.ok(sampleRequest.includes(longzhuSlug) && sampleRequest.includes('Булан Лунчжу'));
+  assert.doesNotMatch(sampleRequest, /500/);
   await page.goto('https://puerhdirect.ru' + productPath);
   await page.getByRole('link', { name: 'Выбрать образец', exact: true }).click();
   await page.waitForURL('**/sample/**');

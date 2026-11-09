@@ -67,7 +67,7 @@ import { teaProfiles } from '../data/tea-profiles';
                   <Picture src={getProductImg(p)} fallback={getProductImg(p).replace(/\.webp$/, ".jpg")} alt={p.nameRu} class="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <span class="text-xs font-bold text-ink text-center leading-tight">{p.nameRu}</span>
-                <span class="sample-card-meta">{p.year} · {typeLabels[p.type]?.ru} · {shapeLabels[p.shape]?.ru}</span>
+                <span class="sample-card-meta">{p.year} · {typeLabels[p.type]?.ru} · {shapeLabels[p.shape]?.ru}{p.unitWeightUnconfirmed && ' · фасовку уточним'}</span>
                 <span class="sample-card-taste">{teaProfiles[p.slug].notes.slice(0, 2).join(' · ') || teaProfiles[p.slug].occasion}</span>
                 <span class="sr-only" lang="en">{p.nameEn}</span>
               </label>

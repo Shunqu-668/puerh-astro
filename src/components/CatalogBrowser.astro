@@ -21,7 +21,7 @@ const { products, fixedType } = Astro.props;
     </div>
     <div id="tea-filter-shape" class="catalog-filter-field">
       <label for="tea-shape" class="form-label">Форма</label>
-      <select id="tea-shape" name="shape" class="form-input"><option value="">Все формы</option><option value="cake">Блин</option><option value="brick">Кирпич</option><option value="tuocha">Точа</option></select>
+      <select id="tea-shape" name="shape" class="form-input"><option value="">Все формы</option><option value="cake">Блин</option><option value="brick">Кирпич</option><option value="tuocha">Точа</option>{products.some(p => p.shape === 'longzhu') && <option value="longzhu">Лунчжу</option>}</select>
     </div>
   </form>
   <div class="catalog-results-bar">
@@ -39,7 +39,7 @@ const { products, fixedType } = Astro.props;
     </div>
   </div>
   <div class="catalog-grid">
-    {products.map(p => <div data-catalog-item data-year={p.year} data-weight={catalogSpecs.get(p.slug)!.grams} data-kind={p.type} data-shape={p.shape} data-search={`${p.nameRu} ${p.nameEn} ${p.year} ${typeLabels[p.type].ru} ${shapeLabels[p.shape].ru} ${catalogSpecs.get(p.slug)!.grams} ${teaProfiles[p.slug].maker || ''} ${teaProfiles[p.slug].notes.join(' ')} ${teaProfiles[p.slug].occasion}`}>
+    {products.map(p => <div data-catalog-item data-year={p.year} data-weight={p.unitWeightUnconfirmed ? undefined : catalogSpecs.get(p.slug)!.grams} data-kind={p.type} data-shape={p.shape} data-search={`${p.nameRu} ${p.nameEn} ${p.year} ${typeLabels[p.type].ru} ${shapeLabels[p.shape].ru} ${p.unitWeightUnconfirmed ? '' : catalogSpecs.get(p.slug)!.grams} ${teaProfiles[p.slug].maker || ''} ${teaProfiles[p.slug].notes.join(' ')} ${teaProfiles[p.slug].occasion}`}>
       <ProductCard product={p} />
     </div>)}
   </div>

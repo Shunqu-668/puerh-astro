@@ -63,13 +63,23 @@ for (const file of files) {
     seen[key].set(value, route);
   }
   const product = nodes.find(n => n['@type'] === 'Product');
+  if (route.startsWith('/catalog/product/')) check(!!product, route, 'Missing Product entity');
   if (product) {
     check(product.url === canonical && product['@id'] === canonical + '#product', route, 'Product URL/id missing');
     check(product.offers === undefined && product.aggregateRating === undefined && product.review === undefined, route, 'Unverified price/review introduced');
-    check(product.image?.length > 0 && product.weight?.value > 0, route, 'Product identity/specification missing');
-    const weightLabel = route.includes('2017-raw-puerh-tuocha-bulanglongzhu') ? 'Фасовка по каталогу' : 'Вес единицы';
-    check(['Вид чая', 'Год выпуска', 'Форма', weightLabel, 'В коробке'].every(label => html.includes(label)), route, 'Visible product specifications missing');
-    if (weightLabel === 'Фасовка по каталогу') check(html.includes('состав упаковки уточняется') && html.includes('500'), route, 'Longzhu packaging uncertainty must remain visible');
+    check(product.image?.length > 0, route, 'Product image missing');
+    const specsHtml = crawlHtml.match(/<dl\b[^>]*class="product-specs"[^>]*>([^]*?)<\/dl>/)?.[1] || '';
+    check(['Вид чая', 'Год выпуска', 'Форма'].every(label => specsHtml.includes(label)), route, 'Visible product specifications missing');
+    if (route === '/catalog/product/2017-raw-puerh-tuocha-bulanglongzhu/') {
+      check(!Object.hasOwn(product, 'weight'), route, 'Longzhu has no verified unit weight');
+      const specText = specsHtml.replace(/<[^>]+>/g, ' ');
+      check(/каталог/iu.test(specText) && /500\s*г/u.test(specText) && /20\s*шт/u.test(specText) && /уточн/iu.test(specText),
+        route, 'Show both supplier figures with their catalogue origin and unconfirmed unit');
+      check(!/<dt[^>]*>\s*(?:Вес единицы|В коробке)\s*<\/dt>/iu.test(specsHtml), route, 'Unverified unit or carton figure presented as a confirmed specification');
+    } else {
+      check(product.weight?.value > 0 && product.weight?.unitCode === 'GRM', route, 'Verified product weight missing');
+      check(['Вес единицы', 'В коробке'].every(label => specsHtml.includes(label)), route, 'Verified unit and carton specifications missing');
+    }
   }
   const faq = nodes.find(n => n['@type'] === 'FAQPage');
   if (faq) {

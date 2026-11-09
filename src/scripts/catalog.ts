@@ -37,7 +37,12 @@ function setupCatalog() {
       const ordered = [...items];
       if (sort.value) {
         const [key, direction] = sort.value.split('-');
-        ordered.sort((a, b) => (Number(a.dataset[key]) - Number(b.dataset[key])) * (direction === 'desc' ? -1 : 1));
+        ordered.sort((a, b) => {
+          const left = a.dataset[key];
+          const right = b.dataset[key];
+          if (left === undefined || right === undefined) return Number(left === undefined) - Number(right === undefined);
+          return (Number(left) - Number(right)) * (direction === 'desc' ? -1 : 1);
+        });
       }
       ordered.forEach(item => grid.append(item));
       if (writeUrl) {
@@ -53,7 +58,8 @@ function setupCatalog() {
       const params = new URLSearchParams(location.search);
       query.value = params.get('q') || '';
       if (type) type.value = ['raw', 'ripe'].includes(params.get('type') || '') ? params.get('type')! : '';
-      shape.value = ['cake', 'brick', 'tuocha'].includes(params.get('shape') || '') ? params.get('shape')! : '';
+      const requestedShape = params.get('shape') || '';
+      shape.value = Array.from(shape.options).some(option => option.value === requestedShape) ? requestedShape : '';
       sort.value = ['year-desc', 'year-asc', 'weight-asc', 'weight-desc'].includes(params.get('sort') || '') ? params.get('sort')! : '';
       apply(false);
     }

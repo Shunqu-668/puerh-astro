@@ -18,5 +18,6 @@ for (const product of products) {
 export function productInquiryLabel(product: Product): string {
   const spec = catalogSpecs.get(product.slug);
   if (!spec) throw new Error(`Missing inquiry specifications: ${product.slug}`);
-  return `${product.nameRu} · ${product.year} · ${typeLabels[product.type].ru} · ${spec.grams} г`;
+  const weight = product.unitWeightUnconfirmed ? 'фасовку уточним' : `${spec.grams} г`;
+  return `${product.nameRu} · ${product.year} · ${typeLabels[product.type].ru} · ${weight}`;
 }
