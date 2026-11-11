@@ -1,6 +1,9 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/blog/proverka-pressovki-puera-na-obrazce/": "2026-11-11",
+  "/blog/proizvodstvo-puera-ot-lista-do-blina/": "2026-11-11",
+  "/blog/": "2026-11-11",
   "/catalog/product/2005-raw-puerh-cake-laochendecha/": "2026-11-09",
   "/catalog/product/2012-ripe-puerh-cake-bandaogongcha/": "2026-11-09",
   "/catalog/product/2017-raw-puerh-tuocha-bulanglongzhu/": "2026-11-09",
