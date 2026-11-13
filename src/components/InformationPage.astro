@@ -3,8 +3,8 @@ import Layout from './Layout.astro';
 import CoverHero from './CoverHero.astro';
 import CTAButton from './CTAButton.astro';
 import CategoryNav from './CategoryNav.astro';
-interface Props { title: string; description: string; path: string; image?: string; imagePosition?: string; eyebrow?: string; actionTitle?: string; actionText?: string; actionHref?: string; }
-const { title, description, path, image = '/images/images/catalog-header.webp', eyebrow = 'PUERH DIRECT', actionTitle = 'Обсудим ваш запрос', actionText = 'Связаться с нами', actionHref } = Astro.props;
+interface Props { title: string; description: string; path: string; image?: string; imagePosition?: string; eyebrow?: string; actionTitle?: string; actionText?: string; actionHref?: string; sampleHref?: string; sampleLabel?: string; }
+const { title, description, path, image = '/images/images/catalog-header.webp', eyebrow = 'PUERH DIRECT', actionTitle = 'Обсудим ваш запрос', actionText = 'Связаться с нами', actionHref, sampleHref = '/sample/', sampleLabel = 'Платные образцы' } = Astro.props;
 const topic = ({ '/private-label/': 'private-label', '/catalog/teaware/': 'teaware', '/catalog/other-tea/': 'other-tea', '/compliance/': 'documents' } as Record<string, string>)[path];
 const inquiryHref = actionHref || (topic ? `/contact/?topic=${topic}#inquiry-form` : '/contact/#inquiry-form');
 const guidance = ({
@@ -25,7 +25,7 @@ const guidance = ({
     </section>
     <nav class="info-related" aria-label="Продолжить знакомство">
       <a href="/catalog/">Каталог чая →</a>
-      {path !== '/sample/' && <a href="/sample/">Платные образцы →</a>}
+      {path !== '/sample/' && <a href={sampleHref}>{sampleLabel} →</a>}
       {path !== '/faq/' && <a href="/faq/">Вопросы перед заказом →</a>}
       {path !== '/about/' && <a href="/about/">Как мы работаем →</a>}
     </nav>

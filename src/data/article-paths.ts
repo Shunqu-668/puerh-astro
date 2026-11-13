@@ -15,9 +15,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   "puer-lunchzhu-ves-upakovka": {"category": "Первая закупка", "label": "Уточнить чай и фасовку", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Укажите шу или шэн, массу шарика, общий объём и нужную упаковку. Уточним чай и условия по вашему запросу.", "related": ["dannye-dlya-kartochki-puera", "kak-sravnit-obraztsy-shu-puera"]},
   "rassypnoy-puer-zayavka-postavshchiku": {
     "category": "Закупка рассыпного чая",
-    "label": "Обсудить заявку на рассыпной пуэр",
-    "href": "/contact/?topic=tea-selection#inquiry-form",
-    "description": "Опишите шу или шэн, нужный объём и фасовку. Эти данные помогут обсудить подбор рассыпного чая.",
+    "label": "Запросить подбор и цену за кг",
+    "href": "/contact/?topic=loose-puerh#inquiry-form",
+    "description": "Укажите шу или шэн, примерный объём и фасовку. Уточним подходящие варианты, условия платного образца и расчёт за килограмм.",
     "related": [
       "stoimost-partii-puera",
       "povtornaya-zakupka-shu-puera"

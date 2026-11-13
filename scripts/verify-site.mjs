@@ -57,7 +57,7 @@ for (const file of pages) {
   }
 }
 const blogCount = fs.readdirSync(path.join(root, 'src/content/blog')).filter(name => name.endsWith('.md')).length;
-assert.equal(pages.length, 57 + blogCount, 'Expected core routes plus published articles');
+assert.equal(pages.length, 58 + blogCount, 'Expected core routes including loose-tea supply plus published articles');
 assert.deepEqual([...new Set(failures)], [], 'Static site regressions');
 const specs = JSON.parse(fs.readFileSync(path.join(root, 'src/data/catalog-specs.json'), 'utf8'));
 const sourceSpecs = JSON.parse(fs.readFileSync(path.join(root, '../research/upstream-20260910/spec-candidates.json'), 'utf8'));
@@ -644,7 +644,7 @@ try {
   assert.equal(await page.locator('.faq-list details').first().getAttribute('open'), '');
   checks.push('article contents anchors, readable heading styles and FAQ disclosure');
   // The new cross-page paths must retain category and inquiry context.
-  for (const route of ['/catalog/', '/catalog/raw-puerh/', '/catalog/ripe-puerh/', '/catalog/teaware/', '/catalog/other-tea/']) {
+  for (const route of ['/catalog/', '/catalog/raw-puerh/', '/catalog/ripe-puerh/', '/catalog/teaware/', '/catalog/other-tea/', '/catalog/loose-puerh/']) {
     await page.goto('https://puerhdirect.ru' + route);
     assert.equal(await page.locator('.category-nav [aria-current="page"]').count(), 1);
     assert.equal(await page.locator('.category-nav [aria-current="page"]').getAttribute('href'), route);
@@ -661,6 +661,14 @@ try {
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Документы к заказу');
   assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
   checks.push('category active state and FAQ-to-documents-to-short-inquiry path');
+  await page.goto('https://puerhdirect.ru/catalog/loose-puerh/');
+  await page.locator('.loose-actions .site-cta').click();
+  await page.waitForURL('**/contact/?topic=loose-puerh#inquiry-form');
+  await page.locator('#selected-product:not(.hidden)').waitFor();
+  assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Рассыпной пуэр: подбор и цена за кг');
+  assert.equal(await page.locator('[name="product_sku"]').inputValue(), '', 'Loose tea request must not pretend to select a catalogue SKU');
+  checks.push('loose tea service preserves its inquiry topic without inventing a product');
+
   await page.goto('https://puerhdirect.ru/blog/');
   assert.equal(await page.locator('.reading-feature, .reading-card').count(), blogCount);
   const articleUrls = await page.locator('.reading-feature, .reading-card a').evaluateAll(links => links.map(a => a.href));
