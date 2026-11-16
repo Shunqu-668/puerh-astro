@@ -1,14 +1,15 @@
 // Only fixed event names and non-personal, allowlisted context leave the site.
+import { activeArticle, currentPurchaseSource, sourceForBuyingLink, sourceParameters, type ArticleEntry } from './article-source';
 export const goalNames = ['pd_inquiry_click', 'pd_sample_select', 'pd_inquiry_start', 'pd_inquiry_success', 'pd_sample_success', 'pd_contact_click', 'pd_article_read', 'pd_product_view', 'pd_form_error'] as const;
 type Goal = typeof goalNames[number];
 export type FormError = 'validation' | 'selection' | 'server' | 'response' | 'network' | 'timeout';
 type Context = { form?: 'contact' | 'sample'; destination?: 'contact' | 'sample'; channel?: 'telegram' | 'whatsapp' | 'vk' | 'email' | 'phone'; sku?: string; depth?: 25 | 50 | 75 | 100; error?: FormError };
 type MetricsWindow = Window & { ym?: (...args: unknown[]) => void };
-export function trackGoal(goal: Goal, context: Context = {}) {
+export function trackGoal(goal: Goal, context: Context = {}, article: ArticleEntry | null | undefined = currentPurchaseSource()) {
   if (!['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname)) return;
   const ym = (window as MetricsWindow).ym;
   if (typeof ym !== 'function') return;
-  const params: Record<string, string> = {};
+  const params = sourceParameters(article ?? undefined);
   if (/^\/[a-z0-9/-]*$/.test(location.pathname)) params.page = location.pathname;
   if (context.form && ['contact', 'sample'].includes(context.form)) params.form = context.form;
   if (context.destination && ['contact', 'sample'].includes(context.destination)) params.destination = context.destination;
@@ -28,7 +29,7 @@ document.addEventListener('click', event => {
   if (url.origin === location.origin) {
     const route = url.pathname.replace(/\/+$/, '');
     if (route === '/contact' || route === '/sample') {
-      trackGoal('pd_inquiry_click', { destination: route === '/sample' ? 'sample' : 'contact' });
+      trackGoal('pd_inquiry_click', { destination: route === '/sample' ? 'sample' : 'contact' }, sourceForBuyingLink(anchor));
     }
     return;
   }
@@ -36,7 +37,7 @@ document.addEventListener('click', event => {
     : ['t.me', 'telegram.me'].includes(url.hostname) ? 'telegram'
     : ['wa.me', 'api.whatsapp.com'].includes(url.hostname) ? 'whatsapp'
     : ['vk.com', 'vk.ru'].includes(url.hostname) ? 'vk' : undefined;
-  if (channel) trackGoal('pd_contact_click', { channel });
+  if (channel) trackGoal('pd_contact_click', { channel }, sourceForBuyingLink(anchor));
 });
 
 let initialized = false;
@@ -74,7 +75,7 @@ function trackPageContent() {
     for (const threshold of [25, 50, 75, 100] as const) {
       if (!sent.has(threshold) && depth + 0.1 >= threshold && visibleMs >= threshold * 200) {
         sent.add(threshold);
-        trackGoal('pd_article_read', { depth: threshold });
+        trackGoal('pd_article_read', { depth: threshold }, activeArticle());
       }
     }
   };
@@ -101,7 +102,7 @@ export function initializeAnalytics() {
   let previousPage = location.pathname;
   document.addEventListener('astro:page-load', () => {
     if (location.pathname !== previousPage) {
-      w.ym(109468811, 'hit', location.pathname, { title: document.title, referer: previousPage });
+      w.ym(109468811, 'hit', location.pathname, { title: document.title, referer: previousPage, params: sourceParameters(currentPurchaseSource()) });
       previousPage = location.pathname;
     }
     trackPageContent();

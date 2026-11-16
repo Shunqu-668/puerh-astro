@@ -3,6 +3,8 @@ export const inquiryTopics: Record<string, string> = {
   'loose-puerh': 'Рассыпной пуэр: подбор и цена за кг',
   'private-label': 'Чай под своим брендом',
   'teaware': 'Чайная посуда',
+  'batch-quote': 'Расчёт стоимости партии чая',
+  'mixed-order': 'Проверка списка чая для сборного заказа',
   'repeat-order': 'Повторная закупка или замена чая',
   'marketplace-tea': 'Фасовка чая для маркетплейса',
   'other-tea': 'Подбор листового китайского чая и оптовая цена',

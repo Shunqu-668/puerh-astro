@@ -1,5 +1,7 @@
+import type { PurchaseSource } from './article-source';
+
 /** Web3Forms renders custom fields as email rows; omit absent context and duplicates. */
-export function inquiryPayload(form: HTMLFormElement, pagePath: string): FormData {
+export function inquiryPayload(form: HTMLFormElement, pagePath: string, article?: PurchaseSource): FormData {
   const source = new FormData(form);
   const body = new FormData();
   const copy = (key: string, label = key) => {
@@ -19,6 +21,11 @@ export function inquiryPayload(form: HTMLFormElement, pagePath: string): FormDat
   copy('selected_samples', 'Образцы');
   copy('destination', 'Город');
   copy('message', 'Комментарий');
+  if (article) {
+    body.set('Статья', `https://puerhdirect.ru/blog/${article.slug}/`);
+    if (article.channel === 'vk_wall') body.set('Канал перехода к статье', 'Сообщество VK');
+    if (article.channel === 'vk_channel') body.set('Канал перехода к статье', 'Канал VK');
+  }
   // Do not forward query parameters, which could contain unrelated personal data.
   body.set('Страница', `https://puerhdirect.ru${pagePath}`);
   return body;

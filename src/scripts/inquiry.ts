@@ -1,4 +1,5 @@
 import { inquiryPayload } from './inquiry-payload';
+import { currentPurchaseSource, clearPurchaseSource } from './article-source';
 import { trackGoal, type FormError } from './analytics';
 
 const initialized = new WeakSet<HTMLFormElement>();
@@ -213,16 +214,18 @@ function setupInquiries() {
       form.setAttribute('aria-busy', 'true');
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), 15000);
+      const articleSource = currentPurchaseSource();
       let failure: FormError = 'network';
       try {
         const response = await fetch(form.action, {
-          method: 'POST', body: inquiryPayload(form, location.pathname), signal: controller.signal,
+          method: 'POST', body: inquiryPayload(form, location.pathname, articleSource), signal: controller.signal,
         });
         if (!response.ok) { failure = 'server'; throw new Error('Submission rejected'); }
         failure = 'response';
         const data = await response.json();
         if (data.success !== true) { failure = 'server'; throw new Error('Submission rejected'); }
-        trackGoal(formType === 'sample' ? 'pd_sample_success' : 'pd_inquiry_success', { form: formType });
+        trackGoal(formType === 'sample' ? 'pd_sample_success' : 'pd_inquiry_success', { form: formType }, articleSource ?? null);
+        if (form.isConnected) clearPurchaseSource();
         started = false;
         form.reset();
         updateSamples();
