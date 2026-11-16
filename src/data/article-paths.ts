@@ -8,10 +8,10 @@ export interface ArticlePath {
 }
 
 export const articlePaths: Record<string, ArticlePath> = {
-  "rezerv-puera-dlya-neskolkih-postavok": {"category": "План закупок", "label": "Обсудить резерв и график поставок", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Укажите чай, общий объём и график: сколько и когда нужно отгрузить. Проверим доступный вариант и обсудим возможность резерва, его срок и условия расчёта.", "related": ["povtornaya-zakupka-shu-puera", "zakaz-puera-neskolko-pozitsiy"]},
+  "rezerv-puera-dlya-neskolkih-postavok": {"category": "План закупок", "label": "Обсудить резерв и график поставок", "href": "/contact/?topic=repeat-order#inquiry-form", "description": "Укажите чай, общий объём и график: сколько и когда нужно отгрузить. Проверим доступный вариант и обсудим возможность резерва, его срок и условия расчёта.", "related": ["povtornaya-zakupka-shu-puera", "zakaz-puera-neskolko-pozitsiy"]},
   "proverka-pressovki-puera-na-obrazce": {"category": "Проверка образцов", "label": "Подобрать чай и платные образцы", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Укажите форму чая, способ использования и предполагаемый объём. Уточним подходящие варианты, вид платного образца и условия дальнейшего расчёта партии.", "related": ["kak-sravnit-obraztsy-shu-puera", "ot-obraztsa-k-partii-puera"]},
   "zakaz-puera-neskolko-pozitsiy": {"category": "Состав заказа", "label": "Проверить список чая", "href": "/contact/?topic=mixed-order#inquiry-form", "description": "Пришлите список с количеством по каждой позиции. Мы отметим, какие выпуски доступны и что нужно уточнить перед сборкой.", "related": ["ot-obraztsa-k-partii-puera", "stoimost-partii-puera"]},
-  "foto-puera-dlya-prodazhi": {"category": "Материалы для продажи", "label": "Обсудить чай и материалы", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Укажите выбранный чай, продаваемую единицу и какие сведения или фотографии вам нужны. Доступные материалы и условия подготовки обсудим отдельно.", "related": ["dannye-dlya-kartochki-puera", "maket-upakovki-puera-pered-pechatyu"]},
+  "foto-puera-dlya-prodazhi": {"category": "Материалы для продажи", "label": "Запросить фото для карточки чая", "href": "/contact/?topic=product-materials#inquiry-form", "description": "Укажите чай, упаковку и недостающий ракурс. Уточним, какие снимки доступны для публикации.", "related": ["dannye-dlya-kartochki-puera", "maket-upakovki-puera-pered-pechatyu"]},
   "podbor-puera-po-foto-upakovki": {"category": "Подбор чая", "label": "Обсудить поиск пуэра", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Начните с названия или ссылки на знакомый чай. Укажите, нужен ли тот же выпуск и какие отличия допустимы.", "related": ["povtornaya-zakupka-shu-puera", "rassypnoy-puer-zayavka-postavshchiku"]},
   "puer-lunchzhu-ves-upakovka": {"category": "Первая закупка", "label": "Уточнить чай и фасовку", "href": "/contact/?topic=tea-selection#inquiry-form", "description": "Укажите шу или шэн, массу шарика, общий объём и нужную упаковку. Уточним чай и условия по вашему запросу.", "related": ["dannye-dlya-kartochki-puera", "kak-sravnit-obraztsy-shu-puera"]},
   "rassypnoy-puer-zayavka-postavshchiku": {
@@ -36,9 +36,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "povtornaya-zakupka-shu-puera": {
     "category": "Повторная закупка",
-    "label": "Обсудить повторную поставку",
-    "href": "/contact/#inquiry-form",
-    "description": "Укажите знакомый выпуск или пришлите фото упаковки. Наличие партии и условия повторной поставки проверим отдельно.",
+    "label": "Проверить прежний выпуск шу",
+    "href": "/contact/?topic=repeat-order#inquiry-form",
+    "description": "Укажите прежний выпуск, нужное количество и дату пополнения. Проверим его доступность и отдельно обсудим образец, если потребуется замена.",
     "related": [
       "kak-sravnit-obraztsy-shu-puera",
       "khranenie-puera-usloviya-vyderzhki"
@@ -56,9 +56,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "dannye-dlya-kartochki-puera": {
     "category": "Для продавцов",
-    "label": "Уточнить сведения о чае",
-    "href": "/contact/?topic=tea-selection#inquiry-form",
-    "description": "Укажите выбранный чай и площадку. Обсудим, какие сведения и фотографии нужны для вашей карточки.",
+    "label": "Запросить данные для карточки",
+    "href": "/contact/?topic=product-materials#inquiry-form",
+    "description": "Укажите чай, площадку и продаваемую единицу. Уточним, какие сведения и снимки этого выпуска можно предоставить для размещения.",
     "related": [
       "maket-upakovki-puera-pered-pechatyu",
       "privatnaya-marka-puera-rukovodstvo"
@@ -76,9 +76,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "ot-obraztsa-k-partii-puera": {
     "category": "Согласование поставки",
-    "label": "Обсудить выбранную партию",
-    "href": "/contact/#inquiry-form",
-    "description": "Пришлите название выбранного чая и нужное количество. Партию и условия заказа подтвердим отдельно.",
+    "label": "Уточнить партию по образцу",
+    "href": "/contact/?topic=batch-quote#inquiry-form",
+    "description": "Укажите маркировку образца и нужное количество. Уточним, доступна ли та же партия, и обсудим расчёт для выбранной упаковки.",
     "related": [
       "stoimost-partii-puera",
       "povtornaya-zakupka-shu-puera"
@@ -96,9 +96,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "kak-vybrat-postavshika-puera-v-kitae": {
     "category": "Первая закупка",
-    "label": "Выбрать платные образцы",
+    "label": "Запросить образец для проверки",
     "href": "/sample/",
-    "description": "Для первого сравнения можно выбрать платные образцы. Состав набора и доставку согласуем до отправки.",
+    "description": "Выберите знакомую позицию из каталога. Уточним, какую пробу можно подготовить, сколько она стоит и во что обойдётся пересылка.",
     "related": [
       "kak-sravnit-obraztsy-shu-puera",
       "stoimost-partii-puera"
@@ -116,9 +116,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "proizvodstvo-puera-ot-lista-do-blina": {
     "category": "О чае",
-    "label": "Посмотреть пуэр",
-    "href": "/catalog/",
-    "description": "Посмотрите фабричные выпуски в каталоге. Свою упаковку можно обсудить для уже выбранного чая.",
+    "label": "Подобрать форму пуэра",
+    "href": "/contact/?topic=tea-selection#inquiry-form",
+    "description": "Расскажите, как будете продавать чай: на развес, целым блином или порциями. Подберём форму для сравнения и уточним условия пробы.",
     "related": [
       "shu-i-shen-puer-raznica",
       "privatnaya-marka-puera-rukovodstvo"
@@ -126,9 +126,9 @@ export const articlePaths: Record<string, ArticlePath> = {
   },
   "khranenie-puera-usloviya-vyderzhki": {
     "category": "После закупки",
-    "label": "Обсудить условия заказа",
-    "href": "/contact/#inquiry-form",
-    "description": "Если выбираете чай для своего запаса, расскажите о планируемом объёме и условиях хранения.",
+    "label": "Уточнить выпуск перед пополнением",
+    "href": "/contact/?topic=repeat-order#inquiry-form",
+    "description": "Назовите чай с прошлой поставки и нужное количество. Уточним, какой выпуск доступен сейчас и что известно о его хранении.",
     "related": [
       "povtornaya-zakupka-shu-puera",
       "rassypnoy-puer-zayavka-postavshchiku"

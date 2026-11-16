@@ -8,5 +8,6 @@ export const inquiryTopics: Record<string, string> = {
   'repeat-order': 'Повторная закупка или замена чая',
   'marketplace-tea': 'Фасовка чая для маркетплейса',
   'other-tea': 'Подбор листового китайского чая и оптовая цена',
+  'product-materials': 'Сведения и фотографии для карточки чая',
   'documents': 'Документы к заказу',
 };
