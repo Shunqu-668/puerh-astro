@@ -10,19 +10,19 @@ import "../../styles/editorial.css";
 const posts = await getCollection("blog");
 posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const description = "Как выбрать чай и подготовиться к закупке. Образцы, свой бренд и вопросы к поставщику.";
+const description = "Как выбрать пуэр для магазина, сравнить образцы, заказать свою упаковку и договориться о следующей поставке.";
 const firstRead = posts.find(post => post.id === 'kak-vybrat-postavshika-puera-v-kitae');
 ---
 
 <Layout
-  title="Статьи о пуэре"
+  title="Закупка китайского чая: статьи для магазинов и чайных"
   description={description}
   canonicalURL="/blog/"
 >
   <CoverHero
     compact
     titleRu="От выбора чая до повторной закупки"
-    titleEn="СТАТЬИ О ПУЭРЕ"
+    titleEn="ЗАКУПКИ ЧАЯ"
     subtitleRu={description}
     bgImage="/images/images/hero-bg.webp"
   />
@@ -30,7 +30,7 @@ const firstRead = posts.find(post => post.id === 'kak-vybrat-postavshika-puera-v
   <div class="shell reading-index">
     {firstRead && <a class="reading-feature" href={`/blog/${firstRead.id}/`}>
       <img src={articleMedia[firstRead.id].src} alt={articleMedia[firstRead.id].alt} width="800" height="600" loading="lazy" />
-      <div><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Разобраться перед выбором →</span></div>
+      <div><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Как проверить поставщика →</span></div>
     </a>}
     <div class="reading-grid">
       {posts.filter(post => post !== firstRead).map(post => <article class="reading-card"><a href={`/blog/${post.id}/`}>

@@ -53,7 +53,7 @@ const websiteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', '@
 const pageSchema = { '@context': 'https://schema.org', '@type': searchCopy?.type || 'WebPage', '@id': `${pageUrl}#webpage`, url: pageUrl, name: pageTitle, description, inLanguage: 'ru-RU', isPartOf: { '@id': websiteId }, publisher: { '@id': organizationId }, primaryImageOfPage: { '@type': 'ImageObject', url: imageUrl } };
 const pathname = new URL(pageUrl).pathname;
 const breadcrumbItems = [{ '@type': 'ListItem', position: 1, name: 'Главная', item: `${baseUrl}/` }];
-if (pathname.startsWith('/blog/') && pathname !== '/blog/') breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: 'Статьи о пуэре', item: `${baseUrl}/blog/` });
+if (pathname.startsWith('/blog/') && pathname !== '/blog/') breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: 'Статьи о закупке чая', item: `${baseUrl}/blog/` });
 else if (pathname.startsWith('/catalog/') && pathname !== '/catalog/') breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: 'Каталог', item: `${baseUrl}/catalog/` });
 breadcrumbItems.push({ '@type': 'ListItem', position: breadcrumbItems.length + 1, name: title.replace(/\s*[—|]\s*PUERH DIRECT\s*$/i, ''), item: pageUrl });
 const showBreadcrumbSchema = pathname !== '/' && !noindex && !pathname.startsWith('/catalog/product/');

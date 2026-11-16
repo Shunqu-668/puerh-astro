@@ -32,7 +32,7 @@ const productUrl = `/catalog/product/${p.slug}/`;
 const productImg = getProductImg(p);
 const detailImages = (galleryData as Record<string, string[]>)[p.slug] || [];
 const categoryUrl = `/catalog/${p.type === "raw" ? "raw-puerh" : "ripe-puerh"}/`;
-const shortDescription = edition?.description ?? `${p.nameRu}, ${p.year}: ${typeLabels[p.type].ru.toLowerCase()}, ${spec.grams} г. Оптовая цена и наличие — по запросу. Платные образцы перед закупкой. ${profile.summary}`;
+const shortDescription = edition?.description ?? `${p.nameRu}, ${p.year}: ${typeLabels[p.type].ru.toLowerCase()}, ${spec.grams} г. ${profile.summary} Оптовую цену рассчитаем по количеству.`;
 const telegramSpec = p.unitWeightUnconfirmed ? '. Прошу уточнить вес и фасовку.' : `, ${spec.grams} г.`;
 const telegramHref = `https://t.me/sqvivi777?text=${encodeURIComponent(`Здравствуйте! Интересует ${p.nameRu}, ${p.year}${telegramSpec}\nhttps://puerhdirect.ru${productUrl}`)}`;
 const breadcrumbSchema = {
@@ -85,29 +85,28 @@ const productSchema = {
             {profile.notes.length > 0 && <ul class="tea-tasting-notes" aria-label="Вкус и аромат">{profile.notes.map(note => <li>{note}</li>)}</ul>}
             <p>{profile.summary}</p>
             {edition?.labelNote && <p>{edition.labelNote}</p>}
-            <p class="product-occasion">{profile.occasion}</p>
           </div>
           <dl class="product-specs">
             <div><dt>Вид чая</dt><dd>{typeLabels[p.type].ru}</dd></div>
             <div><dt>Год выпуска</dt><dd>{p.year}</dd></div>
             <div><dt>Форма</dt><dd>{displayShape}</dd></div>
             {p.unitWeightUnconfirmed ? <>
-              <div class="spec-pending"><dt>Данные каталога</dt><dd>{spec.grams} г и {spec.cartonUnits} шт. Единицу учёта уточним перед заказом.</dd></div>
-              <div class="spec-pending"><dt>Вес одной штуки и состав коробки</dt><dd>Уточняются для предлагаемой партии.</dd></div>
+              <div class="spec-pending"><dt>На какой вес ориентироваться</dt><dd>В каталоге указаны {spec.grams} г и {spec.cartonUnits} шт. Уточним, к какой упаковке относятся эти цифры.</dd></div>
+              <div class="spec-pending"><dt>Вес одного шарика</dt><dd>Запросите вес без обёртки и число шариков в упаковке.</dd></div>
             </> : <>
               <div><dt>Вес единицы</dt><dd>{spec.grams} г</dd></div>
               <div><dt>В коробке</dt><dd>{spec.cartonUnits} шт.</dd></div>
             </>}
           </dl>
-          {!p.unitWeightUnconfirmed && <p class="carton-note">{spec.cartonUnits} × {spec.grams} г = {cartonKg} кг чая в коробке по каталогу. Это комплектация, а не минимальный заказ; транспортная упаковка добавляет вес.</p>}
+          {!p.unitWeightUnconfirmed && <p class="carton-note">По каталогу в полной коробке {cartonKg} кг чая ({spec.cartonUnits} × {spec.grams} г). Это вес без транспортной упаковки.</p>}
           <div class="product-purchase">
             <h2 class="purchase-title">Цена по запросу</h2>
-            <p>Без фиксированного минимума. Цена зависит от чая и количества.</p>
+            <p>Фиксированного минимального заказа нет. Укажите, сколько чая вам нужно. Мы проверим наличие и рассчитаем оптовую цену на этот объём.</p>
             <div class="flex flex-wrap gap-3">
               <CTAButton href={`/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`}>Запросить цену</CTAButton>
               <a class="inline-flex items-center px-5 py-3 border border-line-strong rounded font-bold text-sm hover:border-acid" href={`/sample/?product=${encodeURIComponent(p.slug)}`}>Выбрать образец</a>
             </div>
-            <p class="purchase-followup">Имя и телефон — всё, что нужно для первого запроса.</p>
+            <p class="purchase-followup">Этот чай уже будет отмечен в заявке. Если сначала хотите его попробовать, можно запросить платный образец.</p>
             <a class="product-direct-chat" href={telegramHref} target="_blank" rel="noopener noreferrer">Спросить об этом чае в Telegram ↗</a>
           </div>
           <dl class="grid grid-cols-2 gap-5 border-t border-line pt-5 text-sm">
@@ -115,13 +114,32 @@ const productSchema = {
             <div><dt class="text-muted mb-2">Доставка</dt><dd class="text-ink font-bold">По согласованию</dd></div>
           </dl>
           <nav class="product-practical-links" aria-label="Условия закупки"><a href="/faq/#batch-details">Наличие и упаковка партии →</a><a href="/compliance/">Документы к заказу →</a></nav>
-          <p class="catalog-source-note">Вкус описан по нашему каталогу. Оцените чай на образце; наличие и фасовку партии подтвердим в предложении.</p>
+          {profile.notes.length > 0 && <p class="catalog-source-note">Описание вкуса взято из каталога. Для дегустации уточните, из какой партии будет образец.</p>}
         </div>
       </div>
       {edition?.comparison && <nav class="product-practical-links" aria-label="Сравнить два выпуска">
         <a href={`/catalog/product/${edition.comparison.slug}/`}>{edition.comparison.text} →</a>
       </nav>}
-      {buying && <section class="product-buying" aria-labelledby="buying-heading"><h2 id="buying-heading">{buying.title}</h2><p>{buying.use}</p><div class="buying-columns"><div><h3>Что проверить на образце</h3><p>{buying.compare}</p><a href={`/sample/?product=${encodeURIComponent(p.slug)}`}>Выбрать этот образец →</a></div><div><h3>Повторная поставка и упаковка</h3><p>{buying.repeat}</p><a href="/private-label/">Упаковка под вашим брендом →</a></div></div></section>}
+      {buying && (
+        <section class="product-buying" aria-labelledby="buying-heading">
+          <h2 id="buying-heading">{buying.title}</h2>
+          <p>{buying.use}</p>
+          <div class="buying-columns">
+            <div>
+              <h3>Что проверить на образце</h3>
+              <p>{buying.compare}</p>
+              <a href={`/sample/?product=${encodeURIComponent(p.slug)}`}>Запросить образец этого чая →</a>
+            </div>
+            <div>
+              <h3>Повторная поставка и упаковка</h3>
+              <p>{buying.repeat}</p>
+              {buying.privateLabel
+                ? <a href="/private-label/">Обсудить свою упаковку →</a>
+                : <a href={`/contact/?product=${encodeURIComponent(p.slug)}&tea=${encodeURIComponent(p.nameRu)}#inquiry-form`}>Уточнить наличие этого выпуска →</a>}
+            </div>
+          </div>
+        </section>
+      )}
       <section class="product-related" aria-labelledby="related-heading">
         <h2 id="related-heading">Другие варианты</h2>
         <div class="catalog-grid">{related.map(item => <ProductCard product={item} />)}</div>

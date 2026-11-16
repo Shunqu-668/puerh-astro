@@ -417,7 +417,7 @@ try {
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
   checks.push('removable verified product context, invalid query ignored and client navigation reset');
   await page.goto('https://puerhdirect.ru/private-label/');
-  await page.getByRole('link', { name: 'Обсудить упаковку', exact: true }).click();
+  await page.getByRole('link', { name: 'Рассчитать чай и упаковку', exact: true }).click();
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Чай под своим брендом');
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
@@ -675,7 +675,7 @@ try {
   await page.waitForURL('**/catalog/other-tea/');
   for (const [label, topic, expected] of [
     ['Узнать оптовую цену на чай', 'other-tea', 'Подбор листового китайского чая и оптовая цена'],
-    ['Проверить чай для пополнения', 'repeat-order', 'Повторная закупка или замена чая'],
+    ['Узнать, можно ли заказать тот же чай', 'repeat-order', 'Повторная закупка или замена чая'],
     ['Запросить расчёт для площадки', 'marketplace-tea', 'Фасовка чая для маркетплейса'],
   ]) {
     await page.getByRole('link', { name: label }).click();
