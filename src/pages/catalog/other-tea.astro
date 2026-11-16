@@ -1,17 +1,65 @@
 ---
 import InformationPage from '../../components/InformationPage.astro';
 import Picture from '../../components/Picture.astro';
+import CTAButton from '../../components/CTAButton.astro';
+
+const inquiryHref = '/contact/?topic=other-tea#inquiry-form';
 ---
-<InformationPage title="Китайский чай для магазина — подбор по запросу" description="Красный и белый чай, улун для вашего магазина: подбор по вкусу, формату и бюджету. Образцы, наличие и условия подтверждаем отдельно." path="/catalog/other-tea/" image="/images/images/4.webp" imagePosition="top" eyebrow="ПОДБОР ПО ЗАПРОСУ" actionTitle="Расскажите, что ищете" actionText="Запросить варианты">
+<InformationPage
+  title="Листовой чай оптом для магазинов и чайных"
+  description="Подбираем в Китае улун, зелёный, красный, белый и жасминовый чай. Напишите, какой чай нужен и сколько вы хотите взять на пробу или в первую партию."
+  path="/catalog/other-tea/" image="/images/images/about-selection.webp" imagePosition="center 54%" eyebrow="ЛИСТОВОЙ ЧАЙ"
+  actionTitle="Какой чай вам посчитать?" actionText="Запросить цену партии"
+  actionHref={inquiryHref} sampleHref={inquiryHref} sampleLabel="Уточнить условия образца"
+>
+  <div slot="hero-action" class="leaf-hero-action"><CTAButton href={inquiryHref}>Узнать оптовую цену на чай</CTAButton></div>
   <section class="info-split">
-    <div><h2>Дополните чайную полку</h2><ul class="info-list"><li>Красный чай</li><li>Белый чай</li><li>Улун</li></ul><p>Пришлите название, фото или пожелания по вкусу. Подберём чай через нашу команду в Фанцуне.</p><p><a class="info-link" href="/catalog/">Вернуться к каталогу пуэра →</a></p></div>
-    <div class="tea-photo-crop"><Picture src="/images/images/4.webp" alt="Красный и белый чай" class="w-full" loading="lazy" /></div>
+    <div>
+      <h2>Одна позиция или подборка для полки</h2>
+      <p>Можно начать с одного улуна для чайной или собрать несколько сортов для продажи на развес. Если уже знаете чай, пришлите его название или фото этикетки. Если выбираете впервые, опишите вкус, фасовку и бюджет.</p>
+      <p>Фиксированного минимума заказа нет. Проверим, сколько выбранного чая доступно, и рассчитаем цену на ваш объём в согласованной валюте. Образцы платные; их вес, стоимость и пересылку уточним до отправки.</p>
+
+    </div>
+    <div class="tea-photo-crop"><Picture src="/images/images/4.webp" alt="Сухой чай крупным планом: золотистые почки и тёмные скрученные листья" class="w-full" loading="lazy" /></div>
   </section>
-  <section class="info-section"><h2>Что указать для подбора</h2><ul class="info-list"><li>Тип чая или фотографию знакомой позиции.</li><li>Канал продажи: магазин, чайная, собственный бренд или маркетплейс.</li><li>Желаемый формат, массу и примерное количество.</li><li>Бюджет с указанием валюты и город получения.</li></ul><p>Если точного задания пока нет, опишите покупателей и роль чая в ассортименте. Неизвестные параметры уточним при обсуждении.</p></section>
-  <section class="info-section"><h2>Как сравнить предложенные варианты</h2><p>Сначала сравните чай по образцам. Затем отдельно сверяйте массу, упаковку и стоимость одинакового количества. Уточните, из какой партии взят образец и доступна ли она для заказа.</p><p>Сохраните название, фотографии маркировки и согласованные параметры. Для повторной закупки этих сведений больше, чем одного переведённого названия.</p><p>Условия предоставления образцов других видов чая уточняются отдельно. <a class="info-link" href="/blog/kak-vybrat-postavshika-puera-v-kitae/">Чек-лист проверки предложения →</a></p></section>
-  <section class="info-section"><h2>Что подтверждаем до заказа</h2><p>Актуальные позиции, количество, цену, упаковку и передачу груза согласуем в предложении. Фотография на этой странице показывает направление подбора, а не подтверждённый остаток конкретного товара.</p><p>Для продавцов маркетплейсов отдельно уточняются материалы для карточки и необходимые документы. Не размещайте неподтверждённые характеристики до согласования товара.</p></section>
+
+  <section class="info-section">
+    <h2>Что нужно для вашей закупки</h2>
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>Первая закупка для магазина</h3>
+        <p>Укажите, какой чай хотите попробовать и в каком виде будете его продавать. Согласуем образцы; после дегустации сверим выбранный чай с доступной партией и посчитаем цену за килограмм.</p>
+        <a class="info-link" href={inquiryHref}>Подобрать чай и образцы →</a>
+      </article>
+      <article class="info-card">
+        <h3>Знакомый сорт закончился</h3>
+        <p>Для повторного заказа пригодятся название, фото пачки и обычный объём пополнения. Уточним выпуск. Если нужна замена, согласуем с вами подходящий по вкусу вариант для пробы.</p>
+        <a class="info-link" href="/contact/?topic=repeat-order#inquiry-form">Проверить чай для пополнения →</a>
+      </article>
+      <article class="info-card">
+        <h3>Своя марка или маркетплейс</h3>
+        <p>Сообщите сорт, вес одной пачки, количество и площадку. Уточним возможность фасовки, какие фото и сведения о партии доступны. Требования к этикетке, документам и приёмке на вашем складе сверим до заказа.</p>
+        <a class="info-link" href="/contact/?topic=marketplace-tea#inquiry-form">Запросить расчёт для площадки →</a>
+      </article>
+    </div>
+    <p>Если нужен свой рисунок на упаковке, посмотрите <a class="info-link" href="/private-label/">как согласовать чай, образец и макет</a>.</p>
+  </section>
+
+  <section class="info-section">
+    <h2>Где вы хотите получить чай?</h2>
+    <p>Мы комплектуем заказы в Китае. Если вы работаете через импортёра или экспедитора, укажите его город и место передачи груза. Если вам нужен расчёт до города в России, назовите город и желаемую дату. Сначала проверим маршрут и отдельно согласуем расходы и срок.</p>
+    <p>Для сравнения двух предложений возьмите одинаковые вес и фасовку. Сверьте цену самого чая, упаковку, образцы и точку, до которой посчитана доставка. <a class="info-link" href="/blog/stoimost-partii-puera/">Как сравнить стоимость партии →</a></p>
+  </section>
+
+  <section class="info-section">
+    <h2>Добавить пуэр к заказу</h2>
+    <p>Для развесной полки подберём <a class="info-link" href="/catalog/loose-puerh/">рассыпной шу или шэн</a>. Если удобнее продавать чай целиком, в <a class="info-link" href="/catalog/">каталоге пуэра</a> есть блины, кирпичи и порционные формы с фотографиями и весом.</p>
+    <p>Фото упаковки для подбора можно прислать <a class="info-link" href="https://vk.ru/im/convo/-242419151" target="_blank" rel="noopener noreferrer">в сообщения PUERH DIRECT в VK</a>.</p>
+  </section>
 </InformationPage>
-<style is:global>
+<style>
+  .leaf-hero-action { margin-top: 20px; }
   .tea-photo-crop { aspect-ratio: 2.1; overflow: hidden; border-radius: 5px; }
-  .info-page .tea-photo-crop img { height: 100%; max-height: none; object-fit: cover; object-position: top; }
+  .tea-photo-crop :global(img) { height: 100%; max-height: none; object-fit: cover; object-position: top; }
+  .info-section > p { max-width: 74ch; }
 </style>

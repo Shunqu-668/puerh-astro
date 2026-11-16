@@ -669,6 +669,25 @@ try {
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '', 'Loose tea request must not pretend to select a catalogue SKU');
   checks.push('loose tea service preserves its inquiry topic without inventing a product');
 
+  // The wholesale entrance must work for buyers whose tea has no catalogue SKU.
+  await page.goto('https://puerhdirect.ru/');
+  await page.getByRole('link', { name: 'Подобрать китайский чай' }).click();
+  await page.waitForURL('**/catalog/other-tea/');
+  for (const [label, topic, expected] of [
+    ['Узнать оптовую цену на чай', 'other-tea', 'Подбор листового китайского чая и оптовая цена'],
+    ['Проверить чай для пополнения', 'repeat-order', 'Повторная закупка или замена чая'],
+    ['Запросить расчёт для площадки', 'marketplace-tea', 'Фасовка чая для маркетплейса'],
+  ]) {
+    await page.getByRole('link', { name: label }).click();
+    await page.waitForURL('**/contact/?topic=' + topic + '#inquiry-form');
+    await page.locator('#selected-product:not(.hidden)').waitFor();
+    assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), expected);
+    assert.equal(await page.locator('[name="product_sku"]').inputValue(), '');
+    await page.goBack();
+    await page.waitForURL('**/catalog/other-tea/');
+  }
+  checks.push('Chinese tea wholesale entry preserves leaf, reorder and marketplace inquiry topics');
+
   await page.goto('https://puerhdirect.ru/blog/');
   assert.equal(await page.locator('.reading-feature, .reading-card').count(), blogCount);
   const articleUrls = await page.locator('.reading-feature, .reading-card a').evaluateAll(links => links.map(a => a.href));

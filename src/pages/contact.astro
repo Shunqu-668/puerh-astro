@@ -7,7 +7,7 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
 ---
 <Layout
   title="Обсудим ваш чай — Контакты"
-  description="Пуэр для вашего бизнеса. Оставьте контакт или напишите в Telegram. Поможем с выбором, обсудим цену и условия."
+  description="Запросите цену на китайский чай для магазина или своей марки. Укажите чай, примерный объём и город получения."
   canonicalURL="/contact/"
 >
   <section class="contact-page">
@@ -16,9 +16,9 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
         <a href="/catalog/" class="contact-back">← Каталог</a>
         <p class="contact-eyebrow">PUERH DIRECT · НА СВЯЗИ</p>
         <h1>Обсудим<br /> ваш чай.</h1>
-        <p class="contact-lead">Ваша команда по чаю в Гуанчжоу. Подбор пуэра, образцы или своя серия.</p>
-        <p class="contact-note">Количество и доставку обсудим в переписке.</p>
-        <a class="contact-quick-chat" href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer">Или сразу в Telegram ↗</a>
+        <p class="contact-lead">Подбираем чай в Гуанчжоу. Для расчёта укажите сорт или знакомую упаковку, сколько чая нужно и где вы хотите его получить.</p>
+        <p class="contact-note">Готовый чай можно заказать без фиксированного минимума. Для собственной упаковки отдельно согласуем тираж.</p>
+        <a class="contact-quick-chat" href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer">Написать в Telegram ↗</a>
       </div>
 
       <form id="inquiry-form" data-inquiry-form data-product-catalog={JSON.stringify(catalogue)} data-inquiry-topics={JSON.stringify(inquiryTopics)}
@@ -56,7 +56,7 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
         <div>
           <label for="contact-message" class="form-label">Что вас интересует? <span>Необязательно</span></label>
           <textarea id="contact-message" name="message" maxlength="2000" rows="3" class="ym-disable-keys ym-hide-content form-input"
-            placeholder="Например: помогите выбрать шу пуэр для магазина"></textarea>
+            placeholder="Какой чай вы ищете, сколько нужно и где хотите его получить?"></textarea>
         </div>
         <button type="submit" id="submit-btn" aria-describedby="form-preview" class="contact-submit">Отправить запрос <span aria-hidden="true">↗</span></button>
         <p class="contact-privacy">Используем контакт, чтобы ответить на ваш запрос. <a href="/privacy/">Конфиденциальность</a></p>
@@ -73,11 +73,12 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
       </form>
 
       <aside class="contact-chat">
-        <div class="contact-expectation"><h2>Что дальше?</h2><p>Уточним ваш запрос и обсудим варианты. Цену и условия согласуем до заказа.</p></div>
+        <div class="contact-expectation"><h2>Что дальше?</h2><p>Проверим доступный чай и количество, обсудим цену в выбранной валюте. Образцы, упаковку и доставку до вашей точки посчитаем отдельно, когда уточним условия.</p></div>
         <h2>Удобнее в Telegram?</h2>
         <a href="https://t.me/sqvivi777" target="_blank" rel="noopener noreferrer" class="contact-telegram">Написать в Telegram <span aria-hidden="true">↗</span></a>
         <p>@sqvivi777 · Можно сразу задать вопрос.</p>
         <div class="contact-other">
+          <a href="https://vk.ru/im/convo/-242419151" target="_blank" rel="noopener noreferrer">Сообщения сообщества VK ↗</a>
           <a href="https://wa.me/8613728005309" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>
           <span>WeChat: puerhdirect</span>
         </div>

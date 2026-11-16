@@ -1,9 +1,13 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/contact/": "2026-11-16",
+  "/faq/": "2026-11-16",
+  "/private-label/": "2026-11-16",
+  "/catalog/other-tea/": "2026-11-16",
   "/blog/rezerv-puera-dlya-neskolkih-postavok/": "2026-11-14",
   "/blog/povtornaya-zakupka-shu-puera/": "2026-11-14",
-  "/": "2026-11-14",
+  "/": "2026-11-16",
   "/catalog/loose-puerh/": "2026-11-14",
   "/blog/rassypnoy-puer-zayavka-postavshchiku/": "2026-11-14",
   "/blog/proverka-pressovki-puera-na-obrazce/": "2026-11-11",
@@ -15,8 +19,8 @@ export const pageModifiedAt = {
   "/catalog/product/2018-raw-puerh-cake-yiwu/": "2026-11-09",
   "/catalog/product/2022-ripe-puerh-brick-gongtingchazhuan-fuguiyuan/": "2026-11-09",
   "/catalog/product/2022-ripe-puerh-brick-gongtingchazhuan-paperbox-fuguiyuan/": "2026-11-09",
-  "/catalog/": "2026-11-14",
+  "/catalog/": "2026-11-16",
   "/catalog/raw-puerh/": "2026-11-14",
   "/catalog/ripe-puerh/": "2026-11-14",
-  "/sample/": "2026-11-09"
+  "/sample/": "2026-11-16"
 };

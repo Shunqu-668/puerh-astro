@@ -5,7 +5,7 @@
 .puerh-home .tea-hero-overlay { position: absolute; inset: 0; background: linear-gradient(0deg,#0c0d0e 0%,rgba(8,8,7,.48) 30%,rgba(8,8,7,.48) 75%,rgba(8,8,7,.6)),linear-gradient(90deg,rgba(5,5,5,.25),transparent 60%); }
 .puerh-home .tea-hero-content { position: relative; text-align: center; padding-top: 168px; padding-bottom: 96px; }
 .puerh-home h1 { font-size: clamp(2.35rem,4.3vw,3.8rem); line-height: 1.1; font-weight: 700; letter-spacing: -.035em; margin: 0 auto 22px; max-width: 780px; }
-.puerh-home .tea-intro { font-size: 1rem; line-height: 1.7; color: #e2dfdb; }
+.puerh-home .tea-intro { max-width: 68ch; margin-inline: auto; font-size: 1rem; line-height: 1.7; color: #e2dfdb; }
 .puerh-home .tea-actions { display: flex; justify-content: center; gap: 14px; margin-top: 28px; }
 .puerh-home .tea-button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 24px; padding: 14px 23px; border-radius: 4px; font-size: .9rem; font-weight: 600; }
 .puerh-home .action-flame { background: #f58220; color: #111214; }

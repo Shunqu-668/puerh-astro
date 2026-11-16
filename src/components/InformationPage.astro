@@ -15,7 +15,7 @@ const guidance = ({
 } as Record<string, string>)[path] || 'Можно начать с вопроса, без точного списка и объёма.';
 ---
 <Layout title={title} description={description} canonicalURL={path} ogImage={`https://puerhdirect.ru${image}`}>
-  <CoverHero titleRu={title} titleEn={eyebrow} subtitleRu={description} bgImage={image} imagePosition={Astro.props.imagePosition} />
+  <CoverHero titleRu={title} titleEn={eyebrow} subtitleRu={description} bgImage={image} imagePosition={Astro.props.imagePosition}><slot name="hero-action" /></CoverHero>
   <div class="info-page shell">
     {path.startsWith('/catalog/') ? <CategoryNav /> : <nav class="info-breadcrumb" aria-label="Хлебные крошки"><a href="/">Главная</a><span aria-hidden="true">/</span><span>{eyebrow === 'PUERH DIRECT' ? title : eyebrow.toLocaleLowerCase('ru')}</span></nav>}
     <slot />

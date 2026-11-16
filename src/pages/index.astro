@@ -15,8 +15,8 @@ const featured = selection.items.map(item => {
   return { ...product, grams: catalogSpecs.get(item.slug)!.grams };
 });
 ---
-<Layout title="Пуэр оптом из Китая — шу и шэн для бизнеса"
-  description="Пуэр для магазинов и небольших брендов: подбор шу и шэна, оптовые партии и повторные поставки. Рассыпной чай, блины, кирпичи, лунчжу и своя упаковка."
+<Layout title="Китайский чай оптом для магазинов — пуэр и другие сорта"
+  description="Подбираем китайский чай для магазинов и чайных. Запросите цену на улун, зелёный, красный или белый чай либо выберите шу и шэн пуэр в каталоге."
   ogImage="https://puerhdirect.ru/images/images/hero-bg.webp" canonicalURL="/">
   <link slot="head" rel="preload" as="image" href="/images/images/hero-bg.webp" fetchpriority="high" />
   <div class="puerh-home">
@@ -24,18 +24,18 @@ const featured = selection.items.map(item => {
       <img src="/images/images/hero-bg.webp" alt="" class="tea-hero-image" fetchpriority="high" width="1920" height="1080" />
       <div class="tea-hero-overlay"></div>
       <div class="shell tea-hero-content">
-        <h1>Пуэр оптом<br />для вашего бизнеса</h1>
-        <p class="tea-intro">Подбираем шу и шэн в Китае для магазинов и небольших брендов.<br />Помогаем найти нужный чай, подготовить запас и повторить закупку.</p>
+        <h1>Чай оптом из Китая<br />для вашего магазина</h1>
+        <p class="tea-intro">Ищете улун на развес или чай для своей марки? Подберём варианты в Гуанчжоу и уточним цену на ваш объём. Для закупки пуэра у нас есть отдельный каталог шу и шэна.</p>
         <div class="tea-actions">
-          <a href="#tea-selection" class="action-flame tea-button">Выбрать пуэр <span aria-hidden="true">→</span></a>
-          <a href="/contact/#inquiry-form" class="tea-button tea-button-outline">Запросить цену</a>
+          <a href="/catalog/other-tea/" class="action-flame tea-button">Подобрать китайский чай <span aria-hidden="true">→</span></a>
+          <a href="#tea-selection" class="tea-button tea-button-outline">Выбрать пуэр</a>
         </div>
       </div>
     </section>
     <div class="tea-conditions">
       <div class="shell">
         <p><span>Закупка</span>Без фиксированного минимума</p>
-        <p><span>Образцы</span>Платные, до пяти позиций</p>
+        <p><span>Образцы</span>Платные, условия до отправки</p>
         <p><span>Доставка</span>Условия согласуем отдельно</p>
       </div>
     </div>
@@ -43,7 +43,7 @@ const featured = selection.items.map(item => {
     <section id="tea-selection" class="tea-selection">
       <div class="shell">
         <div class="tea-section-heading">
-          <div><h2>Из каталога</h2></div>
+          <div><h2>Пуэр оптом из нашего каталога</h2></div>
           <a href="/catalog/" class="tea-link">Все {products.length} позиции <span aria-hidden="true">→</span></a>
         </div>
         <nav class="tea-category-links" aria-label="Категории чая">
@@ -51,7 +51,7 @@ const featured = selection.items.map(item => {
           <a href="/catalog/raw-puerh/">Шэн пуэр</a>
           <a href="/catalog/loose-puerh/">Рассыпной пуэр</a>
           <a href="/catalog/teaware/">Чайная посуда</a>
-          <a href="/catalog/other-tea/">Другой чай</a>
+          <a href="/catalog/other-tea/">Улун и другие чаи</a>
         </nav>
         <div class="tea-product-grid">
           {featured.map(p => (
