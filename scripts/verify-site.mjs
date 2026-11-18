@@ -676,7 +676,7 @@ try {
   for (const [label, topic, expected] of [
     ['Узнать оптовую цену на чай', 'other-tea', 'Подбор листового китайского чая и оптовая цена'],
     ['Узнать, можно ли заказать тот же чай', 'repeat-order', 'Повторная закупка или замена чая'],
-    ['Запросить расчёт для площадки', 'marketplace-tea', 'Фасовка чая для маркетплейса'],
+    ['Запросить расчёт для площадки', 'marketplace-tea', 'Фасовка чая для магазина или маркетплейса'],
   ]) {
     await page.getByRole('link', { name: label }).click();
     await page.waitForURL('**/contact/?topic=' + topic + '#inquiry-form');

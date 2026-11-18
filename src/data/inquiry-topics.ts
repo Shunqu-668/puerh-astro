@@ -6,7 +6,7 @@ export const inquiryTopics: Record<string, string> = {
   'batch-quote': 'Расчёт стоимости партии чая',
   'mixed-order': 'Проверка списка чая для сборного заказа',
   'repeat-order': 'Повторная закупка или замена чая',
-  'marketplace-tea': 'Фасовка чая для маркетплейса',
+  'marketplace-tea': 'Фасовка чая для магазина или маркетплейса',
   'other-tea': 'Подбор листового китайского чая и оптовая цена',
   'product-materials': 'Сведения и фотографии для карточки чая',
   'documents': 'Документы к заказу',
