@@ -11,7 +11,7 @@ const posts = await getCollection("blog");
 posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const description = "Как выбрать пуэр для магазина, сравнить образцы, заказать свою упаковку и договориться о следующей поставке.";
-const firstRead = posts.find(post => post.id === 'kak-vybrat-postavshika-puera-v-kitae');
+const firstRead = posts.find(post => post.id === 'kitayskiy-chay-dlya-magazina');
 ---
 
 <Layout
@@ -30,7 +30,7 @@ const firstRead = posts.find(post => post.id === 'kak-vybrat-postavshika-puera-v
   <div class="shell reading-index">
     {firstRead && <a class="reading-feature" href={`/blog/${firstRead.id}/`}>
       <img src={articleMedia[firstRead.id].src} alt={articleMedia[firstRead.id].alt} width="800" height="600" loading="lazy" />
-      <div><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Как проверить поставщика →</span></div>
+      <div><h2>{firstRead.data.title}</h2><p>{firstRead.data.description}</p><span class="reading-link">Как заказать чай у нас →</span></div>
     </a>}
     <div class="reading-grid">
       {posts.filter(post => post !== firstRead).map(post => <article class="reading-card"><a href={`/blog/${post.id}/`}>

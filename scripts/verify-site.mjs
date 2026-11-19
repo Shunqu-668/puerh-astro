@@ -701,7 +701,15 @@ try {
     assert.equal(await page.locator('meta[property="og:type"]').getAttribute('content'), 'article');
     assert.equal(await page.locator('.article-further a').count(), 2);
     const cta = await page.locator('.article-next .site-cta').getAttribute('href');
-    assert.ok(cta.startsWith('/'), 'Reading continues within the site');
+    if (new URL(url).pathname === '/blog/kitayskiy-chay-dlya-magazina/') {
+      assert.equal(cta, 'https://vk.ru/im/convo/-242419151', 'Supplier introduction opens the verified own VK community');
+      await page.locator('.article-body a[href="/contact/?topic=other-tea#inquiry-form"]').click();
+      await page.waitForURL('**/contact/?topic=other-tea#inquiry-form');
+      await page.locator('#selected-product:not(.hidden)').waitFor();
+      assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Подбор листового китайского чая и оптовая цена');
+    } else {
+      assert.ok(cta.startsWith('/'), 'Reading continues within the site');
+    }
   }
   await page.goto('https://puerhdirect.ru/blog/privatnaya-marka-puera-rukovodstvo/');
   await page.locator('.article-next .site-cta').click();
@@ -709,6 +717,7 @@ try {
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Чай под своим брендом');
   checks.push('all five reading paths, article sharing metadata, related reading and brand inquiry context');
+  checks.push('supplier introduction has exact own-community CTA and a working email-inquiry alternative');
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('https://puerhdirect.ru/catalog/product/2024-ripe-puerh-brick-black-pearl-xinwen/');
