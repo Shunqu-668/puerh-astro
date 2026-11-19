@@ -99,15 +99,16 @@ import { teaProfiles } from '../data/tea-profiles';
             </div>
             <div>
               <label for="sample-contact" class="block text-sm font-medium text-soft mb-1.5">
-                Телефон <span class="text-flame">*</span>
+                Телефон <span class="text-muted">(или email ниже)</span>
               </label>
-              <input type="tel" id="sample-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel" required class="ym-disable-keys ym-hide-content w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="+7 …">
+              <input type="tel" id="sample-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel" aria-describedby="sample-contact-hint" class="ym-disable-keys ym-hide-content w-full px-4 py-3 rounded-lg border border-line-strong focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-flame transition text-sm" placeholder="+7 …">
+              <p id="sample-contact-hint" class="sample-note">Укажите телефон с кодом страны или email — достаточно одного контакта.</p>
             </div>
           </div>
 
           <div class="mt-6">
             <label for="sample-email" class="block text-sm font-medium text-soft mb-1.5">
-              Email <span class="text-muted">(необязательно)</span>
+              Email <span class="text-muted">(или телефон выше)</span>
             </label>
             <input id="sample-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email"
               autocapitalize="none" spellcheck="false" class="ym-disable-keys ym-hide-content form-input" placeholder="name@example.com" />

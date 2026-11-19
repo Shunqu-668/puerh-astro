@@ -34,6 +34,7 @@ for (const file of pages) {
   if (!title || (title.match(/PUERH DIRECT/g) || []).length !== 1) failures.push(name + ': title');
   if ((html.match(/<h1[\s>]/g) || []).length !== 1) failures.push(name + ': h1');
   if (!html.includes('rel="canonical"')) failures.push(name + ': canonical');
+  assert.ok(html.includes('<!--email_off--><a href="mailto:wholesale@puerhdirect.ru">wholesale@puerhdirect.ru</a><!--/email_off-->'), name + ': preserve public email through Cloudflare and soft navigation');
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(match => match[1]);
   if (new Set(ids).size !== ids.length) failures.push(name + ': duplicate element IDs');
   if (/MOQ\s*:?\s*20\s*(?:kg|кг)|Бесплатная доставка образцов|Wholesale from 10 pcs/i.test(html)) failures.push(name + ': obsolete terms');
@@ -327,7 +328,7 @@ try {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Inquiry context fits narrow mobile');
   await page.setViewportSize({ width: 1440, height: 1000 });
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '2024-ripe-puerh-brick-black-pearl-xinwen');
-  assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
+  assert.equal(await page.locator('#inquiry-form [required]').count(), 1, 'Name is required; one of phone/email is validated together');
   await page.locator('#submit-btn').click();
   assert.equal(posts.length, 0, 'Empty contact must not submit');
   await page.locator('[name="contact"]').fill('+7 000 000-00-00');
@@ -359,10 +360,10 @@ try {
   assert.ok(posts[0].body.includes('LOCAL TEST'));
   assert.ok(posts[0].body.includes('+7 000 000-00-00'));
   assert.ok(!posts[0].body.includes('name="email"'), 'Omit blank optional email');
-  assert.ok(!posts[0].body.includes('name="Тема запроса"'), 'Omit absent topic');
-  assert.ok(posts[0].body.includes('name="Телефон"') && posts[0].body.includes('name="Товар"'));
-  assert.ok(posts[0].body.includes('name="Страница"'));
-  checks.push('required name and phone, blank/invalid input rejection, optional message, product context');
+  assert.ok(!posts[0].body.includes('name="Inquiry topic"'), 'Omit absent topic');
+  assert.ok(posts[0].body.includes('name="Phone"') && posts[0].body.includes('name="Product"'));
+  assert.ok(posts[0].body.includes('name="Page"'));
+  checks.push('required name and reachable contact, blank/invalid input rejection, optional message, product context');
   await page.locator('[name="name"]').fill('LOCAL TEST');
   await page.locator('[name="message"]').fill('LOCAL TEST QUESTION');
   await page.locator('[name="email"]').fill('buyer@example.com');
@@ -398,7 +399,7 @@ try {
   await page.locator('#submit-btn').click();
   await page.locator('#form-success:not(.hidden)').waitFor();
   assert.ok(!posts.at(-1).body.includes('2024-ripe-puerh-brick-black-pearl-xinwen'));
-  for (const label of ['Товар', 'Артикул', 'Тема запроса', 'Комментарий']) {
+  for (const label of ['Product', 'SKU', 'Inquiry topic', 'Message']) {
     assert.ok(!posts.at(-1).body.includes(`name="${label}"`), `Do not emit an empty ${label} email row`);
   }
   assert.equal(await page.locator('[name="product_sku"]').inputValue(), '', 'Reset must not restore removed product');
@@ -445,6 +446,8 @@ try {
   const sampleRequest = await page.locator('[name="selected_samples"]').inputValue();
   assert.ok(sampleRequest.includes(longzhuSlug) && sampleRequest.includes('Булан Лунчжу'));
   assert.doesNotMatch(sampleRequest, /500/);
+  await page.locator('#sample-form').evaluate(form => form.reset());
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '0');
   await page.goto('https://puerhdirect.ru' + productPath);
   await page.getByRole('link', { name: 'Выбрать образец', exact: true }).click();
   await page.waitForURL('**/sample/**');
@@ -486,7 +489,7 @@ try {
     assert.ok(!event[3].page?.includes('?'), 'Query strings are excluded from event context');
   }
   checks.push('Metrica: intent/start/selection/success separated; no invalid-form success or personal form values');
-  assert.ok(posts.at(-1).body.includes('name="Образцы"'));
+  assert.ok(posts.at(-1).body.includes('name="Selected samples"'));
   assert.ok(posts.at(-1).body.includes('samples@example.com'));
   assert.ok(!/name="sample_\d+"/.test(posts.at(-1).body), 'Selected samples appear once, without raw checkbox duplicates');
   assert.equal(await page.locator('[name="email"]').inputValue(), '', 'Successful submission clears optional email');
@@ -504,6 +507,8 @@ try {
   await boxes.nth(0).check();
   assert.equal(await page.locator('#count').innerText(), '1');
   checks.push('sample controls after repeated client navigation');
+  await page.locator('#sample-form').evaluate(form => form.reset());
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '0');
   await page.goto('https://puerhdirect.ru/sample/');
   assert.equal(await page.locator('.sample-card:visible').count(), 12);
   await page.locator('#sample-show-more').click();
@@ -659,7 +664,7 @@ try {
   await page.waitForURL('**/contact/?topic=documents#inquiry-form');
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(await page.locator('[name="inquiry_topic"]').inputValue(), 'Документы к заказу');
-  assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
+  assert.equal(await page.locator('#inquiry-form [required]').count(), 1, 'Name plus either phone or email');
   checks.push('category active state and FAQ-to-documents-to-short-inquiry path');
   await page.goto('https://puerhdirect.ru/catalog/loose-puerh/');
   await page.locator('.loose-actions .site-cta').click();
@@ -716,7 +721,7 @@ try {
   await page.waitForURL('**/contact/?product=*#inquiry-form');
   await page.locator('#selected-product:not(.hidden)').waitFor();
   assert.equal(new URL(page.url()).searchParams.get('product'), '2024-ripe-puerh-brick-black-pearl-xinwen');
-  assert.equal(await page.locator('#inquiry-form [required]').count(), 2);
+  assert.equal(await page.locator('#inquiry-form [required]').count(), 1, 'Name plus either phone or email');
   checks.push('mobile product quote bar preserves selected tea, hides under the menu, and opens the short inquiry');
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -779,6 +784,65 @@ try {
       await screenshot(`${route.replaceAll('/', '')}-${size}-company.png`);
     }
   }
+  mode = 'success';
+  for (const route of ['contact', 'sample']) {
+    await page.goto(`https://puerhdirect.ru/${route}/`);
+    if (route === 'sample') await page.locator('.sample-card input').first().check();
+    await page.locator('[name="name"]').fill('EMAIL CONTACT TEST');
+    await page.locator('#submit-btn').click();
+    assert.equal(await page.locator('[name="contact"]').evaluate(input => input.validity.customError), true, 'Missing both contact options must be rejected');
+    await page.locator('[name="email"]').fill('email-only@example.invalid');
+    assert.equal(await page.locator('[name="contact"]').evaluate(input => input.validity.customError), false, 'Typing email clears prior missing-contact error');
+    await page.locator('#submit-btn').click();
+    await page.locator('#form-success:not(.hidden)').waitFor();
+    assert.ok(posts.at(-1).body.includes('email-only@example.invalid'));
+    assert.ok(!posts.at(-1).body.includes('name="Phone"'), 'Blank phone omitted from email-only enquiry');
+  }
+  checks.push('contact and sample accept email alone, retain phone-only path, and reject missing both');
+
+  await page.goto('https://puerhdirect.ru/sample/');
+  const sampleSlugs = await page.locator('.sample-card input').evaluateAll(inputs => inputs.map(input => input.value));
+  await page.locator('.sample-card input').nth(0).check();
+  await page.locator('.sample-card input').nth(1).check();
+  await page.locator('[name="name"]').fill('PRIVATE SAMPLE NAME');
+  await page.locator('[name="email"]').fill('private-sample@example.invalid');
+  assert.deepEqual(await page.evaluate(() => JSON.parse(sessionStorage.getItem('pdSelectedSamples'))), sampleSlugs.slice(0, 2));
+  await page.reload();
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '2');
+  await page.locator('footer a[href="/catalog/"]').click();
+  await page.locator('footer a[href="/sample/"]').click();
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '2');
+  await page.goto('https://puerhdirect.ru/sample/?product=' + sampleSlugs[2]);
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '3');
+  await page.evaluate(slugs => sessionStorage.setItem('pdSelectedSamples', JSON.stringify(['invalid-sku', slugs[0], slugs[0], ...slugs])), sampleSlugs.slice(0, 8));
+  await page.reload();
+  await page.waitForFunction(() => document.querySelector('#count')?.textContent === '5');
+  assert.deepEqual(await page.evaluate(() => JSON.parse(sessionStorage.getItem('pdSelectedSamples'))), sampleSlugs.slice(0, 5));
+  await page.goto('https://puerhdirect.ru/sample/?product=' + sampleSlugs[7]);
+  assert.equal(await page.locator('.sample-card input:checked').count(), 5, 'A sixth URL choice cannot exceed cap or silently discard existing choices');
+  await page.locator('[name="name"]').fill('EMAIL CONTACT TEST');
+  await page.locator('[name="email"]').fill('email-only@example.invalid');
+  await page.locator('#submit-btn').click();
+  await page.locator('#form-success:not(.hidden)').waitFor();
+  assert.equal(await page.evaluate(() => sessionStorage.getItem('pdSelectedSamples')), null, 'Provider-acknowledged success clears saved choices');
+  await page.evaluate(() => sessionStorage.setItem('pdSelectedSamples', 'not-json'));
+  await page.reload();
+  assert.equal(await page.locator('#count').innerText(), '1', 'Malformed storage is ignored; valid product URL still works');
+  await page.evaluate(() => sessionStorage.removeItem('pdSelectedSamples'));
+  const noStoragePage = await context.newPage();
+  await noStoragePage.addInitScript(() => {
+    for (const key of ['getItem', 'setItem', 'removeItem']) Storage.prototype[key] = () => { throw new Error('Storage disabled'); };
+  });
+  await noStoragePage.goto('https://puerhdirect.ru/sample/');
+  await noStoragePage.locator('.sample-card input').first().check();
+  assert.equal(await noStoragePage.locator('#count').innerText(), '1');
+  await noStoragePage.close();
+  checks.push('same-tab sample SKU persistence survives refresh/navigation, merges valid links, caps/deduplicates, excludes personal fields and degrades safely without storage');
+  for (const post of posts) {
+    const names = [...post.body.matchAll(/name="([^"]+)"/g)].map(match => match[1]);
+    assert.ok(names.length > 0 && names.every(name => /^[\x20-\x7E]+$/.test(name)), 'Email field names must be ASCII; Russian customer values remain unchanged');
+  }
+  checks.push('ASCII email field headings with intact Russian tea names, topics and values');
   assert.deepEqual(errors, []);
   const result = { date: new Date().toISOString(), staticPages: pages.length, localReferences: references, checks, contrastResults, mockedPosts: posts.length, pageErrors: errors, externalRequestsSent: 0 };
   fs.writeFileSync(path.join(output, 'verification.json'), JSON.stringify(result, null, 2));

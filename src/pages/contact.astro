@@ -43,13 +43,13 @@ const catalogue = products.map(product => ({ slug: product.slug, name: productIn
             required class="ym-disable-keys ym-hide-content form-input" placeholder="Как к вам обращаться?" />
         </div>
         <div>
-          <label for="contact-contact" class="form-label">Телефон <span aria-hidden="true">*</span></label>
+          <label for="contact-contact" class="form-label">Телефон <span>Если удобнее, чем email</span></label>
           <input type="tel" id="contact-contact" name="contact" maxlength="40" autocomplete="tel" inputmode="tel"
-            required class="ym-disable-keys ym-hide-content form-input" placeholder="+7 …" aria-describedby="contact-hint" />
-          <p id="contact-hint" class="contact-hint">Укажите номер с кодом страны.</p>
+            class="ym-disable-keys ym-hide-content form-input" placeholder="+7 …" aria-describedby="contact-hint" />
+          <p id="contact-hint" class="contact-hint">Оставьте телефон с кодом страны или email ниже — достаточно одного контакта.</p>
         </div>
         <div>
-          <label for="contact-email" class="form-label">Email <span>Необязательно</span></label>
+          <label for="contact-email" class="form-label">Email <span>Если удобнее, чем телефон</span></label>
           <input type="email" id="contact-email" name="email" maxlength="254" autocomplete="email" inputmode="email"
             autocapitalize="none" spellcheck="false" class="ym-disable-keys ym-hide-content form-input" placeholder="name@example.com" />
         </div>

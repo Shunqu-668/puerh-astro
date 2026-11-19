@@ -1,6 +1,7 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/privacy/": "2026-11-19",
   "/blog/chay-so-sklada-v-rossii-ili-iz-kitaya/": "2026-11-19",
   "/blog/chay-na-razves-ili-v-pachkah/": "2026-11-18",
   "/blog/probnyy-zakaz-chernogo-i-zelenogo-chaya/": "2026-11-17",
@@ -77,5 +78,5 @@ export const pageModifiedAt = {
   "/catalog/": "2026-11-16",
   "/catalog/raw-puerh/": "2026-11-16",
   "/catalog/ripe-puerh/": "2026-11-16",
-  "/sample/": "2026-11-16"
+  "/sample/": "2026-11-19"
 };

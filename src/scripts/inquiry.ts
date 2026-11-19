@@ -3,6 +3,7 @@ import { currentPurchaseSource, clearPurchaseSource } from './article-source';
 import { trackGoal, type FormError } from './analytics';
 
 const initialized = new WeakSet<HTMLFormElement>();
+const sampleStorageKey = 'pdSelectedSamples';
 const isLocalPreview = () => !['puerhdirect.ru', 'www.puerhdirect.ru'].includes(location.hostname);
 
 function setupInquiries() {
@@ -74,6 +75,12 @@ function setupInquiries() {
     }
     function updateSamples() {
       const checked = selected();
+      if (boxes.length && form.isConnected) {
+        try {
+          if (checked.length) sessionStorage.setItem(sampleStorageKey, JSON.stringify(checked.map(box => box.value)));
+          else sessionStorage.removeItem(sampleStorageKey);
+        } catch { /* Selection still works when browser storage is unavailable. */ }
+      }
       if (counter) counter.textContent = String(checked.length);
       if (selectedField) selectedField.value = checked.map(box => box.value + ' — ' + box.dataset.product).join(', ');
       boxes.forEach(box => { box.disabled = !box.checked && checked.length >= 5; });
@@ -163,11 +170,22 @@ function setupInquiries() {
       form.querySelector<HTMLInputElement>('[name="contact"]')?.focus();
     });
     const contact = form.querySelector<HTMLInputElement>('[name="contact"]');
+    const email = form.querySelector<HTMLInputElement>('[name="email"]');
     contact?.addEventListener('input', () => contact.setCustomValidity(''));
+    email?.addEventListener('input', () => contact?.setCustomValidity(''));
     const name = form.querySelector<HTMLInputElement>('[name="name"]');
     name?.addEventListener('input', () => name.setCustomValidity(''));
-    const chosenBox = boxes.find(box => box.value === product);
-    if (chosenBox) chosenBox.checked = true;
+    if (boxes.length) {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(sampleStorageKey) || '[]');
+        if (Array.isArray(saved)) {
+          const valid = [...new Set(saved.filter(slug => typeof slug === 'string' && boxes.some(box => box.value === slug)))].slice(0, 5);
+          boxes.forEach(box => { box.checked = valid.includes(box.value); });
+        }
+      } catch { /* Ignore unavailable or malformed storage without blocking the form. */ }
+      const chosenBox = boxes.find(box => box.value === product);
+      if (chosenBox && selected().length < 5) chosenBox.checked = true;
+    }
     updateSamples();
     if (isLocalPreview()) {
       form.action = '#';
@@ -187,7 +205,7 @@ function setupInquiries() {
       }
       if (contact) {
         contact.value = contact.value.trim();
-        contact.setCustomValidity(contact.value ? '' : 'Укажите контакт для ответа.');
+        contact.setCustomValidity(contact.value || email?.value.trim() ? '' : 'Укажите телефон или email для ответа.');
         if (contact.type === 'tel' && contact.value) {
           const digits = contact.value.replace(/\D/g, '');
           if (!/^[+()\d\s.-]+$/.test(contact.value) || digits.length < 7 || digits.length > 15) {
@@ -199,7 +217,6 @@ function setupInquiries() {
         name.value = name.value.trim();
         name.setCustomValidity(name.value ? '' : 'Укажите ваше имя.');
       }
-      const email = form.querySelector<HTMLInputElement>('[name="email"]');
       if (email) email.value = email.value.trim();
       if (!form.reportValidity()) return;
       if (isLocalPreview()) {
