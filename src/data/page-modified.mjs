@@ -1,6 +1,7 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/blog/pervyy-shu-puer-dlya-chaynogo-magazina/": "2026-11-21",
   "/blog/kak-vybrat-obraztsy-kitayskogo-chaya/": "2026-11-20",
   "/blog/kitayskiy-chay-dlya-magazina/": "2026-11-19",
   "/privacy/": "2026-11-19",
@@ -12,7 +13,7 @@ export const pageModifiedAt = {
   "/blog/maket-upakovki-puera-pered-pechatyu/": "2026-11-16",
   "/blog/privatnaya-marka-puera-rukovodstvo/": "2026-11-16",
   "/blog/puer-lunchzhu-ves-upakovka/": "2026-11-16",
-  "/blog/shu-i-shen-puer-raznica/": "2026-11-16",
+  "/blog/shu-i-shen-puer-raznica/": "2026-11-21",
   "/catalog/product/1996-ripe-puerh-tuocha-yiwulaoshuqingua/": "2026-11-16",
   "/catalog/product/2004-raw-puerh-cake-banzhangshengtai/": "2026-11-16",
   "/catalog/product/2006-ripe-puerh-brick-laochatou/": "2026-11-16",
@@ -70,7 +71,7 @@ export const pageModifiedAt = {
   "/blog/rassypnoy-puer-zayavka-postavshchiku/": "2026-11-16",
   "/blog/proverka-pressovki-puera-na-obrazce/": "2026-11-16",
   "/blog/proizvodstvo-puera-ot-lista-do-blina/": "2026-11-16",
-  "/blog/": "2026-11-20",
+  "/blog/": "2026-11-21",
   "/catalog/product/2005-raw-puerh-cake-laochendecha/": "2026-11-16",
   "/catalog/product/2012-ripe-puerh-cake-bandaogongcha/": "2026-11-16",
   "/catalog/product/2017-raw-puerh-tuocha-bulanglongzhu/": "2026-11-16",
