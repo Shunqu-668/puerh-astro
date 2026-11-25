@@ -1,6 +1,7 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/blog/zhasminovyy-chay-optom-sostav/": "2026-11-25",
   "/blog/skolko-podarochnyh-naborov-chaya-mozhno-sobrat/": "2026-11-24",
   "/blog/rashod-listovogo-chaya-za-smenu/": "2026-11-23",
   "/blog/chay-pod-svoey-markoy-etiketka-ili-pechat/": "2026-11-22",
@@ -10,7 +11,7 @@ export const pageModifiedAt = {
   "/privacy/": "2026-11-19",
   "/blog/chay-so-sklada-v-rossii-ili-iz-kitaya/": "2026-11-19",
   "/blog/chay-na-razves-ili-v-pachkah/": "2026-11-18",
-  "/blog/probnyy-zakaz-chernogo-i-zelenogo-chaya/": "2026-11-19",
+  "/blog/probnyy-zakaz-chernogo-i-zelenogo-chaya/": "2026-11-25",
   "/about/": "2026-11-16",
   "/blog/kak-sravnit-obraztsy-shu-puera/": "2026-11-20",
   "/blog/maket-upakovki-puera-pered-pechatyu/": "2026-11-16",
@@ -74,7 +75,7 @@ export const pageModifiedAt = {
   "/blog/rassypnoy-puer-zayavka-postavshchiku/": "2026-11-16",
   "/blog/proverka-pressovki-puera-na-obrazce/": "2026-11-16",
   "/blog/proizvodstvo-puera-ot-lista-do-blina/": "2026-11-16",
-  "/blog/": "2026-11-24",
+  "/blog/": "2026-11-25",
   "/catalog/product/2005-raw-puerh-cake-laochendecha/": "2026-11-16",
   "/catalog/product/2012-ripe-puerh-cake-bandaogongcha/": "2026-11-16",
   "/catalog/product/2017-raw-puerh-tuocha-bulanglongzhu/": "2026-11-16",
