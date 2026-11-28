@@ -1,6 +1,9 @@
 // Dates of substantive visible product/data changes, not the build date.
 // Leave unchanged URLs alone; update only after reviewing a real content change.
 export const pageModifiedAt = {
+  "/blog/priemka-kitayskogo-chaya-upakovka-povrezhdeniya/": "2026-11-28",
+  "/blog/chay-so-sklada-v-rossii-ili-iz-kitaya/": "2026-11-28",
+  "/blog/": "2026-11-28",
   "/blog/belyy-chay-optom-god-syrya-data-pressovki/": "2026-11-27",
   "/blog/ulun-optom-prozharka-dlya-povtornoy-zakupki/": "2026-11-26",
   "/blog/zhasminovyy-chay-optom-sostav/": "2026-11-25",
